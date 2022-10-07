@@ -15,9 +15,9 @@ The members of this team are below.
 
 Wenyan is a senior majoring in Statistics and minoring in CS and Data Science. 
 
-## Dan Sussman
+## Jordan Ahn
 
-Dan is a professor in the Math/Stat department and is the instructor for the course.
+Jordan is a senior majoring in Biomedical Engineering with an interest in Biostatistics.
 
 <!-- Please leave in the information below -->
 
