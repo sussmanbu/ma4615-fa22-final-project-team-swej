@@ -23,6 +23,11 @@ Jordan is a senior majoring in Biomedical Engineering with an interest in Biosta
 
 Shawn is a senior majoring in Biomedical Engineering with an interest in Data Science.
 
+## Eui Hyun Eric Kim
+
+Eui Hyun is a junior majoring in Economics and minoring Statistics.
+
+
 <!-- Please leave in the information below -->
 
 ### Info About this Template.
