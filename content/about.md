@@ -19,6 +19,10 @@ Wenyan is a senior majoring in Statistics and minoring in CS and Data Science.
 
 Jordan is a senior majoring in Biomedical Engineering with an interest in Biostatistics.
 
+## Shawn Xu
+
+Shawn is a senior majoring in Biomedical Engineering with an interest in Data Science.
+
 <!-- Please leave in the information below -->
 
 ### Info About this Template.
