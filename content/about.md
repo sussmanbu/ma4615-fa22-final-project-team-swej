@@ -1,5 +1,5 @@
 ---
-title: About
+title: Team SWEJ
 lastmod: 2021-10-11T09:20:50-05:00
 featuredVideo:
 featuredImage:
@@ -15,9 +15,18 @@ The members of this team are below.
 
 Wenyan is a senior majoring in Statistics and minoring in CS and Data Science. 
 
-## Dan Sussman
+## Jordan Ahn
 
-Dan is a professor in the Math/Stat department and is the instructor for the course.
+Jordan is a senior majoring in Biomedical Engineering with an interest in Biostatistics.
+
+## Shawn Xu
+
+Shawn is a senior majoring in Biomedical Engineering with an interest in Data Science.
+
+## Eui Hyun Eric Kim
+
+Eui Hyun is a junior majoring in Economics and minoring Statistics
+
 
 <!-- Please leave in the information below -->
 
