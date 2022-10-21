@@ -1,6 +1,6 @@
 ---
 title: Blog Post 1
-author: Daniel Sussman
+author: Jordan Ahn, Eui Hyun Kim, Shawn Xu, Wenyan Zhang
 date: '2022-10-12'
 slug: []
 categories: []

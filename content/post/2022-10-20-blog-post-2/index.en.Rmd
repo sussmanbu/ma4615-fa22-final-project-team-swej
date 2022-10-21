@@ -1,0 +1,43 @@
+---
+title: Blog Post 2
+author: Jordan Ahn, Eui Hyun Kim, Shawn Xu, Wenyan Zhang
+date: '2022-10-20'
+slug: []
+categories: []
+tags: []
+description: ~
+toc: yes
+authors: []
+series: []
+lastmod: '2022-10-20T18:30:49-04:00'
+featuredVideo: ~
+featuredImage: ~
+---
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+```
+
+```{r}
+bpdata <- read_csv(here::here("dataset/bpdata.csv"))
+#we're gonna be plotting a histogram of blood pressure measurements as well as reporting some descriptive stats for BP
+#taking average across the three columns for each type of blood pressure measurement
+bpMean <- bpdata %>% mutate(MeanDia = rowMeans(select(.,BPXODI1,BPXODI2,BPXODI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXOSY1,BPXOSY2,BPXOSY3), na.rm = TRUE))
+
+#making a table of descriptive stats
+bpMean %>% summarise(Mean_Systolic = mean(MeanSys, na.rm = TRUE), Median_Systolic = median(MeanSys, na.rm = TRUE), IQR_Systolic = IQR(MeanSys, na.rm = TRUE), Mean_Diastolic = mean(MeanDia, na.rm = TRUE), Median_Diastolic = median(MeanDia, na.rm = TRUE), IQR_Diastolic = IQR(MeanDia, na.rm = TRUE)) %>% knitr::kable()
+```
+
+```{r}
+#making histograms of systolic and diastolic
+bpMean %>% ggplot(aes(x = MeanSys, y = ..density..)) +
+  geom_histogram(binwidth = 2, colour= "black", fill= "lightblue") +
+  geom_vline(aes(xintercept = mean(MeanSys, na.rm = TRUE)),color="black", linetype="dashed", size=1) +
+  geom_density(color = "red") +
+  labs(title = "Histogram of Systolic Blood Pressure", x = "Systolic Blood Pressure (mmHg)", y = "Count") 
+
+bpMean %>% ggplot(aes(x = MeanDia, y = ..density..)) +
+  geom_histogram(binwidth = 2, colour= "black", fill= "lightblue") +
+  geom_vline(aes(xintercept = mean(MeanDia, na.rm = TRUE)),color="black", linetype="dashed", size=1) +
+  geom_density(color = "red") +
+  labs(title = "Histogram of Diastolic Blood Pressure", x = "Diastolic Blood Pressure (mmHg)", y = "Count") 
+```
