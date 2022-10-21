@@ -17,7 +17,6 @@ featuredImage: ~
 suppressPackageStartupMessages(library(tidyverse))
 ```
 
-testssetskk
 
 ```{r}
 bpdata <- read_csv(here::here("dataset/bpdata.csv"))
