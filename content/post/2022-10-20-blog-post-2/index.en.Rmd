@@ -14,7 +14,6 @@ featuredVideo: ~
 featuredImage: ~
 ---
 
-To perform our exploratory data analysis, we first took a generalized look at the data as is and focus on columns of information that we would most likely utilize in our analysis using “select”. There are also multiple data sets for the NHANES data sets. It will be necessary to see how to align the different data sets together if each data point is of the same person. If the data points are not aligned in such a way, there might be a possibility of generalizing the primary and secondary data for our analysis. Initially, the data was in .XPT, a SAS data file. We used the package “haven” in R to import and load the XPT data in R. Then, we converted the data into .CSV in R and saved the dataset as “bpdata.csv”. 
 
 
 Since on the website the datasets are grouped by years, we will choose a dataset from one year to work on for our exploratory analysis and eventually combine multiple datasets from different years for further analysis. The year we chose from NHANES was 2017-March 2020 Pre-Pandemic, and inside the dataset, we chose “Examination Data”. We chose to look into all the blood pressure columns because blood pressure is generally representative of a person’s health status – people with high blood pressure tend to have an unhealthier lifestyle and diet than people with normal blood pressure.
