@@ -24,7 +24,7 @@ bpdata <- read_csv(here::here("dataset/bpdata.csv"))
 bpMean <- bpdata %>% mutate(MeanDia = rowMeans(select(.,BPXODI1,BPXODI2,BPXODI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXOSY1,BPXOSY2,BPXOSY3), na.rm = TRUE))
 
 #making a table of descriptive stats
-bpMean %>% summarise(Mean_Systolic = mean(MeanSys, na.rm = TRUE), Median_Systolic = median(MeanSys, na.rm = TRUE), IQR_Systolic = IQR(MeanSys, na.rm = TRUE), Mean_Diastolic = mean(MeanDia, na.rm = TRUE), Median_Diastolic = median(MeanDia, na.rm = TRUE), IQR_Diastolic = IQR(MeanDia, na.rm = TRUE)) %>% knitr::kable()
+bpMean %>% select(MeanDia, MeanSys) %>% pivot_longer(everything()) %>% mutate(Blood_Pressure_Type = str_replace(name,"MeanSys","Systolic"), name = str_replace(name,"MeanDia","Diastolic")) %>% group_by(Blood_Pressure_Type) %>% summarise(Mean = mean(value, na.rm = TRUE), Median = median(value, na.rm = TRUE), IQR = IQR(value, na.rm = TRUE)) %>% knitr::kable()
 ```
 
 ```{r}
@@ -33,11 +33,11 @@ bpMean %>% ggplot(aes(x = MeanSys, y = ..density..)) +
   geom_histogram(binwidth = 2, colour= "black", fill= "lightblue") +
   geom_vline(aes(xintercept = mean(MeanSys, na.rm = TRUE)),color="black", linetype="dashed", size=1) +
   geom_density(color = "red") +
-  labs(title = "Histogram of Systolic Blood Pressure", x = "Systolic Blood Pressure (mmHg)", y = "Count") 
+  labs(title = "Histogram of Systolic Blood Pressure", x = "Systolic Blood Pressure (mmHg)", y = "Density") 
 
 bpMean %>% ggplot(aes(x = MeanDia, y = ..density..)) +
   geom_histogram(binwidth = 2, colour= "black", fill= "lightblue") +
   geom_vline(aes(xintercept = mean(MeanDia, na.rm = TRUE)),color="black", linetype="dashed", size=1) +
   geom_density(color = "red") +
-  labs(title = "Histogram of Diastolic Blood Pressure", x = "Diastolic Blood Pressure (mmHg)", y = "Count") 
+  labs(title = "Histogram of Diastolic Blood Pressure", x = "Diastolic Blood Pressure (mmHg)", y = "Density") 
 ```
