@@ -16,6 +16,7 @@ featuredImage: ~
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
 ```
+asdfasdf
 
 ```{r}
 bpdata <- read_csv(here::here("dataset/bpdata.csv"))
