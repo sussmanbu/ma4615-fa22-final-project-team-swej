@@ -14,6 +14,8 @@ featuredVideo: ~
 featuredImage: ~
 ---
 
+title title title
+
 To perform our exploratory data analysis, we first took a generalized look at the data as is and focus on columns of information that we would most likely utilize in our analysis using “select”. There are also multiple data sets for the NHANES data sets. It will be necessary to see how to align the different data sets together if each data point is of the same person. If the data points are not aligned in such a way, there might be a possibility of generalizing the primary and secondary data for our analysis. Initially, the data was in .XPT, a SAS data file. We used the package “haven” in R to import and load the XPT data in R. Then, we converted the data into .CSV in R and saved the dataset as “bpdata.csv”. 
 
 
