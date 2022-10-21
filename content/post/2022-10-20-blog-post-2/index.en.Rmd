@@ -16,7 +16,7 @@ featuredImage: ~
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
 ```
-Hi
+
 ```{r}
 bpdata <- read_csv(here::here("dataset/bpdata.csv"))
 #we're gonna be plotting a histogram of blood pressure measurements as well as reporting some descriptive stats for BP
