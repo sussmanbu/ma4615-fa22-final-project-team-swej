@@ -1,10 +1,12 @@
 library(tidyverse)
 
-loan_data <- read_csv(here::here("dataset", "loan_refusal.csv"))
+#haven package needed to read in .XPT data
+library(haven)
+bpdata <- read_xpt(here::here("dataset", "P_BPXO.XPT"))
 
 ## CLEAN the data
-loan_data_clean <- loan_data
 
-write_csv(loan_data_clean, file = here::here("dataset", "loan_refusal_clean.csv"))
+write_csv(bpdata, file = here::here("dataset", "bpdata.csv"))
 
-save(loan_data_clean, file = here::here("dataset/loan_refusal.RData"))
+save(bpdata, file = here::here("dataset/bpdata.RData"))
+
