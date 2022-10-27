@@ -16,31 +16,22 @@ featuredImage: ~
 
 To perform our exploratory data analysis, we first took a generalized look at the data as is and focus on columns of information that we would most likely utilize in our analysis using “select”. There are also multiple data sets for the NHANES data sets. It will be necessary to see how to align the different data sets together if each data point is of the same person. If the data points are not aligned in such a way, there might be a possibility of generalizing the primary and secondary data for our analysis. Initially, the data was in .XPT, a SAS data file. We used the package “haven” in R to import and load the XPT data in R. Then, we converted the data into .CSV in R and saved the dataset as “bpdata.csv”. 
 
-
-Since on the website the datasets are grouped by years, we will choose a dataset from one year to work on for our exploratory analysis and eventually combine multiple datasets from different years for further analysis. The year we chose from NHANES was 2017-March 2020 Pre-Pandemic, and inside the dataset, we chose “Examination Data”. We chose to look into all the blood pressure columns because blood pressure is generally representative of a person’s health status – people with high blood pressure tend to have an unhealthier lifestyle and diet than people with normal blood pressure.
-
-
-Not only missing values, but also dissection of periods of time and location would be significant for our data organization. Referring to the overview of data description: https://www.cdc.gov/nchs/data/series/sr_02/sr02-190.pdf, not all the data are on the same age and location. In order to integrate this, after removing the missing values of focused columns, we neet to identify as if they are all in a same categorical values.
-
-
-
-
-We initially analyzed the Systolic Blood Pressure and Diastolic Blood Pressure using histograms. Our graphs show that both distributions are right-skewed, and the Systolic Blood Pressure Histogram is more positively skewed than Diastolic Blood Pressure. This is consistent with our assumption and general health trends – high outliers are people with high blood pressure, which are more common than people with low blood pressure due to current diet and lifestyle.
-
-As mentioned on Blog Post 1, our main goal with this data analysis is to find the general trend of health in various ways, as well as if there was a significant change in health trends from the pre-pandemic vs. post pandemic time periods. The meaningful variables that are noticeable and will be useful for general trends are Blood pressure and cholesterol (BPQ), Diabetes (DIQ), Hospital utilization and access to care (HUQ), Smoking and tobacco use (SMQ) — Adult. We will discuss both direct AND indirect measurements for health in the way that contribute to the general trend. Moreover, the data NHANES 2017-March 2020 Pre-pandemic and 2021 (also 2022) will be our main data since it will able us to analyze pre and post-pandemic health trends. Some very basic examples for the plot and statistics are below:
-
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
+bpdata <- read_csv(here::here("dataset/bpdata.csv"))
 ```
 
+Since on the website the datasets were grouped by years, we chose a dataset from one year to work on for our exploratory analysis and will eventually combine multiple datasets from different years for further analysis. The year we chose from NHANES was 2017-March 2020 Pre-Pandemic, and inside the dataset, we chose “Examination Data”. This is the most recent available NHANES dataset that includes information from both 2020 and previous years. Due to the pandemic, a convenience sample was used, so additional data points were recruited in order to create a more representative dataset. We chose to look into all the blood pressure columns because blood pressure is generally representative of a person’s health status – people with high blood pressure tend to have a more unhealthy lifestyle and diet than people with normal blood pressure, so we could look at the distribution of blood pressure. After choosing focused variables, we cleaned the data of these columns by removing missing values. 
+
+As mentioned on Blog Post 1, our main goal with this data analysis is to find the general trend of health in various ways, as well as if there was a significant change in health trends from the pre-pandemic vs. post pandemic time periods. The meaningful variables that are noticeable and will be useful for general trends are Blood pressure and cholesterol (BPQ), Diabetes (DIQ), Hospital utilization and access to care (HUQ), Smoking and tobacco use (SMQ) — Adult. We will discuss both direct AND indirect measurements for health in the way that contribute to the general trend. Moreover, the data NHANES 2017-March 2020 Pre-pandemic and 2021 (also 2022) will be our main data since it will allow us to analyze pre and post-pandemic health trends. Some very basic examples for the plot and statistics are below:
+
 ```{r}
-bpdata <- read_csv(here::here("dataset/bpdata.csv"))
 #we're gonna be plotting a histogram of blood pressure measurements as well as reporting some descriptive stats for BP
 #taking average across the three columns for each type of blood pressure measurement
 bpMean <- bpdata %>% mutate(MeanDia = rowMeans(select(.,BPXODI1,BPXODI2,BPXODI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXOSY1,BPXOSY2,BPXOSY3), na.rm = TRUE))
 
 #making a table of descriptive stats
-bpMean %>% summarise(Mean_Systolic = mean(MeanSys, na.rm = TRUE), Median_Systolic = median(MeanSys, na.rm = TRUE), IQR_Systolic = IQR(MeanSys, na.rm = TRUE), Mean_Diastolic = mean(MeanDia, na.rm = TRUE), Median_Diastolic = median(MeanDia, na.rm = TRUE), IQR_Diastolic = IQR(MeanDia, na.rm = TRUE)) %>% knitr::kable()
+bpMean %>% select(MeanDia, MeanSys) %>% pivot_longer(everything()) %>% mutate(Blood_Pressure_Type = str_replace(name,"MeanSys","Systolic"), name = str_replace(name,"MeanDia","Diastolic")) %>% group_by(Blood_Pressure_Type) %>% summarise(Mean = mean(value, na.rm = TRUE), Median = median(value, na.rm = TRUE), IQR = IQR(value, na.rm = TRUE)) %>% knitr::kable()
 ```
 
 ```{r}
@@ -49,14 +40,13 @@ bpMean %>% ggplot(aes(x = MeanSys, y = ..density..)) +
   geom_histogram(binwidth = 2, colour= "black", fill= "lightblue") +
   geom_vline(aes(xintercept = mean(MeanSys, na.rm = TRUE)),color="black", linetype="dashed", size=1) +
   geom_density(color = "red") +
-  labs(title = "Histogram of Systolic Blood Pressure", x = "Systolic Blood Pressure (mmHg)", y = "Count") 
+  labs(title = "Histogram of Systolic Blood Pressure", x = "Systolic Blood Pressure (mmHg)", y = "Density") 
 
 bpMean %>% ggplot(aes(x = MeanDia, y = ..density..)) +
   geom_histogram(binwidth = 2, colour= "black", fill= "lightblue") +
   geom_vline(aes(xintercept = mean(MeanDia, na.rm = TRUE)),color="black", linetype="dashed", size=1) +
   geom_density(color = "red") +
-  labs(title = "Histogram of Diastolic Blood Pressure", x = "Diastolic Blood Pressure (mmHg)", y = "Count") 
+  labs(title = "Histogram of Diastolic Blood Pressure", x = "Diastolic Blood Pressure (mmHg)", y = "Density") 
 ```
 
-
-As a very brief analysis, general blood pressure increased significantly when comparing between 2018 vs. 2019 and 2019 vs. 2020. It is not surprising that our team got this obvious pattern of COVID-19 oppressed people to go out and work/be active, as well as an increase of delivery/fast food consumption which would generally lead to increase of blood pressure in a nutshell.
+We initially analyzed the Systolic Blood Pressure and Diastolic Blood Pressure using histograms. Our graphs show that both distributions are right-skewed, and the Systolic Blood Pressure Histogram is more positively skewed than Diastolic Blood Pressure. This is consistent with our assumption and general health trends – high outliers are people with high blood pressure, which are more common than people with low blood pressure due to the increased prevalence of hypertension versus hypotension. 
