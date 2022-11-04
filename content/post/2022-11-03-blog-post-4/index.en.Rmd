@@ -17,6 +17,8 @@ featuredImage: ~
 ```{r}
 #loading in modelling data
 suppressPackageStartupMessages(library(tidyverse))
+
+#MAKE SURE YOU GO TO load_and_clean_data.R to get the modelData1.csv dataset. it's too big to add to git.
 modelData <- read_csv(here::here("dataset","modelData1.csv"))
 ```
 
