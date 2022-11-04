@@ -39,16 +39,16 @@ save(demodata1718, file = here::here("dataset/demodata1718.RData"))
 
 
 #2009-2010
-write_csv(bpdata0910, file = here::here("dataset","BPX_F0910.XPT"))
+write_csv(bpdata0910, file = here::here("dataset","bpdata0910.csv"))
 save(bpdata0910, file = here::here("dataset/bpdata0910.RData"))
 
-write_csv(demodata0910, file = here::here("dataset","DEMO_F0910.XPT"))
+write_csv(demodata0910, file = here::here("dataset","demodata0910.csv"))
 save(demodata0910, file = here::here("dataset/demodata0910.RData"))
 
 #2001-2002
-write_csv(BPX_B0102, file = here::here("dataset","BPX_B0102.XPT"))
-save(BPX_B0102, file = here::here("dataset","BPX_B0102.XPT"))
+write_csv(bpdata0102, file = here::here("dataset","bpdata0102.csv"))
+save(bpdata0102, file = here::here("dataset","bpdata0102.csv"))
 
-write_csv(here::here(demodata0102, file = "dataset","DEMO_B0102.XPT"))
-save(here::here(demodata0102, file = "dataset","DEMO_B0102.XPT"))
+write_csv(demodata0102, file = here::here("dataset","demodata0102.csv"))
+save(demodata0102, file = here::here("dataset","demodata0102.csv"))
 
