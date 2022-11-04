@@ -21,6 +21,27 @@ suppressPackageStartupMessages(library(tidyverse))
 #MAKE SURE YOU GO TO load_and_clean_data.R to get the modelData1.csv dataset. it's too big to add to git.
 modelData <- read_csv(here::here("dataset","modelData1.csv"))
 ```
+  The purpose of this dataset is to create a snapshot of the general health of adults and children in the United States through a nationally representative sample. One trend that we noticed from our exploratory analysis was that the distributions of Blood Pressure are right-skewed. This was an interesting trend and we want to further explore its relationship to other health variables, such as blood pressure (BPQ), cholesterol (CHOL), Diabetes (DIQ), Hospital utilization and access to care (HUQ), and Demographics variables, such as Race, Age, and Sex. In other words, we will be searching for variables in the survey responses that could be easily understood and representative of general health information. These variables will be the indicators of the health status of the US population. From these variables, we can further develop statistical models to understand the variables that are most correlated with the US population’s health trends. We choose the datasets from 2001-2002, 2009-2010, and 2017-2018 because we want to investigate health trends over the past years. 
+  
+  In this data analysis, we continue to consider blood pressure to be our dependent variable because it’s representative of a person’s health. In order to analyze the correlation, we could start by plotting the regression model of it against other variables (i.e. Blood Pressure vs. Cholesterol, Blood Pressure vs. Race). This will help us define our correlating variables and confounding variables.
+
+```{r}
+#EDA
+ggplot(modelData, aes(x=MeanDia, y=as.factor(Year))) + 
+  geom_boxplot() + 
+  labs(x = "Mean Diastolic Blood Pressure", y = "Year") +
+  scale_y_discrete(breaks = 0:2, labels=c("2001","2009","2017"))
+
+ggplot(modelData, aes(x=MeanDia, y=as.factor(RIDRETH1))) + 
+  geom_boxplot() + labs(x = "Mean Diastolic Blood Pressure", y = "Ethnicity") +
+  scale_y_discrete(breaks = 1:5, labels=c("Mexican American","Other Hispanic","Non-Hispanic White",
+                                          "Non-Hispanic Black", "Other Race")) 
+```
+
+  In the two EDA plots shown, we decided on profiling mean diastolic blood pressure. Since we wanted to look more into blood pressure and the trends associated with it, we decided on looking at mean blood pressure in relation to ethnicity and years the survey was conducted. The purpose of doing this EDA plotting is to get a glimpse of some variables that we as a team could possibly work towards or include in the final analysis. In this case, we thought about including the variables ethnicity and years to help illustrate factors that might influence blood pressure (which we deemed as an important indicator of health). From this, we could look into the significance of variables like ethnicity or years when looking at mean diastolic blood pressure as a whole to determine if these variables are conclusive and if secondary data is needed. Of course, further exploration of different variables is needed to get the whole picture.
+
+  The EDA plot of mean diastolic blood pressure over the years shows the distributions of 2001-2002 and 2009-2010 are similar, and the averages are similar too. However, the distribution of mean blood pressure in 2017-2018 is higher than in the other two years, suggesting that the sample population generally has higher blood pressure in 2017-2018. This could be due to diet changes in the last decade causing people to have higher blood pressure on average. The second EDA plot of mean diastolic blood pressure vs. ethnicity shows the different blood pressure distribution across races. The ethnicity with the highest mean blood pressure is Non-Hispanic Black, followed by Non-Hispanic White, other Hispanic, and Mexican American. 
+
 
 ```{r}
 #creating linear models for sysbp and diabp
@@ -42,6 +63,6 @@ modelData %>% ggplot(aes(x = RIDAGEYR, y = MeanSys)) +
 
 modelData %>% ggplot(aes(x = RIDAGEYR, y = MeanDia)) +
   geom_jitter() +
-  stat_smooth(method = "lm", se = FALSE) +
+  stat_smooth(method = "glm", se = FALSE) +
   labs(title = "Simple Model of Diastolic BP(mmHg) vs. Age", x = "Age(Years)", y = "Mean Diastolic BP(mmHg)")
 ```
