@@ -18,7 +18,7 @@ To perform our exploratory data analysis, we first took a generalized look at th
 
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
-bpdata <- read_csv(here::here("dataset/bpdata.csv"))
+bpdata1720 <- read_csv(here::here("dataset/bpdata1720.csv"))
 ```
 
 Since on the website the datasets were grouped by years, we chose a dataset from one year to work on for our exploratory analysis and will eventually combine multiple datasets from different years for further analysis. The year we chose from NHANES was 2017-March 2020 Pre-Pandemic, and inside the dataset, we chose “Examination Data”. This is the most recent available NHANES dataset that includes information from both 2020 and previous years. Due to the pandemic, a convenience sample was used, so additional data points were recruited in order to create a more representative dataset. We chose to look into all the blood pressure columns because blood pressure is generally representative of a person’s health status – people with high blood pressure tend to have a more unhealthy lifestyle and diet than people with normal blood pressure, so we could look at the distribution of blood pressure. After choosing focused variables, we cleaned the data of these columns by removing missing values. 
@@ -28,7 +28,7 @@ As mentioned on Blog Post 1, our main goal with this data analysis is to find th
 ```{r}
 #we're gonna be plotting a histogram of blood pressure measurements as well as reporting some descriptive stats for BP
 #taking average across the three columns for each type of blood pressure measurement
-bpMean <- bpdata %>% mutate(MeanDia = rowMeans(select(.,BPXODI1,BPXODI2,BPXODI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXOSY1,BPXOSY2,BPXOSY3), na.rm = TRUE))
+bpMean <- bpdata1720 %>% mutate(MeanDia = rowMeans(select(.,BPXODI1,BPXODI2,BPXODI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXOSY1,BPXOSY2,BPXOSY3), na.rm = TRUE))
 
 #making a table of descriptive stats
 bpMean %>% select(MeanDia, MeanSys) %>% pivot_longer(everything()) %>% mutate(Blood_Pressure_Type = str_replace(name,"MeanSys","Systolic"), name = str_replace(name,"MeanDia","Diastolic")) %>% group_by(Blood_Pressure_Type) %>% summarise(Mean = mean(value, na.rm = TRUE), Median = median(value, na.rm = TRUE), IQR = IQR(value, na.rm = TRUE)) %>% knitr::kable()

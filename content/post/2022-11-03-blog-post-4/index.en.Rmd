@@ -1,0 +1,44 @@
+---
+title: Blog Post 4
+author: Jordan Ahn, Eui Hyun Kim, Shawn Xu, Wenyan Zhang
+date: '2022-11-03'
+slug: []
+categories: []
+tags: []
+description: ~
+toc: yes
+authors: []
+series: []
+lastmod: '2022-11-03T22:23:10-04:00'
+featuredVideo: ~
+featuredImage: ~
+---
+```{r}
+#library call and loading in necessary data sets
+#before i start, the general algorithm will be to load in the demographics and BP data for the 3 datasets (so 6 sets). Remove NAs. For each dataset, demographics and BP will be joined by ID number, so only observations with ID numbers in both datasets can be considered. Following the joins, the datasets will include a variable for year of collection (to be coded for each set). After all of this, the datasets will be stacked for analysis. also important to note, the names of certain variables change between datasets, so were gonna have to do some renaming to keep things consistent.
+
+#loading in data and libraries
+suppressPackageStartupMessages(library(tidyverse))
+bpdata1718 <- read_csv(here::here("dataset/bpdata1718.csv"))
+demodata1718 <- read_csv(here::here("dataset/demodata1718.csv"))
+
+bpdata0910 <- read_csv(here::here("dataset/bpdata0910.csv"))
+demodata0910 <- read_csv(here::here("dataset/demodata0910.csv"))
+
+bpdata0102 <- read_csv(here::here("dataset/bpdata0102.csv"))
+demodata0102 <- read_csv(here::here("dataset/demodata0102.csv"))
+```
+
+```{r}
+#cleaning, combining, and getting data into working order
+
+##creating variables for mean BP readings
+bpdata1718 <- bpdata1718 %>% mutate(MeanDia = rowMeans(select(.,BPXODI1,BPXODI2,BPXODI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXOSY1,BPXOSY2,BPXOSY3), na.rm = TRUE))
+
+#ask if NaN will cause issues
+bpdata0910 <- bpdata0910 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE))
+
+bpdata0102 <- bpdata0102 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE))
+
+##bp and demo datasets
+```
