@@ -40,5 +40,18 @@ bpdata0910 <- bpdata0910 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BP
 
 bpdata0102 <- bpdata0102 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE))
 
-##bp and demo datasets
+##combine bp and demo for each year
+combo1718 <- bpdata1718 %>% inner_join(demodata1718, by = "SEQN")
+combo0910 <- bpdata0910 %>% inner_join(demodata0910, by = "SEQN")
+combo0102 <- bpdata0102 %>% inner_join(demodata0102, by = "SEQN")
+
+##adding coding for year for each dataset and subsetting for stacking
+###0 = 01-02, 1 = 09-10, 2 = 17-18
+combo0102 <- combo0102 %>% mutate(Year = factor(0)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
+combo0910 <- combo0910 %>% mutate(Year = factor(1)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
+combo1718 <- combo1718 %>% mutate(Year = factor(2)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
+
+##stacking the datasets
+modelData <- bind_rows(combo0102, combo0910, combo1718)
+
 ```
