@@ -1,5 +1,5 @@
 ---
-title: blog post 5
+title: Blog Post 5
 author: Jordan Ahn, Eui Hyun Kim, Shawn Xu, Wenyan Zhang
 date: '2022-11-11'
 slug: []
@@ -9,15 +9,17 @@ description: ~
 toc: yes
 authors: []
 series: []
-lastmod: '2022-11-11T19:04:47-05:00'
+lastmod: '2022-11-11T20:34:52-05:00'
 featuredVideo: ~
 featuredImage: ~
 ---
 
+
+
   For secondary data, we thought about including datasets that describe income and government program assistance as we thought family income and composition might help us in describing the availability of health insurance for demographics and thus show different health trends.
-  
+
   The “Survey of Income and Program Participation” (SIPP) is a comprehensive dataset conducted to provide information on numerous demographics like ethnicity and employment about economic well-being as well as family dynamics/composition. We found this dataset to provide multiple ways for us to combine with our primary dataset through multiple avenues of  demographic data. For example, we already have an idea on grouping data with ethnicities and combining the economic data with our primary dataset. We might also look into other secondary datasets for other information like healthcare coverage to help us in describing different health trends. We think the economic situation of families, in general, is what we want to focus on for secondary data when finding health trends.
-  
+
   Some problems that we will face when tackling secondary datasets, as seen so far, is that a lot of healthcare datasets available for our year range is in the form of premade tables in Excel; this can make the data scraping/inputting process much more tedious. There also might be a lack of what is considered sensitive data like salary data. This lack of numerical information might make analyzing data harder as well. We seem to have a general idea of how we want to combine the data, but finding the data seems to be our biggest hurdle.
 
 Data we are considering: https://www.census.gov/programs-surveys/sipp.html
