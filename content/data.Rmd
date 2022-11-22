@@ -16,7 +16,7 @@ featuredVideo: null
 
 ## Data Files and Relevant Variables
 
-  Our group plans on using every NHANES dataset from 1999-2018 (ten collection cycles in total). For each data collection cycle, we used the singular dataset in the “Demographics Data” tab and the 'Blood Pressure' dataset under the “Examination Data” tab. The data from the World Bank can be found in the website linked in the previous section. The dataset used by our group can be found on the right side of the webpage; simply click “CSV” under the section called “Download.” 
+  Our group plans on using every NHANES dataset from 1999-2018 (ten collection cycles in total). For each data collection cycle, we used the singular dataset in the “Demographics Data” tab and the "Blood Pressure" dataset under the “Examination Data” tab. The data from the World Bank can be found in the website linked in the previous section. The dataset used by our group can be found on the right side of the webpage; simply click “CSV” under the section called “Download.” 
 
   The blood pressure dataset in NHANES consists of information related to blood pressure measurements and the manner in which they were taken such as what arm was used and substances consumed prior to examination. The specific variables used by our group were the first three readings for systolic and diastolic measurements of blood pressure named “BPXSY1(2,3)” and “BPXDI1(2,3).” The demographics data in NHANES consists of data related to individual demographics like education level, race, age, income, etc. Our models seek to specifically explore race (RIDRETH1), age (RIDAGEYR), and gender (RIAGENDR) as predictors of blood pressure. 
 
