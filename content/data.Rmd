@@ -2,8 +2,8 @@
 title: Data
 description:
 toc: true
-featuredVideo:
 featuredImage: images/nhanes_apple_color_tagline.jpg
+featuredVideo:
 draft: false
 ---
 
