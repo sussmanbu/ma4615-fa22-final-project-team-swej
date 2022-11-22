@@ -1,11 +1,10 @@
 ---
-title: "Data"
-description: null
-toc: yes
-output: pdf_document
+title: Data
+description:
+toc: true
+featuredVideo:
 featuredImage: images/nhanes_apple_color_tagline.jpg
-draft: no
-featuredVideo: null
+draft: false
 ---
 
 ## Data Summary and Origin
