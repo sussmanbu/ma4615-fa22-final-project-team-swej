@@ -102,38 +102,71 @@ write_csv(demodata9900, file = here::here("dataset","demodata9900.csv"))
 bpdata1718 <- read_csv(here::here("dataset/bpdata1718.csv"))
 demodata1718 <- read_csv(here::here("dataset/demodata1718.csv"))
 
+bpdata1516 <- read_csv(here::here("dataset/bpdata1516.csv"))
+demodata1516 <- read_csv(here::here("dataset/demodata1516.csv"))
+
+bpdata1314 <- read_csv(here::here("dataset/bpdata1314.csv"))
+demodata1314 <- read_csv(here::here("dataset/demodata1314.csv"))
+
+bpdata1112 <- read_csv(here::here("dataset/bpdata1112.csv"))
+demodata1112 <- read_csv(here::here("dataset/demodata1112.csv"))
+
 bpdata0910 <- read_csv(here::here("dataset/bpdata0910.csv"))
 demodata0910 <- read_csv(here::here("dataset/demodata0910.csv"))
+
+bpdata0708 <- read_csv(here::here("dataset/bpdata0708.csv"))
+demodata0708 <- read_csv(here::here("dataset/demodata0708.csv"))
+
+bpdata0506 <- read_csv(here::here("dataset/bpdata0506.csv"))
+demodata0506 <- read_csv(here::here("dataset/demodata0506.csv"))
+
+bpdata0304 <- read_csv(here::here("dataset/bpdata0304.csv"))
+demodata0304 <- read_csv(here::here("dataset/demodata0304.csv"))
 
 bpdata0102 <- read_csv(here::here("dataset/bpdata0102.csv"))
 demodata0102 <- read_csv(here::here("dataset/demodata0102.csv"))
 
+bpdata9900 <- read_csv(here::here("dataset/bpdata9900.csv"))
+demodata9900 <- read_csv(here::here("dataset/demodata9900.csv"))
+
 ######################################################################
 
-#cleaning, combining, and getting data into working order for 01, 109, and 17
+#cleaning, combining, and getting data into working order for all years
 
-##creating variables for mean BP readings
-bpdata1718 <- bpdata1718 %>% mutate(MeanDia = rowMeans(select(.,BPXODI1,BPXODI2,BPXODI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXOSY1,BPXOSY2,BPXOSY3), na.rm = TRUE))
+##creating variables for mean arterial pressure (MAP)
+###making a function bc this is the same thing. function makes MAP, joins the
+###demographics data, and gets things in working condition
 
-#ask if NaN will cause issues
-bpdata0910 <- bpdata0910 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE))
+combo <- function(df, demo, year){
+  df <- df %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% 
+    mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE)) %>%
+    mutate(MAP = MeanDia + ((MeanSys - MeanDia)/3)) %>%
+    select(SEQN, MAP) %>% 
+    inner_join(demo, by = "SEQN") %>% 
+    mutate(Year = factor(year)) %>% 
+    select(SEQN, MAP, RIAGENDR, RIDAGEYR, RIDRETH1, Year) %>%
+    filter(!is.nan(MAP))
+  return(df)
+}
 
-bpdata0102 <- bpdata0102 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE))
-
-##combine bp and demo for each year
-combo1718 <- bpdata1718 %>% inner_join(demodata1718, by = "SEQN")
-combo0910 <- bpdata0910 %>% inner_join(demodata0910, by = "SEQN")
-combo0102 <- bpdata0102 %>% inner_join(demodata0102, by = "SEQN")
-
-##adding coding for year for each dataset and subsetting for stacking
-###0 = 01-02, 1 = 09-10, 2 = 17-18
-combo0102 <- combo0102 %>% mutate(Year = factor(0)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
-combo0910 <- combo0910 %>% mutate(Year = factor(1)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
-combo1718 <- combo1718 %>% mutate(Year = factor(2)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
+combo1718 <- combo(bpdata1718, demodata1718, 2017)
+combo1516 <- combo(bpdata1516, demodata1516, 2015)
+combo1314 <- combo(bpdata1314, demodata1314, 2013) 
+combo1112 <- combo(bpdata1112, demodata1112, 2011) 
+combo0910 <- combo(bpdata0910, demodata0910, 2009) 
+combo0708 <- combo(bpdata0708, demodata0708, 2007) 
+combo0506 <- combo(bpdata0506, demodata0506, 2005) 
+combo0304 <- combo(bpdata0304, demodata0304, 2003) 
+combo0102 <- combo(bpdata0102, demodata0102, 2001) 
+combo9900 <- combo(bpdata9900, demodata9900, 1999) 
 
 ##stacking the datasets
-modelData1 <- bind_rows(combo0102, combo0910, combo1718)
-write_csv(modelData1, file = here::here("dataset","modelData1.csv"))
+modelData <- bind_rows(combo9900, combo0102, combo0304, combo0506, combo0708, combo0910, combo1112, combo1314, combo1516, combo1718)
+write_csv(modelData, file = here::here("dataset","modelData.csv"))
+
+############################################
+
+#loading in the secondary dataset
 
 
 
