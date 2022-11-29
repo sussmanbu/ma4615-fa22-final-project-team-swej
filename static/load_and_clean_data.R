@@ -10,22 +10,33 @@ library(haven)
 #taking a look at insurance data
 
 
-#2017-2020
-bpdata1720 <- read_xpt(here::here("dataset", "P_BPXO1720.XPT"))
-
 #2017-2018
 bpdata1718 <- read_xpt(here::here("dataset","BPXO_J1718.XPT"))
 demodata1718 <- read_xpt(here::here("dataset", "DEMO_J1718.XPT"))
+
+#2015-2016
+
+#2013-2014
+
+#2011-2012
 
 #2009-2010 -> need to ask about this
 bpdata0910 <- read_xpt(here::here("dataset","BPX_F0910.XPT"))
 demodata0910 <- read_xpt(here::here("dataset","DEMO_F0910.XPT"))
 
+#2007-2008
+
+#2005-2006
+
+#2003-2004
+
 #2001-2002
 bpdata0102 <- read_xpt(here::here("dataset","BPX_B0102.XPT"))
 demodata0102 <- read_xpt(here::here("dataset","DEMO_B0102.XPT"))
 
-
+#1999-2000
+bpdata9900 <- read_xpt(here::here("dataset","DEMO.XPT"))
+demodata9900 <- read_xpt(here::here("dataset","DEMO.XPT"))
 ################################################################################
 
 #writing to .csv
