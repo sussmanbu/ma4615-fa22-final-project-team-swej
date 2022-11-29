@@ -11,31 +11,43 @@ library(haven)
 
 
 #2017-2018
-bpdata1718 <- read_xpt(here::here("dataset","BPXO_J1718.XPT"))
-demodata1718 <- read_xpt(here::here("dataset", "DEMO_J1718.XPT"))
+bpdata1718 <- read_xpt(here::here("dataset","BPXO_J.XPT"))
+demodata1718 <- read_xpt(here::here("dataset", "DEMO_J.XPT"))
 
 #2015-2016
+bpdata1516 <- read_xpt(here::here("dataset","BPX_I.XPT"))
+demodata1516 <- read_xpt(here::here("dataset","DEMO_I.XPT"))
 
 #2013-2014
+bpdata1314 <- read_xpt(here::here("dataset","BPX_H.XPT"))
+demodata1314 <- read_xpt(here::here("dataset","DEMO_H.XPT"))
 
 #2011-2012
+bpdata1112 <- read_xpt(here::here("dataset","BPX_G.XPT"))
+demodata1112 <- read_xpt(here::here("dataset","DEMO_G.XPT"))
 
 #2009-2010 -> need to ask about this
-bpdata0910 <- read_xpt(here::here("dataset","BPX_F0910.XPT"))
-demodata0910 <- read_xpt(here::here("dataset","DEMO_F0910.XPT"))
+bpdata0910 <- read_xpt(here::here("dataset","BPX_F.XPT"))
+demodata0910 <- read_xpt(here::here("dataset","DEMO_F.XPT"))
 
 #2007-2008
+bpdata0708 <- read_xpt(here::here("dataset","BPX_E.XPT"))
+demodata0708 <- read_xpt(here::here("dataset","DEMO_E.XPT"))
 
 #2005-2006
+bpdata0506 <- read_xpt(here::here("dataset","BPX_D.XPT"))
+demodata0506 <- read_xpt(here::here("dataset","DEMO_D.XPT"))
 
 #2003-2004
+bpdata0304 <- read_xpt(here::here("dataset","BPX_C.XPT"))
+demodata0304 <- read_xpt(here::here("dataset","DEMO_C.XPT"))
 
 #2001-2002
-bpdata0102 <- read_xpt(here::here("dataset","BPX_B0102.XPT"))
-demodata0102 <- read_xpt(here::here("dataset","DEMO_B0102.XPT"))
+bpdata0102 <- read_xpt(here::here("dataset","BPX_B.XPT"))
+demodata0102 <- read_xpt(here::here("dataset","DEMO_B.XPT"))
 
 #1999-2000
-bpdata9900 <- read_xpt(here::here("dataset","DEMO.XPT"))
+bpdata9900 <- read_xpt(here::here("dataset","BPX.XPT"))
 demodata9900 <- read_xpt(here::here("dataset","DEMO.XPT"))
 ################################################################################
 
