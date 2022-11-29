@@ -94,6 +94,7 @@ write_csv(demodata0102, file = here::here("dataset","demodata0102.csv"))
 write_csv(bpdata9900, file = here::here("dataset","bpdata9900.csv"))
 write_csv(demodata9900, file = here::here("dataset","demodata9900.csv"))
 
+###############################################################################
 
 #library call and loading in necessary data sets
 #before i start, the general algorithm will be to load in the demographics and BP data for the 3 datasets (so 6 sets). Remove NAs. For each dataset, demographics and BP will be joined by ID number, so only observations with ID numbers in both datasets can be considered. Following the joins, the datasets will include a variable for year of collection (to be coded for each set). After all of this, the datasets will be stacked for analysis. also important to note, the names of certain variables change between datasets, so were gonna have to do some renaming to keep things consistent.
@@ -149,16 +150,16 @@ combo <- function(df, demo, year){
   return(df)
 }
 
-combo1718 <- combo(bpdata1718, demodata1718, 2017)
-combo1516 <- combo(bpdata1516, demodata1516, 2015)
-combo1314 <- combo(bpdata1314, demodata1314, 2013) 
-combo1112 <- combo(bpdata1112, demodata1112, 2011) 
-combo0910 <- combo(bpdata0910, demodata0910, 2009) 
-combo0708 <- combo(bpdata0708, demodata0708, 2007) 
-combo0506 <- combo(bpdata0506, demodata0506, 2005) 
-combo0304 <- combo(bpdata0304, demodata0304, 2003) 
-combo0102 <- combo(bpdata0102, demodata0102, 2001) 
-combo9900 <- combo(bpdata9900, demodata9900, 1999) 
+combo1718 <- combo(bpdata1718, demodata1718, 2018)
+combo1516 <- combo(bpdata1516, demodata1516, 2016)
+combo1314 <- combo(bpdata1314, demodata1314, 2014) 
+combo1112 <- combo(bpdata1112, demodata1112, 2012) 
+combo0910 <- combo(bpdata0910, demodata0910, 2010) 
+combo0708 <- combo(bpdata0708, demodata0708, 2008) 
+combo0506 <- combo(bpdata0506, demodata0506, 2006) 
+combo0304 <- combo(bpdata0304, demodata0304, 2004) 
+combo0102 <- combo(bpdata0102, demodata0102, 2002) 
+combo9900 <- combo(bpdata9900, demodata9900, 2000) 
 
 ##stacking the datasets
 modelData <- bind_rows(combo9900, combo0102, combo0304, combo0506, combo0708, combo0910, combo1112, combo1314, combo1516, combo1718)
@@ -167,6 +168,26 @@ write_csv(modelData, file = here::here("dataset","modelData.csv"))
 ############################################
 
 #loading in the secondary dataset
+##the main variable is the % of US government budget spent towards general health
+health_ex <- read_csv(here::here("dataset/API_USA_DS2_en_csv_v2_4696777.csv"), skip = 4)
+health_ex <- health_ex %>% filter(`Indicator Code`== "SH.XPD.GHED.GE.ZS") %>%
+  select(-`Country Name`,-`Country Code`, -`Indicator Name`, -`Indicator Code`) %>%
+  pivot_longer(cols = everything(), names_to = "Year", values_to = "GovernmentHealthExpenditure") %>%
+  drop_na() %>% filter(Year %in% c("2000","2002","2004","2006","2008","2010","2012","2014","2016","2018")) %>%
+  mutate(Year = factor(Year))
 
+#simplifying model data to median per cycle and joining secondary dataset by year 
+##gonna try hypertension defined as MAP > 100 
+##(https://www.healthline.com/health/mean-arterial-pressure#high-map)
 
+#this is median MAP vs expenditure by year
+MAPvsEx <- modelData %>% group_by(Year) %>% 
+  summarize(MedianMAP = median(MAP, na.rm = TRUE)) %>%
+  left_join(health_ex, by = "Year")
 
+#this is rate of hypertension vs expenditure by year
+rateHTNvsEX <- modelData %>% 
+  mutate(HTN = ifelse(MAP >= 100, 1, 0)) %>%
+  group_by(Year) %>%
+  summarize(rateHTN = sum(HTN)/n()) %>%
+  left_join(health_ex, by = "Year")
