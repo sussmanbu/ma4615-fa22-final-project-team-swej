@@ -11,7 +11,7 @@ library(haven)
 
 
 #2017-2018
-bpdata1718 <- read_xpt(here::here("dataset","BPXO_J.XPT"))
+bpdata1718 <- read_xpt(here::here("dataset","BPX_J.XPT"))
 demodata1718 <- read_xpt(here::here("dataset", "DEMO_J.XPT"))
 
 #2015-2016
@@ -52,32 +52,47 @@ demodata9900 <- read_xpt(here::here("dataset","DEMO.XPT"))
 ################################################################################
 
 #writing to .csv
-#2017-2020
-write_csv(bpdata1720, file = here::here("dataset", "bpdata1720.csv"))
-save(bpdata1720, file = here::here("dataset/bpdata1720.RData"))
-
 
 #2017-2018
 write_csv(bpdata1718, file = here::here("dataset", "bpdata1718.csv"))
-save(bpdata1718, file = here::here("dataset/bpdata1718.RData"))
-
 write_csv(demodata1718, file = here::here("dataset", "demodata1718.csv"))
-save(demodata1718, file = here::here("dataset/demodata1718.RData"))
 
+#2015-2016
+write_csv(bpdata1516, file = here::here("dataset", "bpdata1516.csv"))
+write_csv(demodata1516, file = here::here("dataset", "demodata1516.csv"))
+
+
+#2013-2014
+write_csv(bpdata1314, file = here::here("dataset", "bpdata1314.csv"))
+write_csv(demodata1314, file = here::here("dataset", "demodata1314.csv"))
+
+#2011-2012
+write_csv(bpdata1112, file = here::here("dataset", "bpdata1112.csv"))
+write_csv(demodata1112, file = here::here("dataset", "demodata1112.csv"))
 
 #2009-2010
 write_csv(bpdata0910, file = here::here("dataset","bpdata0910.csv"))
-save(bpdata0910, file = here::here("dataset/bpdata0910.RData"))
-
 write_csv(demodata0910, file = here::here("dataset","demodata0910.csv"))
-save(demodata0910, file = here::here("dataset/demodata0910.RData"))
+
+#2007-2008
+write_csv(bpdata0708, file = here::here("dataset","bpdata0708.csv"))
+write_csv(demodata0708, file = here::here("dataset","demodata0708.csv"))
+
+#2005-2006
+write_csv(bpdata0506, file = here::here("dataset","bpdata0506.csv"))
+write_csv(demodata0506, file = here::here("dataset","demodata0506.csv"))
+
+#2003-2004
+write_csv(bpdata0304, file = here::here("dataset","bpdata0304.csv"))
+write_csv(demodata0304, file = here::here("dataset","demodata0304.csv"))
 
 #2001-2002
 write_csv(bpdata0102, file = here::here("dataset","bpdata0102.csv"))
-save(bpdata0102, file = here::here("dataset","bpdata0102.RData"))
-
 write_csv(demodata0102, file = here::here("dataset","demodata0102.csv"))
-save(demodata0102, file = here::here("dataset","demodata0102.RData"))
+
+#1999-2000
+write_csv(bpdata9900, file = here::here("dataset","bpdata9900.csv"))
+write_csv(demodata9900, file = here::here("dataset","demodata9900.csv"))
 
 
 #library call and loading in necessary data sets
