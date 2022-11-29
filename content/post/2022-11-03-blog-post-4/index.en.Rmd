@@ -27,6 +27,10 @@ modelData <- read_csv(here::here("dataset","modelData1.csv"))
 
 #RIAGENDR: 1 = male, 2 = female
 #RIDRETH1: 1 = Mexican American, 2 =  Other Hispanic, 3 = Non-Hispanic White, 4 = Non-Hispanic Black, 5 = Other Race (includes mixed)
+
+#for more complex model, can show predictions when holding certain things constant
+#can also plot residuals vs. predictiions
+
 modelData <- drop_na(modelData)
 
 syslmMulti <- lm(MeanSys ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)

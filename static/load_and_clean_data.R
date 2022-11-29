@@ -6,6 +6,10 @@ library(haven)
 #the two numbers refer to the years of the cycle, so 1718 means 2017-2018
 
 #loading data
+
+#taking a look at insurance data
+
+
 #2017-2020
 bpdata1720 <- read_xpt(here::here("dataset", "P_BPXO1720.XPT"))
 
