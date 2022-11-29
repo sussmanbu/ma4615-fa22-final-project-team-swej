@@ -1,0 +1,23 @@
+---
+title: Blog Post 6
+author: Jordan Ahn, Eui Hyun Kim, Shawn Xu, Wenyan Zhang
+date: '2022-11-18'
+slug: []
+categories: []
+tags: []
+description: ~
+toc: yes
+authors: []
+series: []
+lastmod: '2022-11-18T15:51:31-05:00'
+featuredVideo: ~
+featuredImage: ~
+---
+
+**IDEAS:**
+For the interactive, we want to focus on the NHANES data and to customize the primary health data with different factors. To do this, we plan on adding a secondary dataset of US GDP and percentage of government general health expenditure to highlight any correlations with health trends. We want to add enough primary health variables in the interactive so that the user has many options to choose from. By doing so, the user can pick and choose the variables that interest them the most. Another idea we can expand on is giving the user the option to include many secondary variables at once. This way, they can see how multiple economic variables can collectively affect trends. We also want to include an option for the user to set the range of years that the interactive includes so that the user can examine a smaller or larger range of data. 
+To make the interactive more personal, we could include demographic variables as well; these variables could be ethnicity, age, or gender. Since we are working with health data, we are already examining data that many might find sensitive and personal. That being said, the data is still relevant and can attract many users in finding out about their own health situation.
+	In order to make the interactive more intuitive, we can also include outputs that highlight what the data shows. Outputs like correlation and percentage of change between variables are qualities that we can include in the final interactive. 
+
+**PROGRESSION:**
+We have started on implementing the Shiny interactive but we have not added anything meaningful for the interactive yet.
