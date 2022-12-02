@@ -1,0 +1,21 @@
+---
+title: Blog Post 7
+author: Daniel Sussman
+date: '2022-12-02'
+slug: []
+categories: []
+tags: []
+description: ~
+toc: yes
+authors: []
+series: []
+lastmod: '2022-12-02T09:57:34-05:00'
+featuredVideo: ~
+featuredImage: ~
+---
+
+To continue our analysis, our team has decided to refine our models for ease of explanation/visualization and summarize our data to join with a secondary dataset. At the start of our project, we wanted to assess health trends over the course of the past two decades and check for health inequalities among races/ethnic groups. To accomplish this, we created two separate multiple linear regression models for systolic (SBP) and diastolic blood pressure (DBP). While this method was serviceable, working with two separate outcomes made our data difficult to visualize and model concisely. Thus, we’ve decided to change our outcome variable to mean arterial pressure (MAP), which is essentially a weighted average of the two values for blood pressure calculated with the formula MAP =DBP+13(SBP-DBP) . Using this singular outcome allows us to convey the same information in a more compact manner. We also plan on adjusting this statistical model to treat “white” as the baseline for race/ethnicity to assess whether other races differ in health outcomes from white individuals.\n
+
+To further explore our regression model, we must visualize the coefficients of our dataset. We plan to create faceted plots with MAP on the y-axis and a single predictor on the x-axis. All other predictors will be held at a constant value. We will also bin the age variable to more easily work with the data, separating the variable into 18–39, 40–59, and 60 and over similar to a CDC data brief (https://www.cdc.gov/nchs/products/databriefs/db289.htm#:~:text=The%20prevalence%20of%20hypertension%20increased,those%20aged%2060%20and%20over). We also plan on expanding our model through the addition of a secondary dataset. We have included information related to the percent of government spending on general health per year and plan to visualize and discuss our plots. Statistical analyses may not be feasible due to the small number of observations in our appended dataset (10 rows), so we will focus on creating visualizations. \n
+
+The results of our multiple linear regression have verified our initial hypothesis, so we plan on taking a deeper dive into this idea to flesh out and provide evidence for our thesis. Specifically, we claim that the outcome of blood pressure (MAP) is significantly associated with race/ethnicity and the year of data collection when corrected for other variables (age and gender). We plan to assess how population blood pressure levels have changed over time and analyze the effects of certain races/ethnic groups on MAP. 

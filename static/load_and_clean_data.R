@@ -162,7 +162,8 @@ combo0102 <- combo(bpdata0102, demodata0102, 2002)
 combo9900 <- combo(bpdata9900, demodata9900, 2000) 
 
 ##stacking the datasets
-modelData <- bind_rows(combo9900, combo0102, combo0304, combo0506, combo0708, combo0910, combo1112, combo1314, combo1516, combo1718)
+modelData <- bind_rows(combo9900, combo0102, combo0304, combo0506, combo0708, combo0910, combo1112, combo1314, combo1516, combo1718) %>%
+  mutate(RIDRETH1 = factor(RIDRETH1), RIAGENDR = factor(RIAGENDR))
 write_csv(modelData, file = here::here("dataset","modelData.csv"))
 
 ############################################
