@@ -38,32 +38,7 @@ draft: false
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>MAPvsEx</code></pre>
-<pre><code>## # A tibble: 10 × 3
-##     Year MedianMAP GovernmentHealthExpenditure
-##    &lt;dbl&gt;     &lt;dbl&gt;                       &lt;dbl&gt;
-##  1  2000      83.7                        16.2
-##  2  2002      82.9                        17.2
-##  3  2004      82                          17.9
-##  4  2006      81.8                        18.6
-##  5  2008      84                          18.2
-##  6  2010      82.9                        18.4
-##  7  2012      84                          19.6
-##  8  2014      83.1                        21.5
-##  9  2016      83.8                        22.4
-## 10  2018      85.8                        22.4</code></pre>
-<pre class="r"><code>plot_govExp &lt;- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
-         geom_point()
-
-plot_medMAP &lt;- ggplot(data = MAPvsEx,aes(x=Year, y = MedianMAP)) + 
-         geom_point()
-
-library(grid)
-
-grid.newpage()
-grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = &quot;last&quot;))</code></pre>
-<p><img src="/analysis_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
-<pre class="r"><code># creating linear models
+<pre class="r"><code># creating multiple linear regression model to predict MAP
 model &lt;- lm(MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)
 summary(model)</code></pre>
 <pre><code>## 
@@ -99,6 +74,12 @@ summary(model)</code></pre>
 ## Residual standard error: 11.88 on 73264 degrees of freedom
 ## Multiple R-squared:  0.2498, Adjusted R-squared:  0.2497 
 ## F-statistic:  1627 on 15 and 73264 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>library(corrplot)</code></pre>
+<pre><code>## corrplot 0.92 loaded</code></pre>
+<pre class="r"><code>model_cor &lt;- cor(modelData, method = c(&quot;spearman&quot;))
+corrplot(model_cor, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
+         tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code>modelData %&gt;% ggplot(aes(x = factor(Year), y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = &quot;lm&quot;, se = FALSE) +
@@ -121,6 +102,36 @@ summary(model)</code></pre>
   coord_flip()</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>plot &lt;- ggplot(modelData, aes(x=RIDAGEYR, y=MAP)) + 
+  geom_smooth()
+plot</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;gam&#39; and formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>MAPvsEx</code></pre>
+<pre><code>## # A tibble: 10 × 3
+##     Year MedianMAP GovernmentHealthExpenditure
+##    &lt;dbl&gt;     &lt;dbl&gt;                       &lt;dbl&gt;
+##  1  2000      83.7                        16.2
+##  2  2002      82.9                        17.2
+##  3  2004      82                          17.9
+##  4  2006      81.8                        18.6
+##  5  2008      84                          18.2
+##  6  2010      82.9                        18.4
+##  7  2012      84                          19.6
+##  8  2014      83.1                        21.5
+##  9  2016      83.8                        22.4
+## 10  2018      85.8                        22.4</code></pre>
+<pre class="r"><code>plot_govExp &lt;- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
+         geom_point()
+
+plot_medMAP &lt;- ggplot(data = MAPvsEx,aes(x=Year, y = MedianMAP)) + 
+         geom_point()
+
+library(grid)
+
+grid.newpage()
+grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = &quot;last&quot;))</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <pre class="r"><code>MAPEx_model &lt;- lm(MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
 summary(MAPEx_model)</code></pre>
 <pre><code>## 
@@ -145,7 +156,12 @@ summary(MAPEx_model)</code></pre>
   geom_point() +
   stat_smooth(method = &quot;lm&quot;, col = &quot;red&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="/analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(MAPvsEx, aes(x = Year, y = GovernmentHealthExpenditure)) + 
+  geom_point() +
+  stat_smooth(method = &quot;lm&quot;, col = &quot;blue&quot;)</code></pre>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <div id="note-on-attribution" class="section level2">
 <h2>Note on Attribution</h2>
 <p>If you are directly quoting from a source, please make that clear. You can show quotes using <code>&gt;</code> like this</p>
