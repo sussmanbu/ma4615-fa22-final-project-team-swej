@@ -175,20 +175,25 @@ health_ex <- health_ex %>% filter(`Indicator Code`== "SH.XPD.GHED.GE.ZS") %>%
   select(-`Country Name`,-`Country Code`, -`Indicator Name`, -`Indicator Code`) %>%
   pivot_longer(cols = everything(), names_to = "Year", values_to = "GovernmentHealthExpenditure") %>%
   drop_na() %>% filter(Year %in% c("2000","2002","2004","2006","2008","2010","2012","2014","2016","2018")) %>%
-  mutate(Year = factor(Year))
+  mutate(Year = factor(Year)) %>%
+  write_csv("health_ex.csv")
 
 #simplifying model data to median per cycle and joining secondary dataset by year 
 ##gonna try hypertension defined as MAP > 100 
 ##(https://www.healthline.com/health/mean-arterial-pressure#high-map)
 
 #this is median MAP vs expenditure by year
+#possibly rate of medication vs. gov exp
 MAPvsEx <- modelData %>% group_by(Year) %>% 
   summarize(MedianMAP = median(MAP, na.rm = TRUE)) %>%
-  left_join(health_ex, by = "Year")
+  left_join(health_ex, by = "Year") %>% 
+  write_csv("MAPvsEx.csv")
+  
 
 #this is rate of hypertension vs expenditure by year
 rateHTNvsEX <- modelData %>% 
   mutate(HTN = ifelse(MAP >= 100, 1, 0)) %>%
   group_by(Year) %>%
   summarize(rateHTN = sum(HTN)/n()) %>%
-  left_join(health_ex, by = "Year")
+  left_join(health_ex, by = "Year") %>%
+  write_csv("rateHTNvsEx.csv")
