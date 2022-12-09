@@ -13,12 +13,10 @@ We describe here our detailed data analysis.
 
 
 ```{r}
-library(dplyr)
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
 print(getwd())
 MAPvsEx <- read_csv(here::here("dataset/MAPvsEx.csv"))
-#load(here::here("dataset/loan_refusal.RData"))
-#print(ls())
+modelData <- read_csv(here::here("dataset/modelData.csv"))
 ```
 
 
