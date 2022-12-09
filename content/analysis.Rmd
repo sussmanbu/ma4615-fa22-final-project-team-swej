@@ -20,13 +20,13 @@ modelData <- read_csv(here::here("dataset/modelData.csv"))
 ```
 
 
-```{r}
+```{r model_summary}
 # creating multiple linear regression model to predict MAP
 model <- lm(MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)
 summary(model)
 ```
 
-```{r}
+```{r corr_matrix}
 library(corrplot)
 model_cor <- cor(modelData, method = c("spearman"))
 corrplot(model_cor, type = "upper", order = "hclust", 
@@ -35,7 +35,7 @@ corrplot(model_cor, type = "upper", order = "hclust",
 
 
 
-```{r}
+```{r year_boxplot}
 modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = "lm", se = FALSE) +
@@ -44,7 +44,7 @@ modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
 ```
 
 
-```{r}
+```{r gender_boxplot}
 modelData %>% ggplot(aes(x = factor(RIAGENDR), y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = "lm", se = FALSE) +
@@ -53,7 +53,7 @@ modelData %>% ggplot(aes(x = factor(RIAGENDR), y = MAP)) +
 ```
 
 
-```{r}
+```{r ethnicity_boxplot}
 modelData %>% ggplot(aes(x = factor(RIDRETH1), y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = "lm", se = FALSE) +
@@ -63,7 +63,7 @@ modelData %>% ggplot(aes(x = factor(RIDRETH1), y = MAP)) +
 ```
 
 
-```{r}
+```{r age_lineplot}
 age_plot <- ggplot(modelData, aes(x=RIDAGEYR, y=MAP)) + 
   geom_smooth(method = "gam") +
   labs(title = "Mean Arterial Pressure (MAP) vs. Age", 
@@ -72,30 +72,38 @@ age_plot
 ```
 
 
-```{r}
-age_plot + facet_wrap( ~ Year, ncol=4)
-age_plot + facet_wrap( ~ RIDRETH1)
-age_plot + facet_wrap( ~ RIAGENDR)
+```{r year_facet}
+year_facet <- age_plot + facet_wrap( ~ Year, ncol=4)
+year_facet
+```
+
+
+```{r ethnicity_facet}
+ethnicity_facet <- age_plot + facet_wrap( ~ RIDRETH1)
+ethnicity_facet
+```
+
+
+```{r gender_facet}
+gender_facet <- age_plot + facet_wrap( ~ RIAGENDR)
+gender_facet
 ```
 
 
 
-```{r}
-MAPvsEx
+```{r MAPvsEx_sidebyside}
 plot_govExp <- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
          geom_point()
-
 plot_medMAP <- ggplot(data = MAPvsEx,aes(x=Year, y = MedianMAP)) + 
          geom_point()
 
 library(grid)
-
 grid.newpage()
 grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = "last"))
 ```
 
 
-```{r}
+```{r MapvsEx_reg}
 MAPEx_model <- lm(MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
 summary(MAPEx_model)
 ggplot(MAPvsEx, aes(x = GovernmentHealthExpenditure, y = MedianMAP)) + 
@@ -104,7 +112,7 @@ ggplot(MAPvsEx, aes(x = GovernmentHealthExpenditure, y = MedianMAP)) +
 ```
 
 
-```{r}
+```{r Ex_year_line}
 ggplot(MAPvsEx, aes(x = Year, y = GovernmentHealthExpenditure)) + 
   geom_point() +
   stat_smooth(method = "lm", col = "blue")
