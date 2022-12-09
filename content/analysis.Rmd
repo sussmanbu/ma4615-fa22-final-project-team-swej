@@ -16,7 +16,7 @@ We describe here our detailed data analysis.
 library(dplyr)
 library(tidyverse)
 print(getwd())
-#data <- read_csv(here::here("dataset/loan_refusal_clean.csv"))
+MAPvsEx <- read_csv(here::here("dataset/MAPvsEx.csv"))
 #load(here::here("dataset/loan_refusal.RData"))
 #print(ls())
 ```

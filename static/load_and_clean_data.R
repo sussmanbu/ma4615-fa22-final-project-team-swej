@@ -187,7 +187,7 @@ health_ex <- health_ex %>% filter(`Indicator Code`== "SH.XPD.GHED.GE.ZS") %>%
 MAPvsEx <- modelData %>% group_by(Year) %>% 
   summarize(MedianMAP = median(MAP, na.rm = TRUE)) %>%
   left_join(health_ex, by = "Year") %>% 
-  write_csv("MAPvsEx.csv")
+  write_csv(here::here("dataset/MAPvsEx.csv"))
   
 
 #this is rate of hypertension vs expenditure by year
@@ -196,4 +196,4 @@ rateHTNvsEX <- modelData %>%
   group_by(Year) %>%
   summarize(rateHTN = sum(HTN)/n()) %>%
   left_join(health_ex, by = "Year") %>%
-  write_csv("rateHTNvsEx.csv")
+  write_csv(here::here("dataset/rateHTNvsEx.csv"))
