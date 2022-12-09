@@ -36,6 +36,55 @@ grid.newpage()
 grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = "last"))
 ```
 
+
+```{r}
+# creating linear models
+model <- lm(MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)
+summary(model)
+```
+
+
+```{r}
+modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
+  geom_boxplot() +
+  stat_smooth(method = "lm", se = FALSE) +
+  labs(title = "Mean Arterial Pressure (MAP) vs. Year", x = "Year", y = "Mean Arterial Pressure") +
+  coord_flip()
+```
+
+
+```{r}
+modelData %>% ggplot(aes(x = factor(RIAGENDR), y = MAP)) +
+  geom_boxplot() +
+  stat_smooth(method = "lm", se = FALSE) +
+  labs(title = "Mean Arterial Pressure (MAP) vs. Gender", x = "Gender", y = "Mean Arterial Pressure") +
+  coord_flip()
+```
+
+
+```{r}
+modelData %>% ggplot(aes(x = factor(RIDRETH1), y = MAP)) +
+  geom_boxplot() +
+  stat_smooth(method = "lm", se = FALSE) +
+  labs(title = "Mean Arterial Pressure (MAP) vs. Ethnicity", 
+       x = "Ethnicity", y = "Mean Arterial Pressure") +
+  coord_flip()
+```
+
+
+```{r}
+MAPEx_model <- lm(MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
+summary(MAPEx_model)
+ggplot(MAPvsEx, aes(x = GovernmentHealthExpenditure, y = MedianMAP)) + 
+  geom_point() +
+  stat_smooth(method = "lm", col = "red")
+```
+
+
+```{r}
+```
+
+
 ## Note on Attribution
 
 If you are directly quoting from a source, please make that clear. You can show quotes using `>` like this
