@@ -13,11 +13,28 @@ We describe here our detailed data analysis.
 
 
 ```{r}
+library(dplyr)
 library(tidyverse)
 print(getwd())
-data <- read_csv(here::here("dataset/loan_refusal_clean.csv"))
-load(here::here("dataset/loan_refusal.RData"))
-print(ls())
+#data <- read_csv(here::here("dataset/MAPvsEx.csv"))
+#data <- read_csv(here::here("dataset/loan_refusal_clean.csv"))
+#load(here::here("dataset/loan_refusal.RData"))
+#print(ls())
+```
+
+
+```{r}
+MAPvsEx
+plot_govExp <- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
+         geom_point()
+
+plot_medMAP <- ggplot(data = MAPvsEx,aes(x=Year, y = MedianMAP)) + 
+         geom_point()
+
+library(grid)
+
+grid.newpage()
+grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = "last"))
 ```
 
 ## Note on Attribution
