@@ -11,9 +11,9 @@
 
 <meta name="author" content="Daniel Sussman" />
 
-<meta name="date" content="2022-12-02" />
+<meta name="date" content="2022-12-09" />
 
-<title>Blog Post 7</title>
+<title>Blog Post 8</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -356,9 +356,9 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Blog Post 7</h1>
+<h1 class="title toc-ignore">Blog Post 8</h1>
 <h4 class="author">Daniel Sussman</h4>
-<h4 class="date">2022-12-02</h4>
+<h4 class="date">2022-12-09</h4>
 
 </div>
 
@@ -366,42 +366,22 @@ display: none;
 true
 </div>
 
-<p>To continue our analysis, our team has decided to refine our models
-for ease of explanation/visualization and summarize our data to join
-with a secondary dataset. At the start of our project, we wanted to
-assess health trends over the course of the past two decades and check
-for health inequalities among races/ethnic groups. To accomplish this,
-we created two separate multiple linear regression models for systolic
-(SBP) and diastolic blood pressure (DBP). While this method was
-serviceable, working with two separate outcomes made our data difficult
-to visualize and model concisely. Thus, we’ve decided to change our
-outcome variable to mean arterial pressure (MAP), which is essentially a
-weighted average of the two values for blood pressure calculated with
-the formula MAP = DBP + 1/3(SBP-DBP) . Using this singular outcome
-allows us to convey the same information in a more compact manner. We
-also plan on adjusting this statistical model to treat “white” as the
-baseline for race/ethnicity to assess whether other races differ in
-health outcomes from white individuals.</p>
-<p>To further explore our regression model, we must visualize the
-coefficients of our dataset. We plan to create faceted plots with MAP on
-the y-axis and a single predictor on the x-axis. All other predictors
-will be held at a constant value. We will also bin the age variable to
-more easily work with the data, separating the variable into 18–39,
-40–59, and 60 and over similar to a CDC data brief (<a href="https://www.cdc.gov/nchs/products/databriefs/db289.htm#" class="uri">https://www.cdc.gov/nchs/products/databriefs/db289.htm#</a>).
-We also plan on expanding our model through the addition of a secondary
-dataset. We have included information related to the percent of
-government spending on general health per year and plan to visualize and
-discuss our plots. Statistical analyses may not be feasible due to the
-small number of observations in our appended dataset (10 rows), so we
-will focus on creating visualizations. </p>
-<p>The results of our multiple linear regression have verified our
-initial hypothesis, so we plan on taking a deeper dive into this idea to
-flesh out and provide evidence for our thesis. Specifically, we claim
-that the outcome of blood pressure (MAP) is significantly associated
-with race/ethnicity and the year of data collection when corrected for
-other variables (age and gender). We plan to assess how population blood
-pressure levels have changed over time and analyze the effects of
-certain races/ethnic groups on MAP. </p>
+<p>For the polish and organizations of our visualizations and tables, we
+plan to first make our multiple regression tables compact per variable
+being analyzed. More specifically, we hope to include different faceted
+graphs for each variable. All graphs will be considered in MAP vs
+independent variable but each facet will be of a different year. To
+provide more evidence and to make clear for the viewer, we plan on
+showing each facet with the click of button in our interactive. It will
+also be optimal to show a general plot for our hypothesis to illustrate
+the baseline of the investigation. We also might go into how
+governmental expenditure plays a role in our data. Thus, we might
+include more analysis in another table. With so many plot ideas, it will
+be wise to include all of these ideas as different options to choose
+from. As mentioned in the previous blog (blog post 7), we are still
+working on different ideas of plotting our analysis. We hope to
+translate our ideas into the interactive with selective options to keep
+everything tidy.</p>
 
 
 
