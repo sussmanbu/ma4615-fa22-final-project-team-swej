@@ -1,0 +1,21 @@
+---
+title: Blog Post 8
+author: Daniel Sussman
+date: '2022-12-09'
+slug: []
+categories: []
+tags: []
+description: ~
+toc: yes
+authors: []
+series: []
+lastmod: '2022-12-02T09:57:34-05:00'
+featuredVideo: ~
+featuredImage: ~
+---
+
+For the polish and organizations of our visualizations and tables, we plan to first make our multiple regression tables compact per variable being analyzed. More specifically, we hope to include different faceted graphs for each variable. \n
+All graphs will be considered in MAP vs independent variable but each facet will be of a different year. \n
+To provide more evidence and to make clear for the viewer, we plan on showing each facet with the click of button in our interactive. It will also be optimal to show a general plot for our hypothesis to illustrate the baseline of the investigation.\n
+We also might go into how governmental expenditure plays a role in our data. Thus, we might include more analysis in another table. With so many plot ideas, it will be wise to include all of these ideas as different options to choose from. \n
+As mentioned in the previous blog (blog post 7), we are still working on different ideas of plotting our analysis. We hope to translate our ideas into the interactive with selective options to keep everything tidy.
