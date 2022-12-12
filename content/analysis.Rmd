@@ -23,13 +23,13 @@ Which of these predictors of health has the greatest impact on health?
 How do health trends change over time?
 
 ## Breadth of the Analysis:
-	Our team wanted to cast a wide net to cover many factors and relationships so that we can pinpoint significant factors. This way, we can provide evidence for our thesis to show that race/ethnicity and time greatly impact general health trends. As such, we aimed to investigate different predictors of health in relation to MAP. We hope to better illustrate our initial exploration of time and race/ethnicity with MAP by profiling other variables.
+Our team wanted to cast a wide net to cover many factors and relationships so that we can pinpoint significant factors. This way, we can provide evidence for our thesis to show that race/ethnicity and time greatly impact general health trends. As such, we aimed to investigate different predictors of health in relation to MAP. We hope to better illustrate our initial exploration of time and race/ethnicity with MAP by profiling other variables.
 
 ## Depth of the Analysis:
-	Since our analytics is about multiple variables in relation to MAP, there will be relationships that might have stronger impacts than other variables. Since we want to look at a wider scope of variables before pinpointing the ones that strongly influence changes in MAP trends, we might see variables with similar correlations. In this specific possibility, we can describe how two indicators of health are closely related to each other. Overall, more questions might arise after exploring different indicators of health; significant relationships might come up between independent variables as we explore them with MAP. 
+Since our analytics is about multiple variables in relation to MAP, there will be relationships that might have stronger impacts than other variables. Since we want to look at a wider scope of variables before pinpointing the ones that strongly influence changes in MAP trends, we might see variables with similar correlations. In this specific possibility, we can describe how two indicators of health are closely related to each other. Overall, more questions might arise after exploring different indicators of health; significant relationships might come up between independent variables as we explore them with MAP. 
 
-Modeling and Inference:
-	Since we are primarily looking at chronological data of MAP in relation to multiple indicators of health, we decided on choosing linear regression as our primary modeling method. FINISH ANALYSIS TO COMPLETE THIS SECTION.
+## Modeling and Inference:
+Since we are primarily looking at chronological data of MAP in relation to multiple indicators of health, we decided on choosing linear regression as our primary modeling method. FINISH ANALYSIS TO COMPLETE THIS SECTION.
 
 
 ```{r}
