@@ -14,14 +14,28 @@ draft: false
 
 <p>This comes from the file <code>content/analysis.Rmd</code>.</p>
 <p>We describe here our detailed data analysis.</p>
-<pre class="r"><code>suppressPackageStartupMessages(library(tidyverse))</code></pre>
-<pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.1.2</code></pre>
-<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.1.2</code></pre>
-<pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.1.2</code></pre>
-<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.1.2</code></pre>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.1.2</code></pre>
-<pre class="r"><code>print(getwd())</code></pre>
-<pre><code>## [1] &quot;/Users/zwy/Documents/College/Fall 2022/MA415 Data Science in R/Project/ma4615-fa22-final-project-team-swej/content&quot;</code></pre>
+<div id="motivation" class="section level2">
+<h2>Motivation:</h2>
+<p>As the United States population grows and develops, there will be a greater need for information on the general health of the nation. Our initial plan was to assess health trends over the course of time (more specifically, two decades worth of data from the National Health and Nutrition Examination Survey program). We first used diastolic and systolic blood pressures as a means of assessing general health. Later on, we ended up using Mean Arterial Pressure (MAP) instead as it provided us a way to combine both diastolic and systolic blood pressures into one value. This made the overall analysis more clean and compact. We also wanted to see how impactful ethnicity/race is on MAP; an initial exploration of the relationship between race and Thus, the variables that we are most interested in are race/ethnicity, MAP, and time (in years).</p>
+<p>After summarizing these relationships together, we can then determine how impactful race/ethnicity is on MAP compared to other predictors of health. As a result, we generated multiple tables and plots of health variables with covariables to profile each relationship. Aside from these other predictors for health, we also plan on introducing a secondary dataset for government expenditure on general health.</p>
+<p>Some questions we wanted to answer through our analysis:
+Does government expenditure have a significant impact on general health?
+How much do these other factors affect health variables?
+Which of these predictors of health has the greatest impact on health?
+How do health trends change over time?</p>
+</div>
+<div id="breadth-of-the-analysis" class="section level2">
+<h2>Breadth of the Analysis:</h2>
+<pre><code>Our team wanted to cast a wide net to cover many factors and relationships so that we can pinpoint significant factors. This way, we can provide evidence for our thesis to show that race/ethnicity and time greatly impact general health trends. As such, we aimed to investigate different predictors of health in relation to MAP. We hope to better illustrate our initial exploration of time and race/ethnicity with MAP by profiling other variables.</code></pre>
+</div>
+<div id="depth-of-the-analysis" class="section level2">
+<h2>Depth of the Analysis:</h2>
+<pre><code>Since our analytics is about multiple variables in relation to MAP, there will be relationships that might have stronger impacts than other variables. Since we want to look at a wider scope of variables before pinpointing the ones that strongly influence changes in MAP trends, we might see variables with similar correlations. In this specific possibility, we can describe how two indicators of health are closely related to each other. Overall, more questions might arise after exploring different indicators of health; significant relationships might come up between independent variables as we explore them with MAP. </code></pre>
+<p>Modeling and Inference:
+Since we are primarily looking at chronological data of MAP in relation to multiple indicators of health, we decided on choosing linear regression as our primary modeling method. FINISH ANALYSIS TO COMPLETE THIS SECTION.</p>
+<pre class="r"><code>suppressPackageStartupMessages(library(tidyverse))
+print(getwd())</code></pre>
+<pre><code>## [1] &quot;C:/Users/Shawn Xu/Desktop/MA415/ma4615-fa22-final-project-team-swej/content&quot;</code></pre>
 <pre class="r"><code>MAPvsEx &lt;- read_csv(here::here(&quot;dataset/MAPvsEx.csv&quot;))</code></pre>
 <pre><code>## Rows: 10 Columns: 3
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -75,6 +89,7 @@ summary(model)</code></pre>
 ## Multiple R-squared:  0.2498, Adjusted R-squared:  0.2497 
 ## F-statistic:  1627 on 15 and 73264 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>library(corrplot)</code></pre>
+<pre><code>## Warning: package &#39;corrplot&#39; was built under R version 4.2.2</code></pre>
 <pre><code>## corrplot 0.92 loaded</code></pre>
 <pre class="r"><code>model_cor &lt;- cor(modelData, method = c(&quot;spearman&quot;))
 corrplot(model_cor, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
@@ -103,21 +118,25 @@ corrplot(model_cor, type = &quot;upper&quot;, order = &quot;hclust&quot;,
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/ethnicity_boxplot-1.png" width="672" /></p>
 <pre class="r"><code>age_plot &lt;- ggplot(modelData, aes(x=RIDAGEYR, y=MAP)) + 
-  geom_smooth(method = &quot;gam&quot;) +
-  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age&quot;, 
-       x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
+  geom_smooth(method = &quot;gam&quot;) 
 age_plot</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/age_lineplot-1.png" width="672" /></p>
-<pre class="r"><code>year_facet &lt;- age_plot + facet_wrap( ~ Year, ncol=4)
+<pre class="r"><code>year_facet &lt;- age_plot + facet_wrap( ~ Year, ncol=4)+
+  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Year&quot;, 
+       x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
 year_facet</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/year_facet-1.png" width="672" /></p>
-<pre class="r"><code>ethnicity_facet &lt;- age_plot + facet_wrap( ~ RIDRETH1)
+<pre class="r"><code>ethnicity_facet &lt;- age_plot + facet_wrap( ~ RIDRETH1)+
+  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Ethnicity&quot;, 
+       x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
 ethnicity_facet</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/ethnicity_facet-1.png" width="672" /></p>
-<pre class="r"><code>gender_facet &lt;- age_plot + facet_wrap( ~ RIAGENDR)
+<pre class="r"><code>gender_facet &lt;- age_plot + facet_wrap( ~ RIAGENDR)+
+  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Gender&quot;, 
+       x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
 gender_facet</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/gender_facet-1.png" width="672" /></p>
@@ -160,6 +179,18 @@ summary(MAPEx_model)</code></pre>
   stat_smooth(method = &quot;lm&quot;, col = &quot;blue&quot;)</code></pre>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/Ex_year_line-1.png" width="672" /></p>
+</div>
+<div id="flaws-and-limitations-of-analysis" class="section level2">
+<h2>Flaws and Limitations of Analysis:</h2>
+<p>FINISH ANALYSIS TO COMPLETE THIS SECTION.</p>
+</div>
+<div id="clarity-of-figures-and-explanations" class="section level2">
+<h2>Clarity of Figures and Explanations:</h2>
+<p>Include significant relationships of MAP with impactful variables
+Describe why each relationship is significant (Maybe why cholesterol is important health indicator, or why age is a good benchmark for MAP)
+Provide a small blurb/explanation of the relationship being shown/plotted
+Maybe some further interpretation of the relationship if it’s significant</p>
+</div>
 <div id="note-on-attribution" class="section level2">
 <h2>Note on Attribution</h2>
 <p>If you are directly quoting from a source, please make that clear. You can show quotes using <code>&gt;</code> like this</p>
@@ -216,16 +247,4 @@ summary(MAPEx_model)</code></pre>
 </ul></li>
 </ul>
 <p><strong>NOTE</strong>: Your Data Analysis can be broken up into multiple pages if that helps with your organization.</p>
-<p>Motivation:
-As the United States population grows and develops, there will be a greater need for information on the general health of the nation. Our initial plan was to assess health trends over the course of time (more specifically, two decades worth of data from the National Health and Nutrition Examination Survey program). We first used diastolic and systolic blood pressures as a means of assessing general health. Later on, we ended up using Mean Arterial Pressure (MAP) instead as it provided us a way to combine both diastolic and systolic blood pressures into one value. This made the overall analysis more clean and compact. We also wanted to see how impactful ethnicity/race is on MAP; an initial exploration of the relationship between race and Thus, the variables that we are most interested in are race/ethnicity, MAP, and time (in years).
-After summarizing these relationships together, we can then determine how impactful race/ethnicity is on MAP compared to other predictors of health. As a result, we generated multiple tables and plots of health variables with covariables to profile each relationship. Aside from these other predictors for health, we also plan on introducing a secondary dataset for government expenditure on general health.
-Some questions we wanted to answer through our analysis:
-Does government expenditure have a significant impact on general health?
-How much do these other factors affect health variables?
-Which of these predictors of health has the greatest impact on health?
-How do health trends change over time?
-Breadth of the Analysis:
-Our team wanted to cast a wide net to cover as many factors and relationships as possible so that we can pinpoint significant factors. This way, we can provide evidence for our thesis to show that race/ethnicity and time greatly impact general health trends. As such, we aimed to investigate a multitude of different predictors of health in relation to MAP. We hope to better illustrate our initial exploration of time and race/ethnicity with MAP by profiling other variables.</p>
-<p>Depth of the Analysis:
-Since our analytics is about multiple variables in relation to MAP, there will be relationships that might have stronger impacts than other variables. Since we want to look at a wider scope of variables before pinpointing the ones that strongly influence changes in MAP trends, we might see variables with similar correlations. In this specific possibility, we can describe how two indicators of health are closely related to each other. Overall, more questions might arise after exploring different indicators of health; significant relationships might come up between independent variables as we explore them with MAP.</p>
 </div>
