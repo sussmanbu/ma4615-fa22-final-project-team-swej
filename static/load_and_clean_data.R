@@ -244,5 +244,5 @@ rateBPMedvsEX <- modelData %>%
   filter(HTN == 1) %>%
   mutate(confirmedMeds = ifelse(BPQ050A == 1, 1, 0)) %>%
   group_by(Year) %>%
-  summarize(sum(confirmedMeds)/n()) %>%
+  summarize(bpMedRate = sum(confirmedMeds)/n()) %>%
   left_join(health_ex, by = "Year")
