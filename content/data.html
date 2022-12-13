@@ -21,21 +21,62 @@ To complement the health data provided by NHANES, we’ve decided to include a s
 </div>
 <div id="data-files-and-relevant-variables" class="section level2">
 <h2>Data Files and Relevant Variables</h2>
-<p>Our group plans on using every NHANES dataset from 1999-2018 (ten collection cycles in total). For each data collection cycle, we used the singular dataset in the “Demographics Data” tab and the “Blood Pressure” dataset under the “Examination Data” tab. The data from the World Bank can be found in the website linked in the previous section. The dataset used by our group can be found on the right side of the webpage; simply click “CSV” under the section called “Download.”
+Our group plans on using every NHANES dataset from 1999-2018 (ten collection cycles in total). For each data collection cycle, we used the singular dataset in the “Demographics Data” tab, the “Blood Pressure” dataset under the “Examination Data” tab, and the “Blood Pressure &amp; Cholesterol” dataset under the “Questionnaire Data” tab. The data from the World Bank can be found in the website linked in the previous section. The dataset used by our group can be found on the right side of the webpage; simply click “CSV” under the section called “Download.”
 <br>
 <br>
-The blood pressure dataset in NHANES consists of information related to blood pressure measurements and the manner in which they were taken such as what arm was used and substances consumed prior to examination. The specific variables used by our group were the first three readings for systolic and diastolic measurements of blood pressure named <code>BPXSY1(2,3)</code> and <code>BPXDI1(2,3)</code>. The demographics data in NHANES consists of data related to individual demographics like education level, race, age, income, etc. Our models seek to specifically explore race (<code>RIDRETH1</code>), age (<code>RIDAGEYR</code>), and gender (RIAGENDR) as predictors of blood pressure. Below is a short list of the variables considered for analysis: <strong>mention hypertension, bp meds, and correction for bp meds.</strong>
+The blood pressure dataset in NHANES consists of information related to blood pressure measurements and the manner in which they were taken such as what arm was used and substances consumed prior to examination. The specific variables used by our group were the first three readings for systolic and diastolic measurements of blood pressure named <code>BPXSY1(2,3)</code> and <code>BPXDI1(2,3)</code>. The demographics data in NHANES consists of data related to individual demographics like education level, race, age, income, etc. Our models seek to specifically explore race (<code>RIDRETH1</code>), age (<code>RIDAGEYR</code>), and gender (<code>RIAGENDR</code>) as predictors of blood pressure. The variable <code>BPQ050A</code> describes which individuals are currently taking blood pressure medication to treat high blood pressure; individuals on BP medication (<code>BPQ050A</code> = 1) had 5 points added to MAP to adjust for the reduction in BP (according to <a href="https://onlinelibrary.wiley.com/doi/epdf/10.1002/sim.2165">this study</a>). Below is a short list of the variables considered for analysis found in the data frame <code>modelData</code>:
 <br>
 <br>
-The World Bank dataset consists of hundreds of variables related to the expenditures of the United States government. Each row is a variable, and each column is an observation within a given year, thus necessitating some cleaning. The specific row variable that we will use in our analysis is <code>SH.XPD.GHED.GE.ZS</code>, which lists the percent of government funds allocated toward general health by year.</p>
+<ul>
+<li>
+<code>SEQN</code>: ID number assigned to each individual in the NHANES dataset. This value is uniform across all datasets within a given NHANES cycle and serves as the basis for all <code>joins</code> between datasets.
+</li>
+<li>
+<code>MAP</code>: derived from averaging over all values of <code>BPXSY1(2,3)</code> and <code>BPXDI1(2,3)</code> then using the formula MAP = MeanDia + ((MeanSys-MeanDia)/3). Serves as a weighted average that considers both systolic and diastolic measurements of blood pressure. In units of mmHg.
+</li>
+<li>
+<code>RIAGENDR</code>: biological sex, coded as male or female.
+</li>
+<li>
+<code>RIDAGEYR</code>: age of participant in years.
+</li>
+<li>
+<code>RIDRETH1</code>: race/ethnicity of the participant. Coded as 1 (Mexican American), 2 (Other Hispanic), 3 (White), 4 (Black), and 5 (Other Race).
+</li>
+<li>
+<code>BPQ050A</code>: blood pressure medication status. Coded as 1 (on BP medication), 2 (not on BP medication), and 3 (participant unsure or missing data).
+</li>
+<li>
+<code>Year</code>: year of NHANES data collection cycle.
+</li>
+<li>
+<code>HTN</code>: presence of hypertension, defined as MAP &gt; 100mmHg. Coded as 1 (present) or 2 (not present).
+</li>
+</ul>
+<br>
+<br>
+The World Bank dataset consists of hundreds of variables related to the expenditures of the United States government. Each row is a variable, and each column is an observation within a given year, thus necessitating some cleaning. The specific row variable that we will use in our analysis is <code>SH.XPD.GHED.GE.ZS</code>, which lists the percent of government funds allocated toward general health by year. The data frames used for analysis and their constituent variables are listed as follows:
+<br>
+<br>
+<ul>
+<li>
+<code>MAPvsEX</code>: contains data describing <code>MedianMap</code> and <code>GovernmentHealthExpenditure</code> (a percent) for each data collection <code>Year</code>.
+</li>
+<li>
+<code>rateBPMedvsEX</code>: describes the percent of individuals who have hypertension and are currently on hypertension medication (<code>bpMedRate</code>) within a given <code>Year</code> in addition to <code>GovernmentHealthExpenditure</code> for each <code>Year</code>.
+</li>
+<li>
+<code>rateHTNvsEX</code>: describes the rate of hypertension per <code>Year</code> (<code>rateHTN</code>) versus <code>GovernmentHealthExpenditure</code> for that <code>Year</code>.
+</li>
+</ul>
 </div>
 <div id="data-cleaning" class="section level2">
 <h2>Data Cleaning</h2>
 <p>A link to our load_and_clean_data.R file can be found <a href="https://drive.google.com/drive/folders/1t90bRkm-VneEOEssjShSrU2Tfm1uFA9D?usp=share_link">here</a>. The NHANES data is only available in the SAS data format .XPT; thus, the <code>read_xpt()</code> function from the <code>haven</code> package was necessary to load the dataset into the R environment. The data was then written to a CSV file using <code>write_csv()</code> from the <code>tidyverse</code> package for a permanent conversion to a data file type more commonly used by R. The datasets were then loaded into the R environment using <code>read_csv()</code>.
 <br>
 <br>
-For the first step in data cleaning, the mean diastolic and systolic blood pressures of each individual was calculated and saved to a variable named <code>MeanDia</code> and <code>MeanSys</code> respectively. Then, a new variable called <code>MAP</code> was created using the formula MAP = MeanDia + ((MeanSys-MeanDia)/3). Following the creation of these variables, the BP data and demographics data were combined for each year using an <code>inner_join()</code> by <code>SEQN</code>. Following this joining, a new column called <code>Year</code> was added to each dataset corresponding to the year in which the data was collected. Lastly, each data frame corresponding to a cycle of NHANES was combined into a single data frame using <code>bind_rows()</code> that was then written to a CSV file. <strong>talk about hyper tension and bp meds</strong>
+For the first step in data cleaning, the mean diastolic and systolic blood pressures of each individual was calculated and saved to a variable named <code>MeanDia</code> and <code>MeanSys</code> respectively. Then, a new variable called <code>MAP</code> was created using the formula MAP = MeanDia + ((MeanSys-MeanDia)/3). Following the creation of these variables, the BP data, medication data, and demographics data were combined for each year using an <code>inner_join()</code> by <code>SEQN</code>. Following this joining, a new column called <code>Year</code> was added to each dataset corresponding to the year in which the data was collected. Lastly, each data frame corresponding to a cycle of NHANES was combined into a single data frame using <code>bind_rows()</code> that was then written to a CSV file.
 <br>
 <br>
-The health expenditure dataset was loaded into the R environment using <code>read_csv()</code> and <code>filtered</code> to include only the row corresponding to <code>SH.XPD.GHED.GE.ZS</code>. To properly orient the dataset, <code>pivot_longer()</code> was used with values to <code>Health_Expenditure</code> and names to <code>Year</code>. The dataset was further <code>filtered</code> to include only the years 1999-2018, the years of NHANES collection used in our analysis. NHANES cycles usually occur over two years, so the values for expenses were averaged over every two years (i.e. 1999 and 2000 were averaged, 2001 and 2002 were averaged, etc.). To prepare the NHANES dataset for joining with the expenditure dataset, the NHANES dataset was <code>summarized</code> by the median <code>MAP</code> for each cycle. The expenditure dataset was then <code>joined</code> to the NHANES dataset by <code>year</code>.</p>
+The health expenditure dataset was loaded into the R environment using <code>read_csv()</code> and <code>filtered</code> to include only the row corresponding to <code>SH.XPD.GHED.GE.ZS</code>. To properly orient the dataset, <code>pivot_longer()</code> was used with values to <code>Health_Expenditure</code> and names to <code>Year</code>. The dataset was further <code>filtered</code> to include only the years 1999-2018, the years of NHANES collection used in our analysis. NHANES cycles usually occur over two years, so the values for expenses were averaged over every two years (i.e. 1999 and 2000 were averaged, 2001 and 2002 were averaged, etc.). To prepare the NHANES dataset for joining with the expenditure dataset, the NHANES dataset was <code>summarized</code> by the median <code>MAP</code> for each cycle. Additional datasets were created to explore the relationship between rate of blood pressure medication prescription () vs. <code>Health_Expenditure</code> and <code>HTN</code> vs. <code>Health_Expenditure</code>. The expenditure dataset was then <code>joined</code> to the NHANES dataset by <code>year</code>.</p>
 </div>
