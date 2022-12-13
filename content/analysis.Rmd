@@ -42,11 +42,14 @@ modelData <- read_csv(here::here("dataset/modelData.csv"))
 
 ```{r model_summary}
 # creating multiple linear regression model to predict MAP
-model <- lm(MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)
+#put this in a table
+#maybe add logistic regression for HTN
+model <- lm(MAP ~ RIDRETH1 + Year + RIDAGEYR + RIAGENDR, data = modelData)
 summary(model)
 ```
 
 ```{r corr_matrix}
+#something broke with this, but i dont really think we need this plot tbh
 library(corrplot)
 model_cor <- cor(modelData, method = c("spearman"))
 corrplot(model_cor, type = "upper", order = "hclust", 
@@ -56,7 +59,7 @@ corrplot(model_cor, type = "upper", order = "hclust",
 
 
 ```{r year_boxplot}
-modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
+modelData %>% ggplot(aes(x = Year, y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = "lm", se = FALSE) +
   labs(title = "Mean Arterial Pressure (MAP) vs. Year", x = "Year", y = "Mean Arterial Pressure") +
@@ -65,7 +68,7 @@ modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
 
 
 ```{r gender_boxplot}
-modelData %>% ggplot(aes(x = factor(RIAGENDR), y = MAP)) +
+modelData %>% ggplot(aes(x = RIAGENDR, y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = "lm", se = FALSE) +
   labs(title = "Mean Arterial Pressure (MAP) vs. Gender", x = "Gender", y = "Mean Arterial Pressure") +
@@ -74,7 +77,7 @@ modelData %>% ggplot(aes(x = factor(RIAGENDR), y = MAP)) +
 
 
 ```{r ethnicity_boxplot}
-modelData %>% ggplot(aes(x = factor(RIDRETH1), y = MAP)) +
+modelData %>% ggplot(aes(x = RIDRETH1, y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = "lm", se = FALSE) +
   labs(title = "Mean Arterial Pressure (MAP) vs. Ethnicity", 
@@ -84,7 +87,7 @@ modelData %>% ggplot(aes(x = factor(RIDRETH1), y = MAP)) +
 
 
 ```{r age_lineplot}
-age_plot <- ggplot(modelData, aes(x=RIDAGEYR, y=MAP)) + 
+age_plot <- ggplot(modelData, aes(x = RIDAGEYR, y = MAP)) + 
   geom_smooth(method = "gam") 
 age_plot
 ```
