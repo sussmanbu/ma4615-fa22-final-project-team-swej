@@ -28,7 +28,7 @@ The blood pressure dataset in NHANES consists of information related to blood pr
   <li>`RIAGENDR`: biological sex, coded as male or female.</li>
   <li>`RIDAGEYR`: age of participant in years.</li>
   <li>`RIDRETH1`: race/ethnicity of the participant. Coded as 1 (Mexican American), 2 (Other Hispanic), 3 (White), 4 (Black), and 5 (Other Race).</li>
-  <li>`BPQ050A`: blood pressure medication status. Coded as 1 (on BP medication), 2 (not on BP medication), and 3 (participant unsure or missing data).</li>
+  <li>`BPQ050A`: blood pressure medication status. Coded as 1 (on BP medication), 2 (not on BP medication), and 0 (participant unsure or missing data).</li>
   <li>`Year`: year of NHANES data collection cycle.</li>
   <li>`HTN`: presence of hypertension, defined as MAP > 100mmHg. Coded as 1 (present) or 2 (not present).</li>
 </ul>
