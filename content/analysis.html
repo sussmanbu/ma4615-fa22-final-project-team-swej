@@ -73,6 +73,55 @@ modelData &lt;- read_csv(here::here(&quot;dataset/modelData.csv&quot;))</code></
 ## Residual standard error: 12.05 on 57742 degrees of freedom
 ## Multiple R-squared:   0.17,  Adjusted R-squared:  0.1697 
 ## F-statistic: 788.2 on 15 and 57742 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>library(MASS)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;MASS&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     select</code></pre>
+<pre class="r"><code>library(car)</code></pre>
+<pre><code>## Loading required package: carData</code></pre>
+<pre><code>## Warning: package &#39;carData&#39; was built under R version 4.1.2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;car&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     recode</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     some</code></pre>
+<pre class="r"><code>stepAIC(model, direction =&quot;both&quot;)</code></pre>
+<pre><code>## Start:  AIC=287537.8
+## MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR)
+## 
+##                    Df Sum of Sq     RSS    AIC
+## &lt;none&gt;                          8383559 287538
+## - factor(Year)      9     43773 8427332 287821
+## - factor(RIAGENDR)  1    101002 8484561 288227
+## - factor(RIDRETH1)  4    105517 8489077 288252
+## - RIDAGEYR          1   1437845 9821404 296678</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + 
+##     factor(RIAGENDR), data = modelData)
+## 
+## Coefficients:
+##                      (Intercept)  factor(RIDRETH1)Mexican American  
+##                          79.0908                           -3.3247  
+##   factor(RIDRETH1)Other Hispanic        factor(RIDRETH1)Other Race  
+##                          -3.1284                           -2.0898  
+##            factor(RIDRETH1)White                  factor(Year)2002  
+##                          -3.3574                           -0.5684  
+##                 factor(Year)2004                  factor(Year)2006  
+##                          -1.5748                           -2.0921  
+##                 factor(Year)2008                  factor(Year)2010  
+##                          -1.3065                           -2.1416  
+##                 factor(Year)2012                  factor(Year)2014  
+##                          -1.1066                           -1.8363  
+##                 factor(Year)2016                  factor(Year)2018  
+##                          -1.0353                            0.7441  
+##                         RIDAGEYR              factor(RIAGENDR)male  
+##                           0.2524                            2.6465</code></pre>
 <pre class="r"><code>suppressPackageStartupMessages(library(broom))</code></pre>
 <pre><code>## Warning: package &#39;broom&#39; was built under R version 4.1.2</code></pre>
 <pre class="r"><code>modelData %&gt;% lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR)) %&gt;% 
@@ -268,7 +317,7 @@ modelData &lt;- read_csv(here::here(&quot;dataset/modelData.csv&quot;))</code></
 ## Residual standard error: 12.05 on 57738 degrees of freedom
 ## Multiple R-squared:  0.1703, Adjusted R-squared:   0.17 
 ## F-statistic: 623.6 on 19 and 57738 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p><img src="/analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <pre class="r"><code>#RIAGENDR: 1 = male, 2 = female
 #RIDRETH1: 1 = Mexican American, 2 =  Other Hispanic, 3 = Non-Hispanic White, 4 = Non-Hispanic Black, 5 = Other Race (includes mixed)
 library(ggcorrplot)</code></pre>

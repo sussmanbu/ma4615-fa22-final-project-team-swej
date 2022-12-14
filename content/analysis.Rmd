@@ -45,6 +45,11 @@ model <- lm(MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR),
 summary(model) 
 ```
 
+```{r}
+library(MASS)
+library(car)
+stepAIC(model, direction ="both")
+```
 
 
 ```{r}
