@@ -37,26 +37,9 @@ How do health trends change over time?</p>
 <p>Since we are primarily looking at chronological data of MAP in relation to multiple indicators of health, we decided on choosing linear regression as our primary modeling method. FINISH ANALYSIS TO COMPLETE THIS SECTION.</p>
 <pre class="r"><code>suppressPackageStartupMessages(library(tidyverse))
 print(getwd())</code></pre>
-<pre><code>## [1] &quot;C:/Users/Shawn Xu/Desktop/MA415/ma4615-fa22-final-project-team-swej/content&quot;</code></pre>
-<pre class="r"><code>MAPvsEx &lt;- read_csv(here::here(&quot;dataset/MAPvsEx.csv&quot;))</code></pre>
-<pre><code>## Rows: 10 Columns: 3
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## dbl (3): Year, MedianMAP, GovernmentHealthExpenditure
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>modelData &lt;- read_csv(here::here(&quot;dataset/modelData.csv&quot;))</code></pre>
-<pre><code>## Rows: 73280 Columns: 6
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## dbl (6): SEQN, MAP, RIAGENDR, RIDAGEYR, RIDRETH1, Year
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code># creating multiple linear regression model to predict MAP
-model &lt;- lm(MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)
-summary(model)</code></pre>
+<pre><code>## [1] &quot;/Users/zwy/Documents/College/Fall 2022/MA415 Data Science in R/Project/ma4615-fa22-final-project-team-swej/content&quot;</code></pre>
+<pre class="r"><code>MAPvsEx &lt;- read_csv(here::here(&quot;dataset/MAPvsEx.csv&quot;))
+modelData &lt;- read_csv(here::here(&quot;dataset/modelData.csv&quot;))</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + 
@@ -64,52 +47,249 @@ summary(model)</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -65.642  -6.711  -0.001   6.855  77.948 
+## -65.495  -7.257  -0.559   6.703  83.577 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)       74.547671   0.175134 425.661  &lt; 2e-16 ***
-## factor(RIDRETH1)2  0.092609   0.185293   0.500  0.61722    
-## factor(RIDRETH1)3 -0.133073   0.121654  -1.094  0.27402    
-## factor(RIDRETH1)4  2.191404   0.133011  16.475  &lt; 2e-16 ***
-## factor(RIDRETH1)5  1.337547   0.179590   7.448 9.60e-14 ***
-## factor(Year)2002  -0.792644   0.194631  -4.073 4.66e-05 ***
-## factor(Year)2004  -1.958727   0.198752  -9.855  &lt; 2e-16 ***
-## factor(Year)2006  -2.042844   0.197630 -10.337  &lt; 2e-16 ***
-## factor(Year)2008  -1.894050   0.198109  -9.561  &lt; 2e-16 ***
-## factor(Year)2010  -2.935005   0.195022 -15.050  &lt; 2e-16 ***
-## factor(Year)2012  -2.115927   0.201580 -10.497  &lt; 2e-16 ***
-## factor(Year)2014  -2.785746   0.197615 -14.097  &lt; 2e-16 ***
-## factor(Year)2016  -1.786119   0.198890  -8.980  &lt; 2e-16 ***
-## factor(Year)2018  -0.668206   0.204425  -3.269  0.00108 ** 
-## RIDAGEYR           0.299772   0.001994 150.358  &lt; 2e-16 ***
-## factor(RIAGENDR)2 -1.935095   0.087827 -22.033  &lt; 2e-16 ***
+##                                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                      79.090834   0.224132 352.876  &lt; 2e-16 ***
+## factor(RIDRETH1)Mexican American -3.324746   0.158084 -21.032  &lt; 2e-16 ***
+## factor(RIDRETH1)Other Hispanic   -3.128361   0.208382 -15.013  &lt; 2e-16 ***
+## factor(RIDRETH1)Other Race       -2.089809   0.200715 -10.412  &lt; 2e-16 ***
+## factor(RIDRETH1)White            -3.357355   0.133539 -25.141  &lt; 2e-16 ***
+## factor(Year)2002                 -0.568418   0.228131  -2.492  0.01272 *  
+## factor(Year)2004                 -1.574805   0.232069  -6.786 1.16e-11 ***
+## factor(Year)2006                 -2.092052   0.231092  -9.053  &lt; 2e-16 ***
+## factor(Year)2008                 -1.306517   0.227536  -5.742 9.40e-09 ***
+## factor(Year)2010                 -2.141606   0.223816  -9.569  &lt; 2e-16 ***
+## factor(Year)2012                 -1.106647   0.232591  -4.758 1.96e-06 ***
+## factor(Year)2014                 -1.836255   0.227896  -8.057 7.94e-16 ***
+## factor(Year)2016                 -1.035310   0.229500  -4.511 6.46e-06 ***
+## factor(Year)2018                  0.744131   0.234053   3.179  0.00148 ** 
+## RIDAGEYR                          0.252444   0.002537  99.515  &lt; 2e-16 ***
+## factor(RIAGENDR)male              2.646544   0.100342  26.375  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 11.88 on 73264 degrees of freedom
-## Multiple R-squared:  0.2498, Adjusted R-squared:  0.2497 
-## F-statistic:  1627 on 15 and 73264 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>library(corrplot)</code></pre>
-<pre><code>## Warning: package &#39;corrplot&#39; was built under R version 4.2.2</code></pre>
-<pre><code>## corrplot 0.92 loaded</code></pre>
-<pre class="r"><code>model_cor &lt;- cor(modelData, method = c(&quot;spearman&quot;))
-corrplot(model_cor, type = &quot;upper&quot;, order = &quot;hclust&quot;, 
-         tl.col = &quot;black&quot;, tl.srt = 45)</code></pre>
+## Residual standard error: 12.05 on 57742 degrees of freedom
+## Multiple R-squared:   0.17,  Adjusted R-squared:  0.1697 
+## F-statistic: 788.2 on 15 and 57742 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>suppressPackageStartupMessages(library(broom))</code></pre>
+<pre><code>## Warning: package &#39;broom&#39; was built under R version 4.1.2</code></pre>
+<pre class="r"><code>modelData %&gt;% lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR)) %&gt;% 
+  broom::tidy() %&gt;%
+  knitr::kable(format = &quot;markdown&quot;)</code></pre>
+<table>
+<colgroup>
+<col width="44%" />
+<col width="14%" />
+<col width="13%" />
+<col width="14%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">79.0908337</td>
+<td align="right">0.2241319</td>
+<td align="right">352.876320</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">factor(RIDRETH1)Mexican American</td>
+<td align="right">-3.3247456</td>
+<td align="right">0.1580838</td>
+<td align="right">-21.031538</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(RIDRETH1)Other Hispanic</td>
+<td align="right">-3.1283605</td>
+<td align="right">0.2083820</td>
+<td align="right">-15.012622</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">factor(RIDRETH1)Other Race</td>
+<td align="right">-2.0898085</td>
+<td align="right">0.2007149</td>
+<td align="right">-10.411828</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(RIDRETH1)White</td>
+<td align="right">-3.3573553</td>
+<td align="right">0.1335395</td>
+<td align="right">-25.141299</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">factor(Year)2002</td>
+<td align="right">-0.5684177</td>
+<td align="right">0.2281306</td>
+<td align="right">-2.491633</td>
+<td align="right">0.0127185</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(Year)2004</td>
+<td align="right">-1.5748054</td>
+<td align="right">0.2320685</td>
+<td align="right">-6.785950</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">factor(Year)2006</td>
+<td align="right">-2.0920515</td>
+<td align="right">0.2310921</td>
+<td align="right">-9.052889</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(Year)2008</td>
+<td align="right">-1.3065168</td>
+<td align="right">0.2275358</td>
+<td align="right">-5.742027</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">factor(Year)2010</td>
+<td align="right">-2.1416058</td>
+<td align="right">0.2238159</td>
+<td align="right">-9.568605</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(Year)2012</td>
+<td align="right">-1.1066468</td>
+<td align="right">0.2325907</td>
+<td align="right">-4.757915</td>
+<td align="right">0.0000020</td>
+</tr>
+<tr class="even">
+<td align="left">factor(Year)2014</td>
+<td align="right">-1.8362552</td>
+<td align="right">0.2278959</td>
+<td align="right">-8.057431</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">factor(Year)2016</td>
+<td align="right">-1.0353095</td>
+<td align="right">0.2294996</td>
+<td align="right">-4.511161</td>
+<td align="right">0.0000065</td>
+</tr>
+<tr class="even">
+<td align="left">factor(Year)2018</td>
+<td align="right">0.7441312</td>
+<td align="right">0.2340531</td>
+<td align="right">3.179327</td>
+<td align="right">0.0014770</td>
+</tr>
+<tr class="odd">
+<td align="left">RIDAGEYR</td>
+<td align="right">0.2524440</td>
+<td align="right">0.0025367</td>
+<td align="right">99.514807</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">factor(RIAGENDR)male</td>
+<td align="right">2.6465445</td>
+<td align="right">0.1003421</td>
+<td align="right">26.375203</td>
+<td align="right">0.0000000</td>
+</tr>
+</tbody>
+</table>
+<pre><code>## 
+## Call:
+## lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + 
+##     factor(RIAGENDR) + factor(RIDRETH1):factor(RIAGENDR), data = modelData)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -65.370  -7.258  -0.568   6.721  83.445 
+## 
+## Coefficients:
+##                                                        Estimate Std. Error
+## (Intercept)                                           79.306133   0.242711
+## factor(RIDRETH1)Mexican American                      -3.712397   0.220234
+## factor(RIDRETH1)Other Hispanic                        -3.829396   0.282785
+## factor(RIDRETH1)Other Race                            -2.575615   0.279050
+## factor(RIDRETH1)White                                 -3.444533   0.186163
+## factor(Year)2002                                      -0.573013   0.228109
+## factor(Year)2004                                      -1.581113   0.232043
+## factor(Year)2006                                      -2.092666   0.231066
+## factor(Year)2008                                      -1.310353   0.227505
+## factor(Year)2010                                      -2.146183   0.223792
+## factor(Year)2012                                      -1.114285   0.232564
+## factor(Year)2014                                      -1.838571   0.227866
+## factor(Year)2016                                      -1.037390   0.229467
+## factor(Year)2018                                       0.738795   0.234022
+## RIDAGEYR                                               0.252504   0.002537
+## factor(RIAGENDR)male                                   2.209015   0.214066
+## factor(RIDRETH1)Mexican American:factor(RIAGENDR)male  0.793375   0.313995
+## factor(RIDRETH1)Other Hispanic:factor(RIAGENDR)male    1.521860   0.415747
+## factor(RIDRETH1)Other Race:factor(RIAGENDR)male        0.991336   0.395728
+## factor(RIDRETH1)White:factor(RIAGENDR)male             0.180164   0.264247
+##                                                       t value Pr(&gt;|t|)    
+## (Intercept)                                           326.751  &lt; 2e-16 ***
+## factor(RIDRETH1)Mexican American                      -16.857  &lt; 2e-16 ***
+## factor(RIDRETH1)Other Hispanic                        -13.542  &lt; 2e-16 ***
+## factor(RIDRETH1)Other Race                             -9.230  &lt; 2e-16 ***
+## factor(RIDRETH1)White                                 -18.503  &lt; 2e-16 ***
+## factor(Year)2002                                       -2.512 0.012007 *  
+## factor(Year)2004                                       -6.814 9.59e-12 ***
+## factor(Year)2006                                       -9.057  &lt; 2e-16 ***
+## factor(Year)2008                                       -5.760 8.47e-09 ***
+## factor(Year)2010                                       -9.590  &lt; 2e-16 ***
+## factor(Year)2012                                       -4.791 1.66e-06 ***
+## factor(Year)2014                                       -8.069 7.24e-16 ***
+## factor(Year)2016                                       -4.521 6.17e-06 ***
+## factor(Year)2018                                        3.157 0.001595 ** 
+## RIDAGEYR                                               99.546  &lt; 2e-16 ***
+## factor(RIAGENDR)male                                   10.319  &lt; 2e-16 ***
+## factor(RIDRETH1)Mexican American:factor(RIAGENDR)male   2.527 0.011516 *  
+## factor(RIDRETH1)Other Hispanic:factor(RIAGENDR)male     3.661 0.000252 ***
+## factor(RIDRETH1)Other Race:factor(RIAGENDR)male         2.505 0.012245 *  
+## factor(RIDRETH1)White:factor(RIAGENDR)male              0.682 0.495368    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 12.05 on 57738 degrees of freedom
+## Multiple R-squared:  0.1703, Adjusted R-squared:   0.17 
+## F-statistic: 623.6 on 19 and 57738 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>#RIAGENDR: 1 = male, 2 = female
+#RIDRETH1: 1 = Mexican American, 2 =  Other Hispanic, 3 = Non-Hispanic White, 4 = Non-Hispanic Black, 5 = Other Race (includes mixed)
+library(ggcorrplot)</code></pre>
+<pre><code>## Warning: package &#39;ggcorrplot&#39; was built under R version 4.1.2</code></pre>
+<pre class="r"><code>model.matrix(~0+., data=modelData) %&gt;% 
+  cor(use=&quot;pairwise.complete.obs&quot;) %&gt;% 
+  ggcorrplot(show.diag = F, type=&quot;lower&quot;, lab=TRUE, lab_size=2)</code></pre>
 <p><img src="/analysis_files/figure-html/corr_matrix-1.png" width="672" /></p>
 <pre class="r"><code>modelData %&gt;% ggplot(aes(x = factor(Year), y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = &quot;lm&quot;, se = FALSE) +
   labs(title = &quot;Mean Arterial Pressure (MAP) vs. Year&quot;, x = &quot;Year&quot;, y = &quot;Mean Arterial Pressure&quot;) +
   coord_flip()</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/year_boxplot-1.png" width="672" /></p>
 <pre class="r"><code>modelData %&gt;% ggplot(aes(x = factor(RIAGENDR), y = MAP)) +
   geom_boxplot() +
   stat_smooth(method = &quot;lm&quot;, se = FALSE) +
   labs(title = &quot;Mean Arterial Pressure (MAP) vs. Gender&quot;, x = &quot;Gender&quot;, y = &quot;Mean Arterial Pressure&quot;) +
   coord_flip()</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/gender_boxplot-1.png" width="672" /></p>
 <pre class="r"><code>modelData %&gt;% ggplot(aes(x = factor(RIDRETH1), y = MAP)) +
   geom_boxplot() +
@@ -117,30 +297,30 @@ corrplot(model_cor, type = &quot;upper&quot;, order = &quot;hclust&quot;,
   labs(title = &quot;Mean Arterial Pressure (MAP) vs. Ethnicity&quot;, 
        x = &quot;Ethnicity&quot;, y = &quot;Mean Arterial Pressure&quot;) +
   coord_flip()</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/ethnicity_boxplot-1.png" width="672" /></p>
 <pre class="r"><code>age_plot &lt;- ggplot(modelData, aes(x=RIDAGEYR, y=MAP)) + 
   geom_smooth(method = &quot;gam&quot;) 
 age_plot</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/age_lineplot-1.png" width="672" /></p>
 <pre class="r"><code>year_facet &lt;- age_plot + facet_wrap( ~ Year, ncol=4)+
   labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Year&quot;, 
        x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
 year_facet</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/year_facet-1.png" width="672" /></p>
 <pre class="r"><code>ethnicity_facet &lt;- age_plot + facet_wrap( ~ RIDRETH1)+
   labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Ethnicity&quot;, 
        x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
 ethnicity_facet</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/ethnicity_facet-1.png" width="672" /></p>
 <pre class="r"><code>gender_facet &lt;- age_plot + facet_wrap( ~ RIAGENDR)+
   labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Gender&quot;, 
        x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
 gender_facet</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/gender_facet-1.png" width="672" /></p>
 <pre class="r"><code>plot_govExp &lt;- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
          geom_point()
@@ -158,28 +338,28 @@ summary(MAPEx_model)</code></pre>
 ## lm(formula = MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -1.4337 -0.7629 -0.1232  0.7889  1.5544 
+##      Min       1Q   Median       3Q      Max 
+## -1.65154 -0.74958 -0.05673  0.70992  1.66061 
 ## 
 ## Coefficients:
 ##                             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                  78.3139     3.1093  25.187 6.61e-09 ***
-## GovernmentHealthExpenditure   0.2638     0.1607   1.642    0.139    
+## (Intercept)                  82.5800     3.2779   25.19  6.6e-09 ***
+## GovernmentHealthExpenditure   0.2372     0.1694    1.40    0.199    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.05 on 8 degrees of freedom
-## Multiple R-squared:  0.252,  Adjusted R-squared:  0.1585 
-## F-statistic: 2.695 on 1 and 8 DF,  p-value: 0.1393</code></pre>
+## Residual standard error: 1.107 on 8 degrees of freedom
+## Multiple R-squared:  0.1969, Adjusted R-squared:  0.09651 
+## F-statistic: 1.961 on 1 and 8 DF,  p-value: 0.1989</code></pre>
 <pre class="r"><code>ggplot(MAPvsEx, aes(x = GovernmentHealthExpenditure, y = MedianMAP)) + 
   geom_point() +
   stat_smooth(method = &quot;lm&quot;, col = &quot;red&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/MapvsEx_reg-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(MAPvsEx, aes(x = Year, y = GovernmentHealthExpenditure)) + 
   geom_point() +
   stat_smooth(method = &quot;lm&quot;, col = &quot;blue&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/Ex_year_line-1.png" width="672" /></p>
 </div>
 <div id="flaws-and-limitations-of-analysis" class="section level2">
