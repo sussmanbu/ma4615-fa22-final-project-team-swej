@@ -1,0 +1,11 @@
+name: swej_interactive
+title:
+username:
+account: swej
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7890270
+bundleId: 6635163
+url: https://swej.shinyapps.io/swej_interactive/
+when: 1671004810.4742
+lastSyncTime: 1671004810.4742
