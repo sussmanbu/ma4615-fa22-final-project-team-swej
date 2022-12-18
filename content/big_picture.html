@@ -2,7 +2,7 @@
 title: Big Picture
 description:
 toc: true
-featuredImage: images/heart.jpg
+featuredImage: /images/heart.jpeg
 featuredVideo:
 draft: false
 ---
@@ -14,11 +14,26 @@ draft: false
 
 <div id="the-land-of-equality-except-in-health" class="section level2">
 <h2>THE LAND OF EQUALITY (EXCEPT IN HEALTH)</h2>
-<p>Access and availability of healthcare is an essential human right. Sickness is and has been an inevitable part of the human experience, and modern advances in public health and medicine have allowed us to combat many of these illnesses. In the United States, we have the ability to administer life-saving treatments with relative ease; hundreds of billions of dollars go towards researching medical technology and establishing healthcare institutions (i.e. hospitals). Thus, we would expect that, with all the capital going into general health, everyone in the US would have equal access to healthcare. However, such idealism never manifests in reality, and the recent pandemic has only served to expose the inequalities in all of our institutions. Statistics from the CDC show that when compared to white individuals, blacks, hispanics, and native americans were about 1.5x more at risk for catching the disease, over 2x more at risk of being hospitalized, and nearly 2x more at risk of death as of Nov. 8, 2022. Given the gross inequality demonstrated over the past 3 years, our group wanted to analyze health trends in the United States over the past 20 years to evaluate differences in health outcomes by race while considering covariates like age and time of data collection. The results of our analysis shown that health outcomes differ by race when considering the effects of other variables/covariates, pointing to some kind of systemic racism within our national healthcare system that has existed for at least the past 20 years.</p>
+<p>Access and availability of healthcare is an essential human right. Sickness is and has been an inevitable part of the human experience, and modern advances in public health and medicine have allowed us to combat many of these illnesses. In the United States, we have the ability to administer life-saving treatments with relative ease; hundreds of billions of dollars go towards researching medical technology and establishing healthcare institutions (i.e. hospitals). Thus, we would expect that, with all the capital going into general health, everyone in the US would have equal access to healthcare. However, such idealism never manifests in reality, and the recent pandemic has only served to expose the inequalities in all of our institutions. Statistics from the CDC show that when compared to white individuals, blacks, hispanics, and native americans were about 1.5x more at risk for catching the disease, over 2x more at risk of being hospitalized, and nearly 2x more at risk of death as of Nov. 8, 2022. Given the gross inequality demonstrated over the past 3 years, our group wanted to analyze health trends in the United States over the past 20 years to evaluate differences in health outcomes by race while considering covariates like age and time of data collection. The results of our analysis show that health outcomes differ by race when considering the effects of other variables/covariates, pointing to some kind of systemic racism within our national healthcare system that still exists in the present.</p>
 </div>
 <div id="a-broken-heart-among-other-issues" class="section level2">
 <h2>A BROKEN HEART, AMONG OTHER ISSUES</h2>
+<p>The primary health outcome that our group decided to model and analyze was blood pressure. Cardiovascular disease is listed by the CDC as the number one cause of death in the US, and many heart disorders stem from elevated blood pressure levels. Specifically, we calculated and analyzed a value called mean arterial pressure (MAP), which is a weighted average of systolic and diastolic blood pressure. All data comes from the National Health and Nutrition Examination Survey (NHANES), a biannual program run by the CDC that estimates the health status of the entire US; more information about NHANES can be found in our Data page. First, we created a multiple linear regression model using participant race/ethnicity, age, gender, year of data collection, and the interaction between ethnicity and age as predictors for MAP. As mentioned earlier, our primary focus is on the association between race/ethnicity and MAP; all other variables mentioned were added to the model as possible covariates to limit confounding. The results of our regression analysis can be seen in the plot below.</p>
 <p><img src="/big_picture_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>The plot above shows our predicted values for MAP as a function of age for three groups: white, black, and mexican american. As mentioned in the previous paragraph, elevated blood pressure (MAP in this case) is known to cause a variety of cardiovascular issues. Even after adjusting for a number of known covariates of blood pressure like age and gender, there is a clear inflation of blood pressure values for non-white participants when compared to white participants. Furthermore, black individuals are predicted to have inflated values for MAP at all ages when compared to the other two groups, pointing toward some kind of social force that leads to negative health outcomes. This model has also been adjusted for the year of data collection, so this systematic increase in MAP for black individuals is present regardless of any temporal factors.
+<br>
+<br>
+To further continue our data analysis, our group decided to look at how government expenditure on general health has changed over the years of NHANES collection. Using data taken from the World Bank, we created the plot shown below.
+<img src="/big_picture_files/figure-html/MAPvsEx_sidebyside-1.png" width="672" />
+Our original hypothesis was that increased government expenditure on health would lead to decreased levels of MAP for the entire sample of participants, but our analysis did not yield significant results. We did, however, find that government expenditure on health increased over time as seen in the plot above. Despite the increase in expenditure over the years, the gap in health outcomes between black and white participants were still significant, pointing toward some institutional factors related to inflated MAP levels for black individuals.</p>
+</div>
+<div id="interactive" class="section level2">
+<h2>INTERACTIVE</h2>
+<p>We have also created an interactive plot for personalized exploration of our dataset found <a href="https://swej.shinyapps.io/swej_interactive/">here</a>. A video demonstration of this interactive is linked <a href="link%20video%20when%20done">here</a></p>
+</div>
+<div id="concluding-remarks" class="section level2">
+<h2>CONCLUDING REMARKS</h2>
+<p>Our modelling suggests that black individuals are predicted to have worse outcomes for cardiovascular health (i.e. increased values for MAP) when compared to other races/ethnicities. In our current paradigm of race, we understand that race does not play a direct role in physiological outcomes; instead, environmental and social factors associated with race are the true culprits of inequity for health outcomes. One factor contributing to this inequity may be an inequal distribution of funds for healthcare by race. Despite government spending on healthcare increasing over the past 20 years, the racial gap remains significant. Further analysis should consider additional sociological factors associated with each individual like access to health care and income in an effort to further determine the true causes of this inequality.</p>
 <hr />
 </div>
 <div id="rubric-on-this-page" class="section level2">
@@ -47,7 +62,7 @@ draft: false
 </div>
 <div id="rubric-other-components" class="section level2">
 <h2>Rubric: Other components</h2>
-<div id="interactive" class="section level3">
+<div id="interactive-1" class="section level3">
 <h3>Interactive</h3>
 <p>You will also be required to make an interactive dashboard like <a href="/flex/flex.html">this one</a>.</p>
 <p>Your Big Data page should include a link to an interactive dashboard. The dashboard should be created either using Shiny or FlexDashboard (or another tool with professor’s approval). This interactive component should in some way support your thesis from your big picture page. Good interactives often provide both high-level understanding of the data while allowing a user to investigate specific scenarios, observations, subgroups, etc.</p>
