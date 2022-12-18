@@ -14,24 +14,32 @@ modelData <- read.csv("modelData.csv")
 colnames(modelData)[3] <- "Gender"
 colnames(modelData)[4] <- "Age"
 colnames(modelData)[5] <- "Ethnicity"
-age_plot <- ggplot(modelData, aes(x = Age, y = MAP)) + 
-  geom_smooth(method = "gam") 
-#initialize modelData dataset and change column names to be called later
-#also intialize age_plot to facet
+#for ease in calling column names
 
-var_choices <- c("Gender", "Year", "Ethnicity")
 
 ui <- fluidPage(
-  selectInput(inputId = "var",
+  selectInput(inputId = "gender",
               label = "Choose a Variable",
-              choices = var_choices),
-  plotOutput("facet")
+              choices = c("male", "female"),
+              selected = "male"),
+  checkboxGroupInput(inputId = "ethnicity", label = "Choose Ethnicity or Ethnicities", 
+                     selected = "White",
+                     choices = c("Mexican American", "Other Hispanic", 
+                                 "White", "Black", "Other Race")),
+  sliderInput(inputId = "year", label = "Year Survey was Conducted",
+              min = 2000, max = 2018, value = 2000, step = 2, animate = TRUE),
+  plotOutput("line")
 )
 server <- function(input, output) {
-  output$facet <- renderPlot({
-    age_plot + facet_wrap( ~ modelData[,input$var])+
-      labs(title = "Mean Arterial Pressure (MAP) vs. Age", 
-           x = "Age", y = "Mean Arterial Pressure")
+  output$line <- renderPlot({
+      modelData %>% filter(Gender == input$gender, Year == input$year,
+                           Ethnicity == input$ethnicity) %>% 
+        ggplot(aes(x = Age, y = MAP)) + geom_point(aes(color = Ethnicity)) + 
+          geom_hline(aes(yintercept = median(MAP), color="Median MAP")) +
+        labs(title = "Mean Arterial Pressure (MAP) vs. Age by Chosen Demographics", 
+             x = "Age", y = "Mean Arterial Pressure") + xlim(0,100)+ ylim(0,180) +
+      coord_fixed(200/700)
+
   })
 }
 shinyApp(ui, server)
