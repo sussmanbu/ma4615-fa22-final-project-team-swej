@@ -30,18 +30,10 @@ The blood pressure dataset in NHANES consists of information related to blood pr
   <li>`RIDRETH1`: race/ethnicity of the participant. Coded as 1 (Mexican American), 2 (Other Hispanic), 3 (White), 4 (Black), and 5 (Other Race).</li>
   <li>`BPQ050A`: blood pressure medication status. Coded as 1 (on BP medication), 2 (not on BP medication), and 0 (participant unsure or missing data).</li>
   <li>`Year`: year of NHANES data collection cycle.</li>
-  <li>`HTN`: presence of hypertension, defined as MAP > 100mmHg. Coded as 1 (present) or 2 (not present).</li>
 </ul>
 <br>
 <br>
-The World Bank dataset consists of hundreds of variables related to the expenditures of the United States government. Each row is a variable, and each column is an observation within a given year, thus necessitating some cleaning. The specific row variable that we will use in our analysis is `SH.XPD.GHED.GE.ZS`, which lists the percent of government funds allocated toward general health by year. The data frames used for analysis and their constituent variables are listed as follows:
-<br>
-<br>
-<ul>
-<li>`MAPvsEX`: contains data describing `MedianMap` and `GovernmentHealthExpenditure` (a percent) for each data collection `Year`.</li>
-<li>`rateBPMedvsEX`: describes the percent of individuals who have hypertension and are currently on hypertension medication (`bpMedRate`) within a given `Year` in addition to `GovernmentHealthExpenditure` for each `Year`.</li>
-<li>`rateHTNvsEX`: describes the rate of hypertension per `Year` (`rateHTN`) versus `GovernmentHealthExpenditure` for that `Year`.</li>
-</ul>
+The World Bank dataset consists of hundreds of variables related to the expenditures of the United States government. Each row is a variable, and each column is an observation within a given year, thus necessitating some cleaning. The specific row variable that we will use in our analysis is `SH.XPD.GHED.GE.ZS`, which lists the percent of government funds allocated toward general health by year. The data frames used for analysis was `MAPvsEX` which contains data describing `MedianMap` and `GovernmentHealthExpenditure` (a percent) for each data collection `Year`.
 
 ## Data Cleaning
 
@@ -51,4 +43,4 @@ A link to our load_and_clean_data.R file can be found [here](https://drive.googl
 For the first step in data cleaning, the mean diastolic and systolic blood pressures of each individual was calculated and saved to a variable named `MeanDia` and `MeanSys` respectively. Then, a new variable called `MAP` was created using the formula MAP = MeanDia + ((MeanSys-MeanDia)/3). Following the creation of these variables, the BP data, medication data, and demographics data were combined for each year using an `inner_join()` by `SEQN`. Following this joining, a new column called `Year` was added to each dataset corresponding to the year in which the data was collected. Lastly, each data frame corresponding to a cycle of NHANES was combined into a single data frame using `bind_rows()` that was then written to a CSV file.
 <br>
 <br>
-The health expenditure dataset was loaded into the R environment using `read_csv()` and `filtered` to include only the row corresponding to `SH.XPD.GHED.GE.ZS`. To properly orient the dataset, `pivot_longer()` was used with values to `Health_Expenditure` and names to `Year`. The dataset was further `filtered` to include only the years 1999-2018, the years of NHANES collection used in our analysis. NHANES cycles usually occur over two years, so the values for expenses were averaged over every two years (i.e. 1999 and 2000 were averaged, 2001 and 2002 were averaged, etc.). To prepare the NHANES dataset for joining with the expenditure dataset, the NHANES dataset was `summarized` by the median `MAP` for each cycle. Additional datasets were created to explore the relationship between rate of blood pressure medication prescription () vs. `Health_Expenditure` and `HTN` vs. `Health_Expenditure`. The expenditure dataset was then `joined` to the NHANES dataset by `year`.
+The health expenditure dataset was loaded into the R environment using `read_csv()` and `filtered` to include only the row corresponding to `SH.XPD.GHED.GE.ZS`. To properly orient the dataset, `pivot_longer()` was used with values to `Health_Expenditure` and names to `Year`. The dataset was further `filtered` to include only the years 1999-2018, the years of NHANES collection used in our analysis. To prepare the NHANES dataset for joining with the expenditure dataset, the NHANES dataset was `summarized` by the median `MAP` for each cycle.  The expenditure dataset was then `joined` to the NHANES dataset by `year`.

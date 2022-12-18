@@ -239,7 +239,7 @@ rateHTNvsEX <- modelData %>%
   left_join(health_ex, by = "Year") %>%
   write_csv(here::here("dataset/rateHTNvsEx.csv"))
 
-#rate of BP med usage by year
+#rate of bp med usage/number of people with hypertension by year
 rateBPMedvsEX <- modelData %>%
   filter(HTN == 1) %>%
   mutate(confirmedMeds = ifelse(BPQ050A == 1, 1, 0)) %>%
