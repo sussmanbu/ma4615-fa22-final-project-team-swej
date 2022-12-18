@@ -24,7 +24,7 @@ The blood pressure dataset in NHANES consists of information related to blood pr
 <br>
 <ul>
   <li>`SEQN`: ID number assigned to each individual in the NHANES dataset. This value is uniform across all datasets within a given NHANES cycle and serves as the basis for all `joins` between datasets.</li>
-  <li>`MAP`: derived from averaging over all values of `BPXSY1(2,3)` and `BPXDI1(2,3)` then using the formula MAP = MeanDia + ((MeanSys-MeanDia)/3). Serves as a weighted average that considers both systolic and diastolic measurements of blood pressure. In units of mmHg.</li>
+  <li>`MAP`: Mean Arterial Pressure, derived from averaging over all values of `BPXSY1(2,3)` and `BPXDI1(2,3)` then using the formula MAP = MeanDia + ((MeanSys-MeanDia)/3). Serves as a weighted average that considers both systolic and diastolic measurements of blood pressure. In units of mmHg.</li>
   <li>`RIAGENDR`: biological sex, coded as male or female.</li>
   <li>`RIDAGEYR`: age of participant in years.</li>
   <li>`RIDRETH1`: race/ethnicity of the participant. Coded as 1 (Mexican American), 2 (Other Hispanic), 3 (White), 4 (Black), and 5 (Other Race).</li>

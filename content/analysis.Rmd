@@ -11,7 +11,7 @@ This comes from the file `content/analysis.Rmd`.
 
 We describe here our detailed data analysis.
 
-## Motivation:
+##Section 1: Motivation of Data Analysis
 As the United States population grows and develops, there will be a greater need for information on the general health of the nation. Our initial plan was to assess health trends over the course of time (more specifically, two decades worth of data from the National Health and Nutrition Examination Survey program). We first used diastolic and systolic blood pressures as a means of assessing general health. Later on, we ended up using Mean Arterial Pressure (MAP) instead as it provided us a way to combine both diastolic and systolic blood pressures into one value. This made the overall analysis more clean and compact. We also wanted to see how impactful ethnicity/race is on MAP; an initial exploration of the relationship between race and Thus, the variables that we are most interested in are race/ethnicity, MAP, and time (in years). 
 
 After summarizing these relationships together, we can then determine how impactful race/ethnicity is on MAP compared to other predictors of health. As a result, we generated multiple tables and plots of health variables with covariables to profile each relationship. Aside from these other predictors for health, we also plan on introducing a secondary dataset for government expenditure on general health. 
@@ -22,61 +22,186 @@ How much do these other factors affect health variables?
 Which of these predictors of health has the greatest impact on health?
 How do health trends change over time?
 
-## Breadth of the Analysis:
-Our team wanted to cast a wide net to cover many factors and relationships so that we can pinpoint significant factors. This way, we can provide evidence for our thesis to show that race/ethnicity and time greatly impact general health trends. As such, we aimed to investigate different predictors of health in relation to MAP. We hope to better illustrate our initial exploration of time and race/ethnicity with MAP by profiling other variables.
-
-## Depth of the Analysis:
-Since our analytics is about multiple variables in relation to MAP, there will be relationships that might have stronger impacts than other variables. Since we want to look at a wider scope of variables before pinpointing the ones that strongly influence changes in MAP trends, we might see variables with similar correlations. In this specific possibility, we can describe how two indicators of health are closely related to each other. Overall, more questions might arise after exploring different indicators of health; significant relationships might come up between independent variables as we explore them with MAP. 
-
-## Modeling and Inference:
-Since we are primarily looking at chronological data of MAP in relation to multiple indicators of health, we decided on choosing linear regression as our primary modeling method. FINISH ANALYSIS TO COMPLETE THIS SECTION.
-
-```{r, warning=FALSE, message=FALSE}
+##Section 2: Variable Analysis
+```{r, include=FALSE}
+# load modelData and rename variables
 suppressPackageStartupMessages(library(tidyverse))
+library(modelr)
+library(caret)
+suppressPackageStartupMessages(library(broom))
+library(MASS)
+library(car)
+library(grid)
+
 print(getwd())
 MAPvsEx <- read_csv(here::here("dataset/MAPvsEx.csv"))
 modelData <- read_csv(here::here("dataset/modelData.csv"))
+modelData <- rename(modelData, c("Ethnicity" = "RIDRETH1",
+                                 "Age" = "RIDAGEYR", 
+                                 "Gender" = "RIAGENDR", 
+                                 "Blood Pressure" = "BPQ050A", 
+                                 "Hypertension" = "HTN"))
+```
+
+To investigate the 
+```{r year_boxplot, warning=FALSE, message=FALSE, echo = FALSE}
+modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
+  geom_boxplot() +
+  stat_smooth(method = "lm", se = FALSE) +
+  labs(title = "Mean Arterial Pressure (MAP) by Year", x = "Year", y = "Mean Arterial Pressure") +
+  coord_flip()
+```
+
+```{r age_lineplot, warning=FALSE, message=FALSE, echo = FALSE }
+age_plot <- ggplot(modelData, aes(x=Age, y=MAP)) + 
+  geom_smooth(method = "gam") 
+age_plot
 ```
 
 
-```{r lin_reg_model_summary, echo=FALSE}
+
+```{r data_split, include=FALSE}
+# separate data into training and testing sets
+set.seed(42)
+training.samples <- 
+  createDataPartition(modelData$MAP, p = 0.7, list = FALSE)
+train.modelData  <- modelData[training.samples, ]
+test.modelData <- modelData[-training.samples, ]
+```
+
+
+```{r MLR_summary}
 # creating multiple linear regression model to predict MAP
-model <- lm(MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)
+model <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
 summary(model) 
 ```
 
-```{r}
-library(MASS)
-library(car)
+
+```{r, warning=FALSE, message=FALSE, include = FALSE}
+# print out the coefficients and significant levels of each predictors
+train.modelData %>% lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender) %>% 
+  broom::tidy() %>%
+  knitr::kable(format = "markdown")
+```
+
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
+grid <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% 
+ gather_predictions(model, .model = "lm")
+
+# Make predictions
+predictions <- model %>% predict(test.modelData)
+# Model performance
+data.frame(
+  RMSE = RMSE(predictions, test.modelData$MAP),
+  R2 = R2(predictions, test.modelData$MAP)
+)
+```
+
+
+
+```{r, warning=FALSE, message=FALSE}
+# load package to perform AIC
+vif(model)
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+# perform AIC to eliminate insignificant variables
 stepAIC(model, direction ="both")
 ```
 
 
 ```{r}
-suppressPackageStartupMessages(library(broom))
-modelData %>% lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR)) %>% 
-  broom::tidy() %>%
-  knitr::kable(format = "markdown")
+# multiple linear regression model with interaction terms 
+model_interaction_eth <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Ethnicity*Age, data = train.modelData)
+model_interaction_gd <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Gender*Age, data = train.modelData)
+model_interaction_both <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Gender*Age + Ethnicity*Age, data = train.modelData)
+summary(model_interaction_eth)
+summary(model_interaction_gd)
+summary(model_interaction_both)
 ```
 
+```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
+gender_ia_plot <- ggplot(train.modelData, aes(Age, MAP)) + geom_point(aes(color = Gender)) 
+ethn_ia_plot <- ggplot(train.modelData, aes(Age, MAP)) + geom_point(aes(color = Ethnicity))
+
+grid.newpage()
+grid.draw(rbind(ggplotGrob(gender_ia_plot), ggplotGrob(ethn_ia_plot), size = "last"))
+```
+
+
 ```{r, echo=FALSE}
-model_interaction <- lm(MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR) +  
-                        factor(RIDRETH1):factor(RIAGENDR), data = modelData)
-summary(model_interaction)
+# Make predictions
+predictions_interaction <- model_interaction_both %>% predict(test.modelData)
+# Model performance
+data.frame(
+  RMSE = RMSE(predictions_interaction, test.modelData$MAP),
+  R2 = R2(predictions_interaction, test.modelData$MAP)
+)
 ```
 
 
 
-```{r, echo=FALSE}
-modelData %>%
+```{r}
+vif(model_interaction_both)
+```
+
+
+```{r, warning=FALSE, message=FALSE}
+# perform AIC to eliminate insignificant variables
+stepAIC(model_interaction_both, direction ="both")
+```
+
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
+grid_2_eth <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% # needs both variables
+ gather_predictions(model, model_interaction_eth, .model = "lm")
+
+grid_2_gd <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% # needs both variables
+ gather_predictions(model, model_interaction_gd, .model = "lm")
+
+ggplot(modelData, aes(Age, MAP, color = Gender)) + 
+ geom_smooth(aes(y = grid_2_gd$pred), data = grid_2_gd, size = 1) +
+ facet_wrap(~ lm)
+
+ggplot(modelData, aes(Age, MAP, color = Ethnicity)) + 
+ geom_smooth(aes(y = grid_2_eth$pred), data = grid_2_eth, size = 1) +
+ facet_wrap(~ lm)
+```
+
+
+
+
+
+```{r scatter_plot_gd, echo=FALSE}
+train.modelData %>%
   filter(Year == "2018") %>%
-  ggplot(aes(RIDAGEYR, MAP)) + geom_point(aes(color = RIAGENDR)) 
+  ggplot(aes(Age, MAP)) + geom_point(aes(color = Gender)) 
 ```
 
 
-```{r corr_matrix}
-#RIAGENDR: 1 = male, 2 = female
-#RIDRETH1: 1 = Mexican American, 2 =  Other Hispanic, 3 = Non-Hispanic White, 4 = Non-Hispanic Black, 5 = Other Race (includes mixed)
+
+```{r scatter_plot_eth, echo=FALSE}
+train.modelData %>%
+  filter(Year == "2018") %>%
+  ggplot(aes(Age, MAP)) + geom_point(aes(color = Ethnicity)) 
+```
+
+```{r, echo = FALSE}
+train.modelData %>% ggplot(aes(x = MAP, y = ..density..)) +
+  geom_histogram(binwidth = 2, colour= "black", fill= "lightblue") +
+  geom_vline(aes(xintercept = median(MAP, na.rm = TRUE)),color="black", linetype="dashed", size=1) +
+  geom_density(color = "red") +
+  labs(title = "Histogram of Mean Arterial Pressure (MAP)", x = "Mean Arterial Pressure (MAP) (mmHg)", 
+       y = "Density") 
+```
+
+
+
+```{r corr_matrix, warning=FALSE, message=FALSE, echo = FALSE}
+# correlation matrix
 library(ggcorrplot)
 model.matrix(~0+., data=modelData) %>% 
   cor(use="pairwise.complete.obs") %>% 
@@ -85,80 +210,20 @@ model.matrix(~0+., data=modelData) %>%
 
 
 
-```{r year_boxplot}
-modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
-  geom_boxplot() +
-  stat_smooth(method = "lm", se = FALSE) +
-  labs(title = "Mean Arterial Pressure (MAP) vs. Year", x = "Year", y = "Mean Arterial Pressure") +
-  coord_flip()
-```
 
 
-
-```{r gender_boxplot}
-modelData %>% ggplot(aes(x = factor(RIAGENDR), y = MAP)) +
-  geom_boxplot() +
-  stat_smooth(method = "lm", se = FALSE) +
-  labs(title = "Mean Arterial Pressure (MAP) vs. Gender", x = "Gender", y = "Mean Arterial Pressure") +
-  coord_flip()
-```
-
-
-```{r ethnicity_boxplot}
-modelData %>% ggplot(aes(x = factor(RIDRETH1), y = MAP)) +
-  geom_boxplot() +
-  stat_smooth(method = "lm", se = FALSE) +
-  labs(title = "Mean Arterial Pressure (MAP) vs. Ethnicity", 
-       x = "Ethnicity", y = "Mean Arterial Pressure") +
-  coord_flip()
-```
-
-
-```{r age_lineplot}
-age_plot <- ggplot(modelData, aes(x=RIDAGEYR, y=MAP)) + 
-  geom_smooth(method = "gam") 
-age_plot
-```
-
-
-```{r year_facet}
-year_facet <- age_plot + facet_wrap( ~ Year, ncol=4)+
-  labs(title = "Mean Arterial Pressure (MAP) vs. Age by Year", 
-       x = "Age", y = "Mean Arterial Pressure")
-year_facet
-```
-
-
-```{r ethnicity_facet}
-ethnicity_facet <- age_plot + facet_wrap( ~ RIDRETH1)+
-  labs(title = "Mean Arterial Pressure (MAP) vs. Age by Ethnicity", 
-       x = "Age", y = "Mean Arterial Pressure")
-ethnicity_facet
-```
-
-
-```{r gender_facet}
-gender_facet <- age_plot + facet_wrap( ~ RIAGENDR)+
-  labs(title = "Mean Arterial Pressure (MAP) vs. Age by Gender", 
-       x = "Age", y = "Mean Arterial Pressure")
-gender_facet
-```
-
-
-
-```{r MAPvsEx_sidebyside}
+```{r MAPvsEx_sidebyside, warning=FALSE, message=FALSE, echo = FALSE}
 plot_govExp <- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
          geom_point()
 plot_medMAP <- ggplot(data = MAPvsEx,aes(x=Year, y = MedianMAP)) + 
          geom_point()
 
-library(grid)
 grid.newpage()
 grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = "last"))
 ```
 
 
-```{r MapvsEx_reg}
+```{r MapvsEx_reg, warning=FALSE, message=FALSE, echo = FALSE}
 MAPEx_model <- lm(MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
 summary(MAPEx_model)
 ggplot(MAPvsEx, aes(x = GovernmentHealthExpenditure, y = MedianMAP)) + 
@@ -167,20 +232,12 @@ ggplot(MAPvsEx, aes(x = GovernmentHealthExpenditure, y = MedianMAP)) +
 ```
 
 
-```{r Ex_year_line}
+```{r Ex_year_line, warning=FALSE, message=FALSE, echo = FALSE}
 ggplot(MAPvsEx, aes(x = Year, y = GovernmentHealthExpenditure)) + 
   geom_point() +
   stat_smooth(method = "lm", col = "blue")
 ```
 
-## Flaws and Limitations of Analysis:
-FINISH ANALYSIS TO COMPLETE THIS SECTION.
-
-## Clarity of Figures and Explanations:
-Include significant relationships of MAP with impactful variables
-Describe why each relationship is significant (Maybe why cholesterol is important health indicator, or why age is a good benchmark for MAP)
-Provide a small blurb/explanation of the relationship being shown/plotted
-Maybe some further interpretation of the relationship if it’s significant
 
 ## Note on Attribution
 

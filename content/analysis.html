@@ -14,374 +14,270 @@ draft: false
 
 <p>This comes from the file <code>content/analysis.Rmd</code>.</p>
 <p>We describe here our detailed data analysis.</p>
-<div id="motivation" class="section level2">
-<h2>Motivation:</h2>
-<p>As the United States population grows and develops, there will be a greater need for information on the general health of the nation. Our initial plan was to assess health trends over the course of time (more specifically, two decades worth of data from the National Health and Nutrition Examination Survey program). We first used diastolic and systolic blood pressures as a means of assessing general health. Later on, we ended up using Mean Arterial Pressure (MAP) instead as it provided us a way to combine both diastolic and systolic blood pressures into one value. This made the overall analysis more clean and compact. We also wanted to see how impactful ethnicity/race is on MAP; an initial exploration of the relationship between race and Thus, the variables that we are most interested in are race/ethnicity, MAP, and time (in years).</p>
+<p>##Section 1: Motivation of Data Analysis
+As the United States population grows and develops, there will be a greater need for information on the general health of the nation. Our initial plan was to assess health trends over the course of time (more specifically, two decades worth of data from the National Health and Nutrition Examination Survey program). We first used diastolic and systolic blood pressures as a means of assessing general health. Later on, we ended up using Mean Arterial Pressure (MAP) instead as it provided us a way to combine both diastolic and systolic blood pressures into one value. This made the overall analysis more clean and compact. We also wanted to see how impactful ethnicity/race is on MAP; an initial exploration of the relationship between race and Thus, the variables that we are most interested in are race/ethnicity, MAP, and time (in years).</p>
 <p>After summarizing these relationships together, we can then determine how impactful race/ethnicity is on MAP compared to other predictors of health. As a result, we generated multiple tables and plots of health variables with covariables to profile each relationship. Aside from these other predictors for health, we also plan on introducing a secondary dataset for government expenditure on general health.</p>
 <p>Some questions we wanted to answer through our analysis:
 Does government expenditure have a significant impact on general health?
 How much do these other factors affect health variables?
 Which of these predictors of health has the greatest impact on health?
 How do health trends change over time?</p>
-</div>
-<div id="breadth-of-the-analysis" class="section level2">
-<h2>Breadth of the Analysis:</h2>
-<p>Our team wanted to cast a wide net to cover many factors and relationships so that we can pinpoint significant factors. This way, we can provide evidence for our thesis to show that race/ethnicity and time greatly impact general health trends. As such, we aimed to investigate different predictors of health in relation to MAP. We hope to better illustrate our initial exploration of time and race/ethnicity with MAP by profiling other variables.</p>
-</div>
-<div id="depth-of-the-analysis" class="section level2">
-<h2>Depth of the Analysis:</h2>
-<p>Since our analytics is about multiple variables in relation to MAP, there will be relationships that might have stronger impacts than other variables. Since we want to look at a wider scope of variables before pinpointing the ones that strongly influence changes in MAP trends, we might see variables with similar correlations. In this specific possibility, we can describe how two indicators of health are closely related to each other. Overall, more questions might arise after exploring different indicators of health; significant relationships might come up between independent variables as we explore them with MAP.</p>
-</div>
-<div id="modeling-and-inference" class="section level2">
-<h2>Modeling and Inference:</h2>
-<p>Since we are primarily looking at chronological data of MAP in relation to multiple indicators of health, we decided on choosing linear regression as our primary modeling method. FINISH ANALYSIS TO COMPLETE THIS SECTION.</p>
-<pre class="r"><code>suppressPackageStartupMessages(library(tidyverse))
-print(getwd())</code></pre>
-<pre><code>## [1] &quot;/Users/zwy/Documents/College/Fall 2022/MA415 Data Science in R/Project/ma4615-fa22-final-project-team-swej/content&quot;</code></pre>
-<pre class="r"><code>MAPvsEx &lt;- read_csv(here::here(&quot;dataset/MAPvsEx.csv&quot;))
-modelData &lt;- read_csv(here::here(&quot;dataset/modelData.csv&quot;))</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + 
-##     factor(RIAGENDR), data = modelData)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -65.495  -7.257  -0.559   6.703  83.577 
-## 
-## Coefficients:
-##                                   Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                      79.090834   0.224132 352.876  &lt; 2e-16 ***
-## factor(RIDRETH1)Mexican American -3.324746   0.158084 -21.032  &lt; 2e-16 ***
-## factor(RIDRETH1)Other Hispanic   -3.128361   0.208382 -15.013  &lt; 2e-16 ***
-## factor(RIDRETH1)Other Race       -2.089809   0.200715 -10.412  &lt; 2e-16 ***
-## factor(RIDRETH1)White            -3.357355   0.133539 -25.141  &lt; 2e-16 ***
-## factor(Year)2002                 -0.568418   0.228131  -2.492  0.01272 *  
-## factor(Year)2004                 -1.574805   0.232069  -6.786 1.16e-11 ***
-## factor(Year)2006                 -2.092052   0.231092  -9.053  &lt; 2e-16 ***
-## factor(Year)2008                 -1.306517   0.227536  -5.742 9.40e-09 ***
-## factor(Year)2010                 -2.141606   0.223816  -9.569  &lt; 2e-16 ***
-## factor(Year)2012                 -1.106647   0.232591  -4.758 1.96e-06 ***
-## factor(Year)2014                 -1.836255   0.227896  -8.057 7.94e-16 ***
-## factor(Year)2016                 -1.035310   0.229500  -4.511 6.46e-06 ***
-## factor(Year)2018                  0.744131   0.234053   3.179  0.00148 ** 
-## RIDAGEYR                          0.252444   0.002537  99.515  &lt; 2e-16 ***
-## factor(RIAGENDR)male              2.646544   0.100342  26.375  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 12.05 on 57742 degrees of freedom
-## Multiple R-squared:   0.17,  Adjusted R-squared:  0.1697 
-## F-statistic: 788.2 on 15 and 57742 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>library(MASS)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;MASS&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     select</code></pre>
-<pre class="r"><code>library(car)</code></pre>
-<pre><code>## Loading required package: carData</code></pre>
-<pre><code>## Warning: package &#39;carData&#39; was built under R version 4.1.2</code></pre>
-<pre><code>## 
-## Attaching package: &#39;car&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
-## 
-##     recode</code></pre>
-<pre><code>## The following object is masked from &#39;package:purrr&#39;:
-## 
-##     some</code></pre>
-<pre class="r"><code>stepAIC(model, direction =&quot;both&quot;)</code></pre>
-<pre><code>## Start:  AIC=287537.8
-## MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR)
-## 
-##                    Df Sum of Sq     RSS    AIC
-## &lt;none&gt;                          8383559 287538
-## - factor(Year)      9     43773 8427332 287821
-## - factor(RIAGENDR)  1    101002 8484561 288227
-## - factor(RIDRETH1)  4    105517 8489077 288252
-## - RIDAGEYR          1   1437845 9821404 296678</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + 
-##     factor(RIAGENDR), data = modelData)
-## 
-## Coefficients:
-##                      (Intercept)  factor(RIDRETH1)Mexican American  
-##                          79.0908                           -3.3247  
-##   factor(RIDRETH1)Other Hispanic        factor(RIDRETH1)Other Race  
-##                          -3.1284                           -2.0898  
-##            factor(RIDRETH1)White                  factor(Year)2002  
-##                          -3.3574                           -0.5684  
-##                 factor(Year)2004                  factor(Year)2006  
-##                          -1.5748                           -2.0921  
-##                 factor(Year)2008                  factor(Year)2010  
-##                          -1.3065                           -2.1416  
-##                 factor(Year)2012                  factor(Year)2014  
-##                          -1.1066                           -1.8363  
-##                 factor(Year)2016                  factor(Year)2018  
-##                          -1.0353                            0.7441  
-##                         RIDAGEYR              factor(RIAGENDR)male  
-##                           0.2524                            2.6465</code></pre>
-<pre class="r"><code>suppressPackageStartupMessages(library(broom))</code></pre>
-<pre><code>## Warning: package &#39;broom&#39; was built under R version 4.1.2</code></pre>
-<pre class="r"><code>modelData %&gt;% lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR)) %&gt;% 
-  broom::tidy() %&gt;%
-  knitr::kable(format = &quot;markdown&quot;)</code></pre>
-<table>
-<colgroup>
-<col width="44%" />
-<col width="14%" />
-<col width="13%" />
-<col width="14%" />
-<col width="13%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">term</th>
-<th align="right">estimate</th>
-<th align="right">std.error</th>
-<th align="right">statistic</th>
-<th align="right">p.value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">(Intercept)</td>
-<td align="right">79.0908337</td>
-<td align="right">0.2241319</td>
-<td align="right">352.876320</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">factor(RIDRETH1)Mexican American</td>
-<td align="right">-3.3247456</td>
-<td align="right">0.1580838</td>
-<td align="right">-21.031538</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">factor(RIDRETH1)Other Hispanic</td>
-<td align="right">-3.1283605</td>
-<td align="right">0.2083820</td>
-<td align="right">-15.012622</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">factor(RIDRETH1)Other Race</td>
-<td align="right">-2.0898085</td>
-<td align="right">0.2007149</td>
-<td align="right">-10.411828</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">factor(RIDRETH1)White</td>
-<td align="right">-3.3573553</td>
-<td align="right">0.1335395</td>
-<td align="right">-25.141299</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">factor(Year)2002</td>
-<td align="right">-0.5684177</td>
-<td align="right">0.2281306</td>
-<td align="right">-2.491633</td>
-<td align="right">0.0127185</td>
-</tr>
-<tr class="odd">
-<td align="left">factor(Year)2004</td>
-<td align="right">-1.5748054</td>
-<td align="right">0.2320685</td>
-<td align="right">-6.785950</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">factor(Year)2006</td>
-<td align="right">-2.0920515</td>
-<td align="right">0.2310921</td>
-<td align="right">-9.052889</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">factor(Year)2008</td>
-<td align="right">-1.3065168</td>
-<td align="right">0.2275358</td>
-<td align="right">-5.742027</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">factor(Year)2010</td>
-<td align="right">-2.1416058</td>
-<td align="right">0.2238159</td>
-<td align="right">-9.568605</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">factor(Year)2012</td>
-<td align="right">-1.1066468</td>
-<td align="right">0.2325907</td>
-<td align="right">-4.757915</td>
-<td align="right">0.0000020</td>
-</tr>
-<tr class="even">
-<td align="left">factor(Year)2014</td>
-<td align="right">-1.8362552</td>
-<td align="right">0.2278959</td>
-<td align="right">-8.057431</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="odd">
-<td align="left">factor(Year)2016</td>
-<td align="right">-1.0353095</td>
-<td align="right">0.2294996</td>
-<td align="right">-4.511161</td>
-<td align="right">0.0000065</td>
-</tr>
-<tr class="even">
-<td align="left">factor(Year)2018</td>
-<td align="right">0.7441312</td>
-<td align="right">0.2340531</td>
-<td align="right">3.179327</td>
-<td align="right">0.0014770</td>
-</tr>
-<tr class="odd">
-<td align="left">RIDAGEYR</td>
-<td align="right">0.2524440</td>
-<td align="right">0.0025367</td>
-<td align="right">99.514807</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">factor(RIAGENDR)male</td>
-<td align="right">2.6465445</td>
-<td align="right">0.1003421</td>
-<td align="right">26.375203</td>
-<td align="right">0.0000000</td>
-</tr>
-</tbody>
-</table>
-<pre><code>## 
-## Call:
-## lm(formula = MAP ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + 
-##     factor(RIAGENDR) + factor(RIDRETH1):factor(RIAGENDR), data = modelData)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -65.370  -7.258  -0.568   6.721  83.445 
-## 
-## Coefficients:
-##                                                        Estimate Std. Error
-## (Intercept)                                           79.306133   0.242711
-## factor(RIDRETH1)Mexican American                      -3.712397   0.220234
-## factor(RIDRETH1)Other Hispanic                        -3.829396   0.282785
-## factor(RIDRETH1)Other Race                            -2.575615   0.279050
-## factor(RIDRETH1)White                                 -3.444533   0.186163
-## factor(Year)2002                                      -0.573013   0.228109
-## factor(Year)2004                                      -1.581113   0.232043
-## factor(Year)2006                                      -2.092666   0.231066
-## factor(Year)2008                                      -1.310353   0.227505
-## factor(Year)2010                                      -2.146183   0.223792
-## factor(Year)2012                                      -1.114285   0.232564
-## factor(Year)2014                                      -1.838571   0.227866
-## factor(Year)2016                                      -1.037390   0.229467
-## factor(Year)2018                                       0.738795   0.234022
-## RIDAGEYR                                               0.252504   0.002537
-## factor(RIAGENDR)male                                   2.209015   0.214066
-## factor(RIDRETH1)Mexican American:factor(RIAGENDR)male  0.793375   0.313995
-## factor(RIDRETH1)Other Hispanic:factor(RIAGENDR)male    1.521860   0.415747
-## factor(RIDRETH1)Other Race:factor(RIAGENDR)male        0.991336   0.395728
-## factor(RIDRETH1)White:factor(RIAGENDR)male             0.180164   0.264247
-##                                                       t value Pr(&gt;|t|)    
-## (Intercept)                                           326.751  &lt; 2e-16 ***
-## factor(RIDRETH1)Mexican American                      -16.857  &lt; 2e-16 ***
-## factor(RIDRETH1)Other Hispanic                        -13.542  &lt; 2e-16 ***
-## factor(RIDRETH1)Other Race                             -9.230  &lt; 2e-16 ***
-## factor(RIDRETH1)White                                 -18.503  &lt; 2e-16 ***
-## factor(Year)2002                                       -2.512 0.012007 *  
-## factor(Year)2004                                       -6.814 9.59e-12 ***
-## factor(Year)2006                                       -9.057  &lt; 2e-16 ***
-## factor(Year)2008                                       -5.760 8.47e-09 ***
-## factor(Year)2010                                       -9.590  &lt; 2e-16 ***
-## factor(Year)2012                                       -4.791 1.66e-06 ***
-## factor(Year)2014                                       -8.069 7.24e-16 ***
-## factor(Year)2016                                       -4.521 6.17e-06 ***
-## factor(Year)2018                                        3.157 0.001595 ** 
-## RIDAGEYR                                               99.546  &lt; 2e-16 ***
-## factor(RIAGENDR)male                                   10.319  &lt; 2e-16 ***
-## factor(RIDRETH1)Mexican American:factor(RIAGENDR)male   2.527 0.011516 *  
-## factor(RIDRETH1)Other Hispanic:factor(RIAGENDR)male     3.661 0.000252 ***
-## factor(RIDRETH1)Other Race:factor(RIAGENDR)male         2.505 0.012245 *  
-## factor(RIDRETH1)White:factor(RIAGENDR)male              0.682 0.495368    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 12.05 on 57738 degrees of freedom
-## Multiple R-squared:  0.1703, Adjusted R-squared:   0.17 
-## F-statistic: 623.6 on 19 and 57738 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p><img src="/analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<pre class="r"><code>#RIAGENDR: 1 = male, 2 = female
-#RIDRETH1: 1 = Mexican American, 2 =  Other Hispanic, 3 = Non-Hispanic White, 4 = Non-Hispanic Black, 5 = Other Race (includes mixed)
-library(ggcorrplot)</code></pre>
-<pre><code>## Warning: package &#39;ggcorrplot&#39; was built under R version 4.1.2</code></pre>
-<pre class="r"><code>model.matrix(~0+., data=modelData) %&gt;% 
-  cor(use=&quot;pairwise.complete.obs&quot;) %&gt;% 
-  ggcorrplot(show.diag = F, type=&quot;lower&quot;, lab=TRUE, lab_size=2)</code></pre>
-<p><img src="/analysis_files/figure-html/corr_matrix-1.png" width="672" /></p>
-<pre class="r"><code>modelData %&gt;% ggplot(aes(x = factor(Year), y = MAP)) +
-  geom_boxplot() +
-  stat_smooth(method = &quot;lm&quot;, se = FALSE) +
-  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Year&quot;, x = &quot;Year&quot;, y = &quot;Mean Arterial Pressure&quot;) +
-  coord_flip()</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="/analysis_files/figure-html/year_boxplot-1.png" width="672" /></p>
-<pre class="r"><code>modelData %&gt;% ggplot(aes(x = factor(RIAGENDR), y = MAP)) +
-  geom_boxplot() +
-  stat_smooth(method = &quot;lm&quot;, se = FALSE) +
-  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Gender&quot;, x = &quot;Gender&quot;, y = &quot;Mean Arterial Pressure&quot;) +
-  coord_flip()</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="/analysis_files/figure-html/gender_boxplot-1.png" width="672" /></p>
-<pre class="r"><code>modelData %&gt;% ggplot(aes(x = factor(RIDRETH1), y = MAP)) +
-  geom_boxplot() +
-  stat_smooth(method = &quot;lm&quot;, se = FALSE) +
-  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Ethnicity&quot;, 
-       x = &quot;Ethnicity&quot;, y = &quot;Mean Arterial Pressure&quot;) +
-  coord_flip()</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="/analysis_files/figure-html/ethnicity_boxplot-1.png" width="672" /></p>
-<pre class="r"><code>age_plot &lt;- ggplot(modelData, aes(x=RIDAGEYR, y=MAP)) + 
-  geom_smooth(method = &quot;gam&quot;) 
-age_plot</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
+<p>##Section 2: Variable Analysis</p>
+<p>To investigate the
+<img src="/analysis_files/figure-html/year_boxplot-1.png" width="672" /></p>
 <p><img src="/analysis_files/figure-html/age_lineplot-1.png" width="672" /></p>
-<pre class="r"><code>year_facet &lt;- age_plot + facet_wrap( ~ Year, ncol=4)+
-  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Year&quot;, 
-       x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
-year_facet</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="/analysis_files/figure-html/year_facet-1.png" width="672" /></p>
-<pre class="r"><code>ethnicity_facet &lt;- age_plot + facet_wrap( ~ RIDRETH1)+
-  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Ethnicity&quot;, 
-       x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
-ethnicity_facet</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="/analysis_files/figure-html/ethnicity_facet-1.png" width="672" /></p>
-<pre class="r"><code>gender_facet &lt;- age_plot + facet_wrap( ~ RIAGENDR)+
-  labs(title = &quot;Mean Arterial Pressure (MAP) vs. Age by Gender&quot;, 
-       x = &quot;Age&quot;, y = &quot;Mean Arterial Pressure&quot;)
-gender_facet</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ s(x, bs = &quot;cs&quot;)&#39;</code></pre>
-<p><img src="/analysis_files/figure-html/gender_facet-1.png" width="672" /></p>
-<pre class="r"><code>plot_govExp &lt;- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
-         geom_point()
-plot_medMAP &lt;- ggplot(data = MAPvsEx,aes(x=Year, y = MedianMAP)) + 
-         geom_point()
-
-library(grid)
-grid.newpage()
-grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = &quot;last&quot;))</code></pre>
+<pre class="r"><code># creating multiple linear regression model to predict MAP
+model &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
+summary(model) </code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -64.068  -7.233  -0.550   6.720  83.671 
+## 
+## Coefficients:
+##                            Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)               79.208887   0.268027 295.526  &lt; 2e-16 ***
+## EthnicityMexican American -3.386728   0.188917 -17.927  &lt; 2e-16 ***
+## EthnicityOther Hispanic   -3.226913   0.247376 -13.045  &lt; 2e-16 ***
+## EthnicityOther Race       -2.304722   0.239770  -9.612  &lt; 2e-16 ***
+## EthnicityWhite            -3.445758   0.159370 -21.621  &lt; 2e-16 ***
+## factor(Year)2002          -0.624531   0.273451  -2.284 0.022383 *  
+## factor(Year)2004          -1.633870   0.278282  -5.871 4.36e-09 ***
+## factor(Year)2006          -2.171135   0.276492  -7.852 4.18e-15 ***
+## factor(Year)2008          -1.374975   0.271010  -5.074 3.92e-07 ***
+## factor(Year)2010          -2.206979   0.269039  -8.203 2.41e-16 ***
+## factor(Year)2012          -1.118101   0.276753  -4.040 5.35e-05 ***
+## factor(Year)2014          -1.858980   0.272215  -6.829 8.67e-12 ***
+## factor(Year)2016          -1.056082   0.273654  -3.859 0.000114 ***
+## factor(Year)2018           0.628943   0.279771   2.248 0.024578 *  
+## Age                        0.251894   0.003021  83.368  &lt; 2e-16 ***
+## Gendermale                 2.631427   0.119711  21.981  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 12.03 on 40417 degrees of freedom
+## Multiple R-squared:   0.17,  Adjusted R-squared:  0.1697 
+## F-statistic:   552 on 15 and 40417 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre><code>##       RMSE        R2
+## 1 12.10082 0.1697358</code></pre>
+<pre class="r"><code># load package to perform AIC
+vif(model)</code></pre>
+<pre><code>##                  GVIF Df GVIF^(1/(2*Df))
+## Ethnicity    1.129515  4        1.015340
+## factor(Year) 1.100293  9        1.005324
+## Age          1.046434  1        1.022954
+## Gender       1.000783  1        1.000391</code></pre>
+<pre class="r"><code># perform AIC to eliminate insignificant variables
+stepAIC(model, direction =&quot;both&quot;)</code></pre>
+<pre><code>## Start:  AIC=201147.4
+## MAP ~ Ethnicity + factor(Year) + Age + Gender
+## 
+##                Df Sum of Sq     RSS    AIC
+## &lt;none&gt;                      5847013 201147
+## - factor(Year)  9     30254 5877268 201338
+## - Gender        1     69901 5916914 201626
+## - Ethnicity     4     77245 5924258 201670
+## - Age           1   1005475 6852488 207561</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
+## 
+## Coefficients:
+##               (Intercept)  EthnicityMexican American  
+##                   79.2089                    -3.3867  
+##   EthnicityOther Hispanic        EthnicityOther Race  
+##                   -3.2269                    -2.3047  
+##            EthnicityWhite           factor(Year)2002  
+##                   -3.4458                    -0.6245  
+##          factor(Year)2004           factor(Year)2006  
+##                   -1.6339                    -2.1711  
+##          factor(Year)2008           factor(Year)2010  
+##                   -1.3750                    -2.2070  
+##          factor(Year)2012           factor(Year)2014  
+##                   -1.1181                    -1.8590  
+##          factor(Year)2016           factor(Year)2018  
+##                   -1.0561                     0.6289  
+##                       Age                 Gendermale  
+##                    0.2519                     2.6314</code></pre>
+<pre class="r"><code># multiple linear regression model with interaction terms 
+model_interaction_eth &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Ethnicity*Age, data = train.modelData)
+model_interaction_gd &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Gender*Age, data = train.modelData)
+model_interaction_both &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Gender*Age + Ethnicity*Age, data = train.modelData)
+summary(model_interaction_eth)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender + 
+##     Ethnicity * Age, data = train.modelData)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -62.514  -7.188  -0.517   6.705  85.659 
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                   76.499216   0.362032 211.305  &lt; 2e-16 ***
+## EthnicityMexican American     -3.455946   0.440970  -7.837 4.72e-15 ***
+## EthnicityOther Hispanic       -1.955161   0.622321  -3.142  0.00168 ** 
+## EthnicityOther Race           -0.689151   0.586138  -1.176  0.23970    
+## EthnicityWhite                 2.595090   0.385900   6.725 1.78e-11 ***
+## factor(Year)2002              -0.608116   0.272004  -2.236  0.02538 *  
+## factor(Year)2004              -1.646978   0.276879  -5.948 2.73e-09 ***
+## factor(Year)2006              -2.122999   0.275035  -7.719 1.20e-14 ***
+## factor(Year)2008              -1.458038   0.269602  -5.408 6.41e-08 ***
+## factor(Year)2010              -2.308640   0.267659  -8.625  &lt; 2e-16 ***
+## factor(Year)2012              -1.262471   0.275380  -4.584 4.56e-06 ***
+## factor(Year)2014              -1.991905   0.270847  -7.354 1.95e-13 ***
+## factor(Year)2016              -1.224773   0.272335  -4.497 6.90e-06 ***
+## factor(Year)2018               0.464445   0.278446   1.668  0.09533 .  
+## Age                            0.316445   0.006469  48.916  &lt; 2e-16 ***
+## Gendermale                     2.662625   0.119092  22.358  &lt; 2e-16 ***
+## EthnicityMexican American:Age  0.005470   0.009618   0.569  0.56955    
+## EthnicityOther Hispanic:Age   -0.030557   0.012855  -2.377  0.01745 *  
+## EthnicityOther Race:Age       -0.036219   0.012593  -2.876  0.00403 ** 
+## EthnicityWhite:Age            -0.130808   0.007821 -16.726  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 11.96 on 40413 degrees of freedom
+## Multiple R-squared:  0.1789, Adjusted R-squared:  0.1785 
+## F-statistic: 463.5 on 19 and 40413 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>summary(model_interaction_gd)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender + 
+##     Gender * Age, data = train.modelData)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -62.731  -7.201  -0.519   6.703  81.982 
+## 
+## Coefficients:
+##                            Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)               77.122459   0.297892 258.894  &lt; 2e-16 ***
+## EthnicityMexican American -3.366833   0.188340 -17.876  &lt; 2e-16 ***
+## EthnicityOther Hispanic   -3.192548   0.246624 -12.945  &lt; 2e-16 ***
+## EthnicityOther Race       -2.307178   0.239032  -9.652  &lt; 2e-16 ***
+## EthnicityWhite            -3.411456   0.158894 -21.470  &lt; 2e-16 ***
+## factor(Year)2002          -0.631697   0.272610  -2.317   0.0205 *  
+## factor(Year)2004          -1.646447   0.277426  -5.935 2.97e-09 ***
+## factor(Year)2006          -2.159706   0.275642  -7.835 4.80e-15 ***
+## factor(Year)2008          -1.406976   0.270184  -5.207 1.92e-07 ***
+## factor(Year)2010          -2.225109   0.268214  -8.296  &lt; 2e-16 ***
+## factor(Year)2012          -1.151094   0.275909  -4.172 3.03e-05 ***
+## factor(Year)2014          -1.895798   0.271387  -6.986 2.88e-12 ***
+## factor(Year)2016          -1.069147   0.272813  -3.919 8.91e-05 ***
+## factor(Year)2018           0.625161   0.278910   2.241   0.0250 *  
+## Age                        0.297942   0.004186  71.179  &lt; 2e-16 ***
+## Gendermale                 6.858919   0.292309  23.465  &lt; 2e-16 ***
+## Age:Gendermale            -0.093334   0.005891 -15.843  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 11.99 on 40416 degrees of freedom
+## Multiple R-squared:  0.1752, Adjusted R-squared:  0.1748 
+## F-statistic: 536.4 on 16 and 40416 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>summary(model_interaction_both)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender + 
+##     Gender * Age + Ethnicity * Age, data = train.modelData)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -62.571  -7.096  -0.488   6.687  83.973 
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                   74.437588   0.383991 193.853  &lt; 2e-16 ***
+## EthnicityMexican American     -3.424518   0.439636  -7.789 6.89e-15 ***
+## EthnicityOther Hispanic       -1.761176   0.620554  -2.838  0.00454 ** 
+## EthnicityOther Race           -0.719808   0.584362  -1.232  0.21804    
+## EthnicityWhite                 2.601181   0.384729   6.761 1.39e-11 ***
+## factor(Year)2002              -0.615010   0.271178  -2.268  0.02334 *  
+## factor(Year)2004              -1.659225   0.276040  -6.011 1.86e-09 ***
+## factor(Year)2006              -2.111996   0.274201  -7.702 1.37e-14 ***
+## factor(Year)2008              -1.489435   0.268791  -5.541 3.02e-08 ***
+## factor(Year)2010              -2.326290   0.266849  -8.718  &lt; 2e-16 ***
+## factor(Year)2012              -1.293830   0.274551  -4.713 2.45e-06 ***
+## factor(Year)2014              -2.027748   0.270034  -7.509 6.07e-14 ***
+## factor(Year)2016              -1.235920   0.271509  -4.552 5.33e-06 ***
+## factor(Year)2018               0.461630   0.277601   1.663  0.09633 .  
+## Age                            0.361934   0.007068  51.207  &lt; 2e-16 ***
+## Gendermale                     6.839093   0.290837  23.515  &lt; 2e-16 ***
+## Age:Gendermale                -0.092206   0.005862 -15.731  &lt; 2e-16 ***
+## EthnicityMexican American:Age  0.005181   0.009589   0.540  0.58899    
+## EthnicityOther Hispanic:Age   -0.034122   0.012818  -2.662  0.00777 ** 
+## EthnicityOther Race:Age       -0.035559   0.012555  -2.832  0.00462 ** 
+## EthnicityWhite:Age            -0.130243   0.007797 -16.704  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 11.93 on 40412 degrees of freedom
+## Multiple R-squared:  0.1839, Adjusted R-squared:  0.1835 
+## F-statistic: 455.4 on 20 and 40412 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre><code>##       RMSE        R2
+## 1 12.00937 0.1822237</code></pre>
+<pre class="r"><code>vif(model_interaction_both)</code></pre>
+<pre><code>##                      GVIF Df GVIF^(1/(2*Df))
+## Ethnicity     1457.076080  4        2.485623
+## factor(Year)     1.107227  9        1.005675
+## Age              5.823047  1        2.413099
+## Gender           6.006809  1        2.450879
+## Age:Gender       7.007324  1        2.647135
+## Ethnicity:Age 2467.532893  4        2.654806</code></pre>
+<pre class="r"><code># perform AIC to eliminate insignificant variables
+stepAIC(model_interaction_both, direction =&quot;both&quot;)</code></pre>
+<pre><code>## Start:  AIC=200475.2
+## MAP ~ Ethnicity + factor(Year) + Age + Gender + Gender * Age + 
+##     Ethnicity * Age
+## 
+##                 Df Sum of Sq     RSS    AIC
+## &lt;none&gt;                       5749198 200475
+## - factor(Year)   9     30023 5779221 200668
+## - Age:Gender     1     35204 5784402 200720
+## - Ethnicity:Age  4     61727 5810925 200899</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender + 
+##     Gender * Age + Ethnicity * Age, data = train.modelData)
+## 
+## Coefficients:
+##                   (Intercept)      EthnicityMexican American  
+##                     74.437588                      -3.424518  
+##       EthnicityOther Hispanic            EthnicityOther Race  
+##                     -1.761176                      -0.719808  
+##                EthnicityWhite               factor(Year)2002  
+##                      2.601181                      -0.615010  
+##              factor(Year)2004               factor(Year)2006  
+##                     -1.659225                      -2.111996  
+##              factor(Year)2008               factor(Year)2010  
+##                     -1.489435                      -2.326290  
+##              factor(Year)2012               factor(Year)2014  
+##                     -1.293830                      -2.027748  
+##              factor(Year)2016               factor(Year)2018  
+##                     -1.235920                       0.461630  
+##                           Age                     Gendermale  
+##                      0.361934                       6.839093  
+##                Age:Gendermale  EthnicityMexican American:Age  
+##                     -0.092206                       0.005181  
+##   EthnicityOther Hispanic:Age        EthnicityOther Race:Age  
+##                     -0.034122                      -0.035559  
+##            EthnicityWhite:Age  
+##                     -0.130243</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="/analysis_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+<p><img src="/analysis_files/figure-html/scatter_plot_gd-1.png" width="672" /></p>
+<p><img src="/analysis_files/figure-html/scatter_plot_eth-1.png" width="672" /></p>
+<pre><code>## Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+## ℹ Please use `after_stat(density)` instead.</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="/analysis_files/figure-html/corr_matrix-1.png" width="672" /></p>
 <p><img src="/analysis_files/figure-html/MAPvsEx_sidebyside-1.png" width="672" /></p>
-<pre class="r"><code>MAPEx_model &lt;- lm(MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
-summary(MAPEx_model)</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
@@ -400,28 +296,8 @@ summary(MAPEx_model)</code></pre>
 ## Residual standard error: 1.107 on 8 degrees of freedom
 ## Multiple R-squared:  0.1969, Adjusted R-squared:  0.09651 
 ## F-statistic: 1.961 on 1 and 8 DF,  p-value: 0.1989</code></pre>
-<pre class="r"><code>ggplot(MAPvsEx, aes(x = GovernmentHealthExpenditure, y = MedianMAP)) + 
-  geom_point() +
-  stat_smooth(method = &quot;lm&quot;, col = &quot;red&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/MapvsEx_reg-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(MAPvsEx, aes(x = Year, y = GovernmentHealthExpenditure)) + 
-  geom_point() +
-  stat_smooth(method = &quot;lm&quot;, col = &quot;blue&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="/analysis_files/figure-html/Ex_year_line-1.png" width="672" /></p>
-</div>
-<div id="flaws-and-limitations-of-analysis" class="section level2">
-<h2>Flaws and Limitations of Analysis:</h2>
-<p>FINISH ANALYSIS TO COMPLETE THIS SECTION.</p>
-</div>
-<div id="clarity-of-figures-and-explanations" class="section level2">
-<h2>Clarity of Figures and Explanations:</h2>
-<p>Include significant relationships of MAP with impactful variables
-Describe why each relationship is significant (Maybe why cholesterol is important health indicator, or why age is a good benchmark for MAP)
-Provide a small blurb/explanation of the relationship being shown/plotted
-Maybe some further interpretation of the relationship if it’s significant</p>
-</div>
 <div id="note-on-attribution" class="section level2">
 <h2>Note on Attribution</h2>
 <p>If you are directly quoting from a source, please make that clear. You can show quotes using <code>&gt;</code> like this</p>
