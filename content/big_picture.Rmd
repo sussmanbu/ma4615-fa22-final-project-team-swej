@@ -37,7 +37,7 @@ grid_2_eth <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% # 
 
 ggplot(modelData, aes(Age, MAP, color = Ethnicity)) + 
  geom_smooth(aes(y = grid_2_eth$pred), data = grid_2_eth, size = 1) +
- facet_wrap(~ lm)
+  labs(title = "Predicted MAP vs. Age")
 ```
 
 
