@@ -2,14 +2,46 @@
 title: Big Picture
 description:
 toc: true
-featuredImage: /images/The_Big_Picture_2.jpeg
+featuredImage: /images/heart.jpeg
 featuredVideo:
 draft: false
 ---
+## THE LAND OF EQUALITY (EXCEPT IN HEALTH)
 
-This comes from the file `content/big_picture.Rmd`.
+Access and availability of healthcare is an essential human right. Sickness is and has been an inevitable part of the human experience, and modern advances in public health and medicine have allowed us to combat many of these illnesses. In the United States, we have the ability to administer life-saving treatments with relative ease; hundreds of billions of dollars go towards researching medical technology and establishing healthcare institutions (i.e. hospitals). Thus, we would expect that, with all the capital going into general health, everyone in the US would have equal access to healthcare. However, such idealism never manifests in reality, and the recent pandemic has only served to expose the inequalities in all of our institutions. Statistics from the CDC show that when compared to white individuals, blacks, hispanics, and native americans were about 1.5x more at risk for catching the disease, over 2x more at risk of being hospitalized, and nearly 2x more at risk of death as of Nov. 8, 2022. Given the gross inequality demonstrated over the past 3 years, our group wanted to analyze health trends in the United States over the past 20 years to evaluate differences in health outcomes by race while considering covariates like age and time of data collection. The results of our analysis shown that health outcomes differ by race when considering the effects of other variables/covariates, pointing to some kind of systemic racism within our national healthcare system that has existed for at least the past 20 years. 
 
-Think of this page as your 538/Upshot style article. This means that you should try to tell a story through the data and your analysis. Read articles from those sites and similar sites to get a feeling for what they are like. Importantly, these should be geared towards the general public. You shouldn't assume the reader understands how to interpret a linear regression. Focus on interpretation and visualizations.
+## A BROKEN HEART, AMONG OTHER ISSUES
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
+suppressPackageStartupMessages(library(tidyverse))
+library(modelr)
+library(caret)
+library(MASS)
+library(car)
+library(grid)
+MAPvsEx <- read_csv(here::here("dataset/MAPvsEx.csv"))
+modelData <- read_csv(here::here("dataset/modelData.csv"))
+modelData <- rename(modelData, c("Ethnicity" = "RIDRETH1",
+                                 "Age" = "RIDAGEYR", 
+                                 "Gender" = "RIAGENDR", 
+                                 "Blood Pressure" = "BPQ050A", 
+                                 "Hypertension" = "HTN"))
+set.seed(42)
+training.samples <- 
+  createDataPartition(modelData$MAP, p = 0.7, list = FALSE)
+train.modelData  <- modelData[training.samples, ]
+model <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
+model_interaction_eth <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Ethnicity*Age, data = train.modelData)
+grid_2_eth <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% # needs both variables
+ gather_predictions(model, model_interaction_eth, .model = "lm")
+
+ggplot(modelData, aes(Age, MAP, color = Ethnicity)) + 
+ geom_smooth(aes(y = grid_2_eth$pred), data = grid_2_eth, size = 1) +
+ facet_wrap(~ lm)
+```
+
+
+
 
 ---
 
