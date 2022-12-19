@@ -57,7 +57,7 @@ Our original hypothesis was that increased government expenditure on health woul
 
 ## INTERACTIVE
 
-We have also created an interactive plot for personalized exploration of our dataset found [here](https://swej.shinyapps.io/swej_interactive/). A video demonstration of this interactive is linked [here](link video when done)
+We have also created an interactive plot for personalized exploration of our dataset found [here](https://swej.shinyapps.io/swej_interactive/). A video demonstration of this interactive is linked [here](https://youtu.be/FXOA3a7H3U8)
 
 ## CONCLUDING REMARKS
 
