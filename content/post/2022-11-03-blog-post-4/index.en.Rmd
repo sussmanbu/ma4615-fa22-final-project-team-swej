@@ -11,7 +11,7 @@ authors: []
 series: []
 lastmod: '2022-11-03T22:23:10-04:00'
 featuredVideo: ~
-featuredImage: ~
+featuredImage: images/blogpost4.png
 ---
 
 ```{r}
