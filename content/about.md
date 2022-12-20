@@ -14,19 +14,22 @@ The members of this team are below.
 ## Wenyan Zhang
 
 Wenyan is a senior majoring in Statistics and minoring in CS and Data Science. 
+Wenyan's Github is linked [here](https://github.com/wenyanzh)
 
 ## Jordan Ahn
 
 Jordan is a senior majoring in Biomedical Engineering with an interest in Biostatistics.
+Jordan's Github is linked [here](https://github.com/jordanahn)
 
 ## Shawn Xu
 
 Shawn is a senior majoring in Biomedical Engineering with an interest in Data Science.
+Shawn's Github is linked [here](https://github.com/shawnhxu)
 
 ## Eui Hyun Eric Kim
 
 Eui Hyun is a junior majoring in Economics and minoring Statistics.
-
+Eric's Github is linked [here](https://github.com/EHKcode)
 
 <!-- Please leave in the information below -->
 
