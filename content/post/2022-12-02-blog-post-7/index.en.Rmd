@@ -1,5 +1,5 @@
 ---
-title: Blog Post 7
+title: Tentative Thesis and Further Exploration of Analysis
 author: Daniel Sussman
 date: '2022-12-02'
 slug: []

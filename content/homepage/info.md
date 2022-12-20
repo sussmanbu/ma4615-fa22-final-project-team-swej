@@ -1,8 +1,8 @@
 ---
-title: MA 415 Final Project
+title: Analysis of Racial Health Disparities
 draft: false
 role: Team SWEJ
-bio: In this project, our team (Jordan Ahn, Eui Hyun Eric Kim, Shawn Xu, and Wenyan Zhang) hopes to explore, analyze, and evaluate the health outcomes of different demographics to find evidence for inequalities within the healthcare system.
+bio: In this project, our team (Jordan Ahn, Eui Hyun Eric Kim, Shawn Xu, and Wenyan Zhang) hopes to explore, analyze, and evaluate the health outcomes of different demographics to find evidence for inequalities within the healthcare system. More specifically, we will look into Mean Arterial Pressure (MAP) in relation to different demographics variables.
 
 organization:
   name: Boston University

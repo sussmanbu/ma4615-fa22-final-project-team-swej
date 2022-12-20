@@ -5,7 +5,7 @@ date: '2022-10-12'
 slug: []
 categories: []
 tags: []
-description: "In this blog post, we provided three datasets that we will potentially work with. We will describe what each dataset consists of, how the dataset was collected, how large the dataset is, how loadable/clean the dataset is, what direction we could take with each dataset, and what challenges each dataset might have."
+description: In this blog post, we provided three datasets that we will potentially work with. We will describe what each dataset consists of, how the dataset was collected, how large the dataset is, how loadable/clean the dataset is, what direction we could take with each dataset, and what challenges each dataset might have.
 toc: yes
 authors: []
 series: []
