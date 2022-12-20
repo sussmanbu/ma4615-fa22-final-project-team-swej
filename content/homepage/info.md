@@ -2,7 +2,8 @@
 title: MA 415 Final Project
 draft: false
 role: Team SWEJ
-bio: This is my data science project. Check out the links at the top. You can update this in `content/homepage/info.md`. You can change the image above by changing `content/homepage/feature_image.md`.
+bio: In this project, our team (Jordan Ahn, Eui Hyun Eric Kim, Shawn Xu, and Wenyan Zhang) hopes to explore and analyze the health outcomes of different demographics to find evidence for....
+
 organization:
   name: Boston University
   url: https://www.bu.edu/
