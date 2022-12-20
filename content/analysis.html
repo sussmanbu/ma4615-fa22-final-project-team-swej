@@ -114,7 +114,8 @@ summary(model) </code></pre>
 </div>
 <div id="b-model-fit" class="section level4">
 <h4>3.1. b) Model Fit</h4>
-<p>We use root-mean-square error (RMSE) and R-squared (R2) to evaluate model performance. We compare predictions of MAP based on independent variables to the real MAP values in the testing set to see how well the model fits. The results of RMSE and R2 are shown below.</p>
+<p>We use root-mean-square error (RMSE) and R-squared (R2) to evaluate model performance. We compare predictions of MAP based on independent variables to the real MAP values in the testing set to see how well the model fits. RMSE measures the average difference between values predicted by a model and the actual values. The lower the value of the RMSE, the better the model is. R2 measures the strength of the relationship between the linear model and the dependent variables on a 0-1 scale.</p>
+<p>The results of RMSE and R2 are shown below. R2 = 0.169 means that 16.9% of the variance for the dependent variable MAP is explained by the independent variables in the MLR model. The result is not perfect, but we believe it is still a good model for MAP, and we will use other statistical methods to improve the model.</p>
 <pre><code>##     RMSE        R2
 ## 1 12.029 0.1693604</code></pre>
 </div>
@@ -201,7 +202,7 @@ model_interaction_eth &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +
 <p>Since both interaction terms are significant based on the graphs, we use <code>Ethnicity*Age</code> and <code>Gender*Age</code> to model the interaction effect in our final model.</p>
 <pre class="r"><code>model_interaction_both &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
                         Gender*Age + Ethnicity*Age, data = train.modelData)</code></pre>
-<p>The RMSE and R2 results of this model are shown below.</p>
+<p>The RMSE and R2 results of this model are shown below. In this model, RMSE = 11.95303, which is lower than RMSE in the MLR model (RMSE = 12.029), MLR model with only Gender interaction (RMSE = 11.99895), and MLR model with only Ethnicity interaction (RMSE = 11.98485). In addition, R2 = 0.1799 means that in this model, 17.99% of the variance for the dependent variable MAP is explained by the independent variables in the MLR model. This R2 is also better than all the other MLR models we have used above.</p>
 <pre><code>##       RMSE       R2
 ## 1 11.95303 0.179887</code></pre>
 <p>Among the models used, the multiple linear regression model with <code>Ethnicity*Age</code> and <code>Gender*Age</code> as interaction terms has the lowest RMSE and the highest R2. Therefore, this will be our final model of choice.</p>

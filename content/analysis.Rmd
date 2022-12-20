@@ -161,7 +161,9 @@ summary(model)
 
 #### 3.1. b) Model Fit
 
-We use root-mean-square error (RMSE) and R-squared (R2) to evaluate model performance. We compare predictions of MAP based on independent variables to the real MAP values in the testing set to see how well the model fits. The results of RMSE and R2 are shown below. 
+We use root-mean-square error (RMSE) and R-squared (R2) to evaluate model performance. We compare predictions of MAP based on independent variables to the real MAP values in the testing set to see how well the model fits. RMSE measures the average difference between values predicted by a model and the actual values. The lower the value of the RMSE, the better the model is. R2 measures the strength of the relationship between the linear model and the dependent variables on a 0-1 scale. 
+
+The results of RMSE and R2 are shown below. R2 = 0.169 means that 16.9% of the variance for the dependent variable MAP is explained by the independent variables in the MLR model. The result is not perfect, but we believe it is still a good model for MAP, and we will use other statistical methods to improve the model. 
 
 ```{r, warning=FALSE, message=FALSE, echo = FALSE}
 grid <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% 
@@ -282,7 +284,7 @@ model_interaction_both <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +
                         Gender*Age + Ethnicity*Age, data = train.modelData)
 ```
 
-The RMSE and R2 results of this model are shown below. 
+The RMSE and R2 results of this model are shown below. In this model, RMSE = 11.95303, which is lower than RMSE in the MLR model (RMSE = 12.029), MLR model with only Gender interaction (RMSE = 11.99895), and MLR model with only Ethnicity interaction (RMSE = 11.98485). In addition, R2 = 0.1799 means that in this model, 17.99% of the variance for the dependent variable MAP is explained by the independent variables in the MLR model. This R2 is also better than all the other MLR models we have used above.  
 
 ```{r, echo=FALSE}
 # Make predictions
