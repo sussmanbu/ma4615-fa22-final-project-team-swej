@@ -5,7 +5,7 @@ date: '2022-10-28'
 slug: []
 categories: []
 tags: []
-description: ~
+description: Talking about principles of data equity for our health trends project.
 toc: yes
 authors: []
 series: []

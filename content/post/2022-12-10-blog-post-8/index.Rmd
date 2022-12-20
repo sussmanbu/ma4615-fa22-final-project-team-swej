@@ -5,7 +5,7 @@ date: '2022-12-09'
 slug: []
 categories: []
 tags: []
-description: ~
+description: We discuss about how we will polish our visualizations and interactive.
 toc: yes
 authors: []
 series: []

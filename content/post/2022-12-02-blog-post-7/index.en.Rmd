@@ -5,7 +5,7 @@ date: '2022-12-02'
 slug: []
 categories: []
 tags: []
-description: ~
+description: Discuss about our tentative thesis and how we want to approach further data analyses.
 toc: yes
 authors: []
 series: []
