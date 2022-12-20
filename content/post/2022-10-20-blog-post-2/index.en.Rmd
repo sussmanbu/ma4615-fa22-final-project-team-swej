@@ -18,7 +18,8 @@ To perform our exploratory data analysis, we first took a generalized look at th
 
 ```{r}
 suppressPackageStartupMessages(library(tidyverse))
-bpdata1720 <- read_csv(here::here("dataset/bpdata1720.csv"))
+suppressPackageStartupMessages(library(haven))
+bpdata1720 <- read_xpt(here::here("dataset/P_BPXO.XPT"))
 ```
 
 Since on the website the datasets were grouped by years, we chose a dataset from one year to work on for our exploratory analysis and will eventually combine multiple datasets from different years for further analysis. The year we chose from NHANES was 2017-March 2020 Pre-Pandemic, and inside the dataset, we chose “Examination Data”. This is the most recent available NHANES dataset that includes information from both 2020 and previous years. Due to the pandemic, a convenience sample was used, so additional data points were recruited in order to create a more representative dataset. We chose to look into all the blood pressure columns because blood pressure is generally representative of a person’s health status – people with high blood pressure tend to have a more unhealthy lifestyle and diet than people with normal blood pressure, so we could look at the distribution of blood pressure. After choosing focused variables, we cleaned the data of these columns by removing missing values. 
