@@ -3,7 +3,7 @@ title: Analysis
 description:
 toc: true
 featuredVideo:
-featuredImage: https://upload.wikimedia.org/wikipedia/commons/7/77/Pebbleswithquarzite.jpg
+featuredImage: https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/health/wp-content/uploads/2021/08/Untitled-design-2021-08-27T123144.738.png
 draft: false
 ---
 
@@ -11,18 +11,22 @@ This comes from the file `content/analysis.Rmd`.
 
 We describe here our detailed data analysis.
 
-##Section 1: Motivation of Data Analysis
-As the United States population grows and develops, there will be a greater need for information on the general health of the nation. Our initial plan was to assess health trends over the course of time (more specifically, two decades worth of data from the National Health and Nutrition Examination Survey program). We first used diastolic and systolic blood pressures as a means of assessing general health. Later on, we ended up using Mean Arterial Pressure (MAP) instead as it provided us a way to combine both diastolic and systolic blood pressures into one value. This made the overall analysis more clean and compact. We also wanted to see how impactful ethnicity/race is on MAP; an initial exploration of the relationship between race and Thus, the variables that we are most interested in are race/ethnicity, MAP, and time (in years). 
+## Section 1: Motivation of Data Analysis
 
-After summarizing these relationships together, we can then determine how impactful race/ethnicity is on MAP compared to other predictors of health. As a result, we generated multiple tables and plots of health variables with covariables to profile each relationship. Aside from these other predictors for health, we also plan on introducing a secondary dataset for government expenditure on general health. 
+As the United States population grows and develops, there will be a greater need for information on the nation’s general health. Our plan for the project is to evaluate differences in health outcomes by race while considering covariates like gender, age, and time of data collection. 
 
-Some questions we wanted to answer through our analysis:
-Does government expenditure have a significant impact on general health?
-How much do these other factors affect health variables?
-Which of these predictors of health has the greatest impact on health?
-How do health trends change over time?
+Our response variable used to measure health outcomes is Mean Arterial Pressure (MAP), which combines both Diastolic and Systolic Blood Pressures into one value. We chose to use Blood Pressure as the dependent variable because it is often considered one of the best ways to measure overall health and possible risk factors. 
 
-##Section 2: Variable Analysis
+Our exploratory data analysis (EDA) begins with the goal of investigating the relevant independent variables and their correlation with the dependent variable. We perform our exploratory data analysis by performing in-depth analysis on the following independent variables selected from the dataset:  
+
+* Year
+* Age
+* Gender
+* Ethnicity
+* Government Health Expenditure. 
+
+
+## Section 2: Variable Analysis
 ```{r, include=FALSE}
 # load modelData and rename variables
 suppressPackageStartupMessages(library(tidyverse))
@@ -32,6 +36,7 @@ suppressPackageStartupMessages(library(broom))
 library(MASS)
 library(car)
 library(grid)
+library(ggcorrplot)
 
 print(getwd())
 MAPvsEx <- read_csv(here::here("dataset/MAPvsEx.csv"))
@@ -43,7 +48,20 @@ modelData <- rename(modelData, c("Ethnicity" = "RIDRETH1",
                                  "Hypertension" = "HTN"))
 ```
 
-To investigate the 
+We start the variable analysis by looking at the correlation matrix. A correlation matrix displays the correlation between all the possible pairs of values. From the correlation matrix, we can see that Age is moderately correlated and Ethnicity, Gender, Year are weakly correlated. After looking at the correlation matrix, we took a deeper dive into each variable. 
+
+```{r corr_matrix, warning=FALSE, message=FALSE, echo = FALSE}
+# correlation matrix
+model.matrix(~0+., data=modelData) %>% 
+  cor(use="pairwise.complete.obs") %>% 
+  ggcorrplot(show.diag = F, type="lower", lab=TRUE, lab_size=2)
+```
+
+
+### 2.1 Variable: Year
+
+From the boxplot of MAP of each year, we can see that MAP varies by year. Additionally, Median MAP increases over the years. This suggests us to consider the effect of Year on MAP and prompts us to look into other variables that might influence MAP. 
+
 ```{r year_boxplot, warning=FALSE, message=FALSE, echo = FALSE}
 modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
   geom_boxplot() +
@@ -52,37 +70,98 @@ modelData %>% ggplot(aes(x = factor(Year), y = MAP)) +
   coord_flip()
 ```
 
+
+### 2.2 Variable: Age
+
+Age is a continuous variable that is most correlated with MAP. From the smoothed regression line plot of `Age` vs. `MAP`, we can see that MAP increases as Age increases as it is commonly known that people’s blood pressure increases as they age. Interestingly, MAP starts to decrease for people over 65 years old. We believe that this could be due to people with high blood pressure taking medicine to lower their blood pressure. 
+
 ```{r age_lineplot, warning=FALSE, message=FALSE, echo = FALSE }
 age_plot <- ggplot(modelData, aes(x=Age, y=MAP)) + 
   geom_smooth(method = "gam") 
 age_plot
 ```
 
+For our predicted model and model evaluation later, we choose to use Age as the X variable because it is the only continuous variable in the model, and the linear relationship between Age and MAP is moderate. Using Age as X allows us to further look into the relationship between MAP and other categorical variables. 
 
+### 2.3 Variable: Gender
 
-```{r data_split, include=FALSE}
-# separate data into training and testing sets
-set.seed(42)
-training.samples <- 
-  createDataPartition(modelData$MAP, p = 0.7, list = FALSE)
-train.modelData  <- modelData[training.samples, ]
-test.modelData <- modelData[-training.samples, ]
+We use a scatter plot to investigate the relationship between Gender and MAP. Since the original dataset has around 60,000 data points, we choose Year 2018, the most recent year, to help us see the pattern more clearly. 
+
+```{r scatter_plot_gd, echo=FALSE}
+modelData %>%
+  filter(Year == "2018") %>%
+  ggplot(aes(Age, MAP)) + geom_point(aes(color = Gender)) 
+```
+
+In the scatter plot, data points of female are colored in red and male are colored in green. From the graph, we can see that females generally have lower MAP. This suggests a possible interaction between `Gender` and `MAP`, which we will take into account in the models later. 
+
+### 2.4 Variable: Ethnicity
+
+Similar to the scatter plot for Gender, we plot the scatter plot of Ethnicity vs. MAP in Year 2018. Because data points for each ethnicity are not randomly distributed and seem to show some patterns, we will consider the interaction between `Ethnicity` and `MAP` as well. 
+
+```{r scatter_plot_eth, echo=FALSE}
+modelData %>%
+  filter(Year == "2018") %>%
+  ggplot(aes(Age, MAP)) + geom_point(aes(color = Ethnicity)) 
+```
+
+### 2.5 Variable: Government Health Expenditure
+
+In addition to our original dataset, we used a secondary dataset of Government Health Expenditure in percentage. The graph of Government Health Expenditure over the year shows that government spending is increasing over the year. We plot the graph of Median MAP over the year as well to see if there is a possible correlation between the two variables. 
+
+```{r MAPvsEx_sidebyside, warning=FALSE, message=FALSE, echo = FALSE}
+plot_govExp <- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
+         geom_point()
+plot_medMAP <- ggplot(data = MAPvsEx,aes(x=Year, y = MedianMAP)) + 
+         geom_point()
+
+grid.newpage()
+grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = "last"))
+```
+
+To explore the relationship between Government Health Expenditure and Median MAP, we use a simple linear regression model to evaluate the correlation. The p-value of variable `GovernmentHealthExpenditure` is 0.198, suggesting that it is not significant. Therefore, we will not consider this variable in the model later. 
+
+```{r MAPEx_model}
+MAPEx_model <- lm(MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
+summary(MAPEx_model)$coefficients
 ```
 
 
+
+## 3. Modeling and Inferences
+
+We start by dividing the dataset into a training set and a testing set using the `createDataPartition` function in the `caret` package. The training set contains 75% of the data (43,319 rows) and the testing set contains the rest of the data (14,439 rows). Then, we ran numerous multiple linear regressions on training data.
+
+```{r data_split, echo=FALSE}
+# separate data into training and testing sets
+set.seed(42)
+training.samples <- 
+  createDataPartition(modelData$MAP, p = 0.75, list = FALSE)
+train.modelData  <- modelData[training.samples, ]
+test.modelData <- modelData[-training.samples, ]
+data.frame(
+  Training = nrow(train.modelData),
+  Testing = nrow(test.modelData)
+)
+```
+
+### 3.1 Multiple Linear Regression 
+
+
+#### 3.1. a) Model
+
+The first model we consider is a multiple linear regression model. The independent variables are `Ethnicity`, `Year`, `Age`, and `Gender`, and the dependent variable is `MAP`.
+<br>
+<br>
 ```{r MLR_summary}
-# creating multiple linear regression model to predict MAP
 model <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
 summary(model) 
 ```
 
 
-```{r, warning=FALSE, message=FALSE, include = FALSE}
-# print out the coefficients and significant levels of each predictors
-train.modelData %>% lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender) %>% 
-  broom::tidy() %>%
-  knitr::kable(format = "markdown")
-```
+#### 3.1. b) Model Fit
+
+We use root-mean-square error (RMSE) and R-squared (R2) to evaluate model performance. We compare predictions of MAP based on independent variables to the real MAP values in the testing set to see how well the model fits. The results of RMSE and R2 are shown below. 
 
 ```{r, warning=FALSE, message=FALSE, echo = FALSE}
 grid <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% 
@@ -96,100 +175,152 @@ data.frame(
   R2 = R2(predictions, test.modelData$MAP)
 )
 ```
+#### 3.1. c) Variable Selection
 
+
+* VIF
+
+One common problem of regression model is multicollinearity. Multicollinearity may hide significant variables, change the sign of them and result in an increase in the variability of the estimation. To detect multicollinearity in the regression model, we use Variance Inflation Factor (VIF) to measure the amount of multicollinearity. To calculate VIF, we use `vif` function in `car` package. 
 
 
 ```{r, warning=FALSE, message=FALSE}
-# load package to perform AIC
 vif(model)
 ```
 
+Since all variables have VIF < 5, multicollinearity is not a concern in our model. 
+
+* AIC
+
+In addition, we can also use Akaike information criterion (AIC) to perform further feature selection. AIC can be used to compare different possible models and determine which one is the best fit for the data.
 
 ```{r, warning=FALSE, message=FALSE}
 # perform AIC to eliminate insignificant variables
 stepAIC(model, direction ="both")
 ```
 
+After using `stepAIC` function from the `MASS` package on our multiple linear regression model, no variables were eliminated. Thus, we come to the conclusion that all the variables are significant to the model. 
+
+### 3.2 Multiple Linear Regression with Interactions
+
+Interaction effect means that two or more features/variables combined have a significantly larger effect on a feature as compared to the sum of the individual variables alone. 
+
+#### 3.2 a) Multiple Linear Regression with Ethnicity Interacts with Age
+
+Since the scatter plot in EDA shows possible interaction between `Ethnicity` and `Age`, we use `Ethnicity*Age` to model the interaction effect. 
 
 ```{r}
 # multiple linear regression model with interaction terms 
 model_interaction_eth <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
                         Ethnicity*Age, data = train.modelData)
-model_interaction_gd <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
-                        Gender*Age, data = train.modelData)
-model_interaction_both <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
-                        Gender*Age + Ethnicity*Age, data = train.modelData)
-summary(model_interaction_eth)
-summary(model_interaction_gd)
-summary(model_interaction_both)
 ```
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE, include=FALSE}
-gender_ia_plot <- ggplot(train.modelData, aes(Age, MAP)) + geom_point(aes(color = Gender)) 
-ethn_ia_plot <- ggplot(train.modelData, aes(Age, MAP)) + geom_point(aes(color = Ethnicity))
-
-grid.newpage()
-grid.draw(rbind(ggplotGrob(gender_ia_plot), ggplotGrob(ethn_ia_plot), size = "last"))
-```
-
+We use RMSE and R2 to measure model performance. 
 
 ```{r, echo=FALSE}
 # Make predictions
-predictions_interaction <- model_interaction_both %>% predict(test.modelData)
+predictions_interaction_eth <- model_interaction_eth %>% predict(test.modelData)
 # Model performance
 data.frame(
-  RMSE = RMSE(predictions_interaction, test.modelData$MAP),
-  R2 = R2(predictions_interaction, test.modelData$MAP)
+  RMSE = RMSE(predictions_interaction_eth, test.modelData$MAP),
+  R2 = R2(predictions_interaction_eth, test.modelData$MAP)
 )
-```
-
-
-
-```{r}
-vif(model_interaction_both)
-```
-
-
-```{r, warning=FALSE, message=FALSE}
-# perform AIC to eliminate insignificant variables
-stepAIC(model_interaction_both, direction ="both")
 ```
 
 ```{r, warning=FALSE, message=FALSE, echo = FALSE}
 grid_2_eth <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% # needs both variables
  gather_predictions(model, model_interaction_eth, .model = "lm")
 
+ggplot(modelData, aes(Age, MAP, color = Ethnicity)) + 
+ geom_smooth(aes(y = grid_2_eth$pred), data = grid_2_eth, size = 1) +
+ facet_wrap(~ lm)
+```
+
+The graph of predicted MAP with and without the interaction term shows that there is an interaction between the two variables. 
+ 
+
+
+#### 3.2 b) Multiple Linear Regression with Gender Interacts with Age
+
+Similarly, the scatter plot in EDA shows possible interaction between `Gender` and `Age`, so we use `Gender*Age` to model the interaction effect. 
+
+```{r}
+model_interaction_gd <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Gender*Age, data = train.modelData)
+```
+
+We use RMSE and R2 to measure model performance. 
+
+```{r, echo=FALSE}
+# Make predictions
+predictions_interaction_gd <- model_interaction_gd %>% predict(test.modelData)
+# Model performance
+data.frame(
+  RMSE = RMSE(predictions_interaction_gd, test.modelData$MAP),
+  R2 = R2(predictions_interaction_gd, test.modelData$MAP)
+)
+```
+
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
 grid_2_gd <- train.modelData %>% data_grid(Ethnicity, Year, Age, Gender) %>% # needs both variables
  gather_predictions(model, model_interaction_gd, .model = "lm")
 
 ggplot(modelData, aes(Age, MAP, color = Gender)) + 
  geom_smooth(aes(y = grid_2_gd$pred), data = grid_2_gd, size = 1) +
  facet_wrap(~ lm)
-
-ggplot(modelData, aes(Age, MAP, color = Ethnicity)) + 
- geom_smooth(aes(y = grid_2_eth$pred), data = grid_2_eth, size = 1) +
- facet_wrap(~ lm)
 ```
 
+The graph of predicted MAP with and without the interaction term shows that there is an interaction between the two variables. 
 
 
 
+#### 3.2 c) Multiple Linear Regression with Ethnicity and Gender Interact with Age
 
-```{r scatter_plot_gd, echo=FALSE}
-train.modelData %>%
-  filter(Year == "2018") %>%
-  ggplot(aes(Age, MAP)) + geom_point(aes(color = Gender)) 
+Since both interaction terms are significant based on the graphs, we use `Ethnicity*Age` and `Gender*Age` to model the interaction effect in our final model.  
+
+```{r}
+model_interaction_both <- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Gender*Age + Ethnicity*Age, data = train.modelData)
 ```
 
+The RMSE and R2 results of this model are shown below. 
 
-
-```{r scatter_plot_eth, echo=FALSE}
-train.modelData %>%
-  filter(Year == "2018") %>%
-  ggplot(aes(Age, MAP)) + geom_point(aes(color = Ethnicity)) 
+```{r, echo=FALSE}
+# Make predictions
+predictions_interaction_both <- model_interaction_both %>% predict(test.modelData)
+# Model performance
+data.frame(
+  RMSE = RMSE(predictions_interaction_both, test.modelData$MAP),
+  R2 = R2(predictions_interaction_both, test.modelData$MAP)
+)
 ```
 
-```{r, echo = FALSE}
+Among the models used, the multiple linear regression model with `Ethnicity*Age` and `Gender*Age` as interaction terms has the lowest RMSE and the highest R2. Therefore, this will be our final model of choice. 
+
+
+### 3.3 Logistic Regression
+
+In addition to multiple linear regression model, we also try logistic regression model to predict the probability of a person having hypertension (`HTN` = 1) based on their `Ethnicity`, `Age`, and `Gender`. The graph of the logistic regression model is shown below. 
+
+```{r log_model}
+log_model <- glm(Hypertension ~ Ethnicity + Age + Gender, data = modelData, family = binomial)
+```
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(pscl)
+pR2(log_model)
+```
+
+To evaluate the model performance, we use the `pR2` function in the `pscl` package to calculate pseudo-r2. Our pseudo-r2 is 0.0788, suggesting that model is poor fit. Therefore, we decide to use the multiple linear regression model with interaction terms instead. 
+
+### 3.4 Conclusion
+
+From the graph of MLR model with Ethnicity as interaction term, we come to the conclusion that health outcomes (measured by MAP) differ by race since the regression line of Ethnicity Black is above all the other regression line. Other factors such as gender and age also have an effect on an individual’s health outcomes, and using our model, we can predict a person’s MAP. 
+
+### 4. Flaws and Limitations
+* Flaws 
+
+In the linear regression model, there are four assumptions that need to be satisfied: linearity, homoscedasticity, independence, and normality. One possible flaw of our model is the normality assumption might be violated. The normality assumption states that for any fixed value of X, Y is normally distributed. 
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
 train.modelData %>% ggplot(aes(x = MAP, y = ..density..)) +
   geom_histogram(binwidth = 2, colour= "black", fill= "lightblue") +
   geom_vline(aes(xintercept = median(MAP, na.rm = TRUE)),color="black", linetype="dashed", size=1) +
@@ -198,93 +329,9 @@ train.modelData %>% ggplot(aes(x = MAP, y = ..density..)) +
        y = "Density") 
 ```
 
+From the graph of the distribution of the dependent variable, MAP, we can see that MAP is slightly right-skewed even after adjusting for MAP using formula. The violation of the normality assumption is attributed by the skewed nature of the dependent variable, Blood Pressure. Blood Pressure is slightly skewed to the right due to the high proportion of people with Blood Pressure values in the range above 140 mmHg. Normality assumption violation will affect the estimates of the standard error and the confidence interval, and hence the significance of the independent variables. 
 
 
-```{r corr_matrix, warning=FALSE, message=FALSE, echo = FALSE}
-# correlation matrix
-library(ggcorrplot)
-model.matrix(~0+., data=modelData) %>% 
-  cor(use="pairwise.complete.obs") %>% 
-  ggcorrplot(show.diag = F, type="lower", lab=TRUE, lab_size=2)
-```
+* Limitations
 
-
-
-
-
-```{r MAPvsEx_sidebyside, warning=FALSE, message=FALSE, echo = FALSE}
-plot_govExp <- ggplot(data = MAPvsEx,aes(x=Year, y = GovernmentHealthExpenditure)) + 
-         geom_point()
-plot_medMAP <- ggplot(data = MAPvsEx,aes(x=Year, y = MedianMAP)) + 
-         geom_point()
-
-grid.newpage()
-grid.draw(rbind(ggplotGrob(plot_govExp), ggplotGrob(plot_medMAP), size = "last"))
-```
-
-
-```{r MapvsEx_reg, warning=FALSE, message=FALSE, echo = FALSE}
-MAPEx_model <- lm(MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
-summary(MAPEx_model)
-ggplot(MAPvsEx, aes(x = GovernmentHealthExpenditure, y = MedianMAP)) + 
-  geom_point() +
-  stat_smooth(method = "lm", col = "red")
-```
-
-
-```{r Ex_year_line, warning=FALSE, message=FALSE, echo = FALSE}
-ggplot(MAPvsEx, aes(x = Year, y = GovernmentHealthExpenditure)) + 
-  geom_point() +
-  stat_smooth(method = "lm", col = "blue")
-```
-
-
-## Note on Attribution
-
-If you are directly quoting from a source, please make that clear. You can show quotes using `>` like this
-
-```
-> To be or not to be.
-```
-
-> To be or not to be.
-
-Also, make sure to provide a link or citation to where you are quoting from.
-
--------
-
-
-## Rubric: On this page
-
-you will
-
-
-* Introduce what motivates your Data Analysis (DA)
-  * Which variables and relationships are you most interested in?
-  * What questions are you interested in answering?
-* Breadth of the DA
-  * Make sure that you ask enough initial questions to explore the different variables in your data.
-  * i.e. Do you explore more than just one or two variables? Do you explore a few different relationships or many?
-* Depth of the DA
-  * When you answer one question, usually more questions arise as well. 
-  * The depth of the DA is about coming up with and exploring the answers to these questions, often iterating the process a few times.
-* Modeling and Inference 
-  * You should also include some kind of formal statistical model and/or inference. This could be a linear regression, logistic regression, hypothesis testing etc.
-  * Explain the techniques you used for validating your results.
-  * Describe the results of your modelling and make sure to give a sense of the uncertainty in your estimates and conclusions.
-* Explain the flaws and limitations of your analysis
-  * Are there some assumptions that you needed to make that might not hold? Is there other data that would help to answer your questions? ...
-* Clarity Figures
-  * Are your figures/tables/results easy to read, informative, without problems like overplotting, hard-to-read labels, etc?
-  * Each figure should provide a key insight. Too many figures or other data summaries can detract from this.
-* Clarity of Explanations
-  * Do you introduce why you are doing each analysis?
-  * How well do you explain each figure/result?
-  * Do you provide interpretations that suggest further analysis or explanations for observed phenomenon?
-* Organization and cleanliness.
-  * Make sure to remove excessive warnings, use clean easy-to-read code, organize with sections or multiple pages, use bullets, etc.
-  
-  
-**NOTE**: Your Data Analysis can be broken up into multiple pages if that helps with your organization.
-
-
+Our model has limited predictive power due to the limited selection of predictors we can use. The dataset we used does not have geographic information and the data points are anonymous. We cannot incorporate geographic datasets as a secondary data source due to anonymity of the responders. Therefore, useful geographic predictors cannot be used to account for the differences. 

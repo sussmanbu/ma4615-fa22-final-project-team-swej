@@ -2,7 +2,8 @@
 title: Big Picture
 description:
 toc: true
-featuredImage: images/heart.jpg
+#featuredImage: images/heart.jpg
+featuredImage: https://cms-img.coverfox.com/guide-on-health-insurance-for-a-family.webp
 featuredVideo:
 draft: false
 ---
