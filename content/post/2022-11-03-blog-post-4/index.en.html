@@ -11,7 +11,7 @@ authors: []
 series: []
 lastmod: '2022-11-03T22:23:10-04:00'
 featuredVideo: ~
-featuredImage: ~
+featuredImage: images/blogpost4.png
 ---
 
 
@@ -19,18 +19,66 @@ featuredImage: ~
 
 </div>
 
-<pre class="r"><code>#loading in modelling data
-suppressPackageStartupMessages(library(tidyverse))</code></pre>
 <pre><code>## Warning: package &#39;tidyverse&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## -- Attaching packages --------------------------------------- tidyverse 1.3.2 --
+## v ggplot2 3.3.6     v purrr   0.3.4
+## v tibble  3.1.8     v dplyr   1.0.9
+## v tidyr   1.2.0     v stringr 1.4.0
+## v readr   2.1.2     v forcats 0.5.1</code></pre>
 <pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.1.3</code></pre>
 <pre><code>## Warning: package &#39;tidyr&#39; was built under R version 4.1.3</code></pre>
 <pre><code>## Warning: package &#39;readr&#39; was built under R version 4.1.3</code></pre>
 <pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.1.3</code></pre>
 <pre><code>## Warning: package &#39;stringr&#39; was built under R version 4.1.3</code></pre>
 <pre><code>## Warning: package &#39;forcats&#39; was built under R version 4.1.3</code></pre>
-<pre class="r"><code>#MAKE SURE YOU GO TO load_and_clean_data.R to get the modelData1.csv dataset. it&#39;s too big to add to git.
-modelData &lt;- read_csv(here::here(&quot;dataset&quot;,&quot;modelData1.csv&quot;))</code></pre>
-<pre><code>## Rows: 27862 Columns: 6
+<pre><code>## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre><code>## Warning: package &#39;haven&#39; was built under R version 4.1.3</code></pre>
+<pre><code>## Rows: 8704 Columns: 21
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## dbl (21): SEQN, PEASCCT1, BPXCHR, BPAARM, BPACSZ, BPXPLS, BPXPULS, BPXPTY, B...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 9254 Columns: 46
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## dbl (46): SEQN, SDDSRVYR, RIDSTATR, RIAGENDR, RIDAGEYR, RIDAGEMN, RIDRETH1, ...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 10253 Columns: 27
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## dbl (27): SEQN, PEASCST1, PEASCTM1, PEASCCT1, BPXCHR, BPQ150A, BPQ150B, BPQ1...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 10537 Columns: 43
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## dbl (43): SEQN, SDDSRVYR, RIDSTATR, RIDEXMON, RIAGENDR, RIDAGEYR, RIDAGEMN, ...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 10477 Columns: 30
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## dbl (30): SEQN, PEASCST1, PEASCTM1, PEASCCT1, BPXCHR, BPQ150A, BPQ150B, BPQ1...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 11039 Columns: 37
+## -- Column specification --------------------------------------------------------
+## Delimiter: &quot;,&quot;
+## dbl (37): SEQN, SDDSRVYR, RIDSTATR, RIDEXMON, RIAGENDR, RIDAGEYR, RIDAGEMN, ...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+## Rows: 29434 Columns: 6
 ## -- Column specification --------------------------------------------------------
 ## Delimiter: &quot;,&quot;
 ## dbl (6): MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year
@@ -44,13 +92,13 @@ ggplot(modelData, aes(x=MeanDia, y=as.factor(Year))) +
   geom_boxplot() + 
   labs(x = &quot;Mean Diastolic Blood Pressure&quot;, y = &quot;Year&quot;) +
   scale_y_discrete(breaks = 0:2, labels=c(&quot;2001&quot;,&quot;2009&quot;,&quot;2017&quot;))</code></pre>
-<pre><code>## Warning: Removed 6109 rows containing non-finite values (stat_boxplot).</code></pre>
+<pre><code>## Warning: Removed 7111 rows containing non-finite values (stat_boxplot).</code></pre>
 <p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <pre class="r"><code>ggplot(modelData, aes(x=MeanDia, y=as.factor(RIDRETH1))) + 
   geom_boxplot() + labs(x = &quot;Mean Diastolic Blood Pressure&quot;, y = &quot;Ethnicity&quot;) +
   scale_y_discrete(breaks = 1:5, labels=c(&quot;Mexican American&quot;,&quot;Other Hispanic&quot;,&quot;Non-Hispanic White&quot;,
                                           &quot;Non-Hispanic Black&quot;, &quot;Other Race&quot;)) </code></pre>
-<pre><code>## Warning: Removed 6109 rows containing non-finite values (stat_boxplot).</code></pre>
+<pre><code>## Warning: Removed 7111 rows containing non-finite values (stat_boxplot).</code></pre>
 <p><img src="{{< blogdown/postref >}}index.en_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
 <p>In the two EDA plots shown, we decided on profiling mean diastolic blood pressure. Since we wanted to look more into blood pressure and the trends associated with it, we decided on looking at mean blood pressure in relation to ethnicity and years the survey was conducted. The purpose of doing this EDA plotting is to get a glimpse of some variables that we as a team could possibly work towards or include in the final analysis. In this case, we thought about including the variables ethnicity and years to help illustrate factors that might influence blood pressure (which we deemed as an important indicator of health). From this, we could look into the significance of variables like ethnicity or years when looking at mean diastolic blood pressure as a whole to determine if these variables are conclusive and if secondary data is needed. Of course, further exploration of different variables is needed to get the whole picture.</p>
 <p>The EDA plot of mean diastolic blood pressure over the years shows the distributions of 2001-2002 and 2009-2010 are similar, and the averages are similar too. However, the distribution of mean blood pressure in 2017-2018 is higher than in the other two years, suggesting that the sample population generally has higher blood pressure in 2017-2018. This could be due to diet changes in the last decade causing people to have higher blood pressure on average. The second EDA plot of mean diastolic blood pressure vs. ethnicity shows the different blood pressure distribution across races. The ethnicity with the highest mean blood pressure is Non-Hispanic Black, followed by Non-Hispanic White, other Hispanic, and Mexican American.</p>
@@ -58,6 +106,10 @@ ggplot(modelData, aes(x=MeanDia, y=as.factor(Year))) +
 
 #RIAGENDR: 1 = male, 2 = female
 #RIDRETH1: 1 = Mexican American, 2 =  Other Hispanic, 3 = Non-Hispanic White, 4 = Non-Hispanic Black, 5 = Other Race (includes mixed)
+
+#for more complex model, can show predictions when holding certain things constant
+#can also plot residuals vs. predictiions
+
 modelData &lt;- drop_na(modelData)
 
 syslmMulti &lt;- lm(MeanSys ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)
@@ -69,25 +121,25 @@ summary(syslmMulti)</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -61.766  -9.390  -1.058   7.863 130.098 
+## -61.669  -9.479  -1.166   7.805 129.270 
 ## 
 ## Coefficients:
 ##                     Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)       101.975651   0.316068 322.638  &lt; 2e-16 ***
-## factor(RIDRETH1)2  -0.915262   0.443903  -2.062   0.0392 *  
-## factor(RIDRETH1)3  -1.856508   0.286109  -6.489 8.84e-11 ***
-## factor(RIDRETH1)4   3.241022   0.321559  10.079  &lt; 2e-16 ***
-## factor(RIDRETH1)5  -0.220942   0.431451  -0.512   0.6086    
-## factor(Year)1      -3.013713   0.247781 -12.163  &lt; 2e-16 ***
-## factor(Year)2      -2.108333   0.271523  -7.765 8.54e-15 ***
-## RIDAGEYR            0.532136   0.004714 112.874  &lt; 2e-16 ***
-## factor(RIAGENDR)2  -3.371685   0.207740 -16.230  &lt; 2e-16 ***
+## (Intercept)       101.315738   0.315974 320.646  &lt; 2e-16 ***
+## factor(RIDRETH1)2  -1.049597   0.439425  -2.389  0.01692 *  
+## factor(RIDRETH1)3  -2.037661   0.285475  -7.138 9.77e-13 ***
+## factor(RIDRETH1)4   3.331229   0.319995  10.410  &lt; 2e-16 ***
+## factor(RIDRETH1)5  -0.754687   0.424135  -1.779  0.07520 .  
+## factor(Year)1      -3.031435   0.249780 -12.136  &lt; 2e-16 ***
+## factor(Year)2      -0.732742   0.267628  -2.738  0.00619 ** 
+## RIDAGEYR            0.542461   0.004683 115.828  &lt; 2e-16 ***
+## factor(RIAGENDR)2  -2.634668   0.206808 -12.740  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 15.32 on 21744 degrees of freedom
-## Multiple R-squared:  0.3813, Adjusted R-squared:  0.3811 
-## F-statistic:  1675 on 8 and 21744 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 15.44 on 22314 degrees of freedom
+## Multiple R-squared:  0.3875, Adjusted R-squared:  0.3872 
+## F-statistic:  1764 on 8 and 22314 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>dialmMulti &lt;- lm(MeanDia ~ factor(RIDRETH1) + factor(Year) + RIDAGEYR + factor(RIAGENDR), data = modelData)
 summary(dialmMulti)</code></pre>
 <pre><code>## 
@@ -97,25 +149,25 @@ summary(dialmMulti)</code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -75.652  -7.233   0.564   8.114  64.109 
+## -77.701  -7.181   1.192   8.701  63.974 
 ## 
 ## Coefficients:
 ##                    Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)       59.406746   0.276412 214.921  &lt; 2e-16 ***
-## factor(RIDRETH1)2  1.682190   0.388209   4.333 1.48e-05 ***
-## factor(RIDRETH1)3  0.966440   0.250212   3.862 0.000113 ***
-## factor(RIDRETH1)4  2.961862   0.281215  10.532  &lt; 2e-16 ***
-## factor(RIDRETH1)5  2.281972   0.377319   6.048 1.49e-09 ***
-## factor(Year)1     -1.695659   0.216693  -7.825 5.30e-15 ***
-## factor(Year)2      3.935797   0.237457  16.575  &lt; 2e-16 ***
-## RIDAGEYR           0.179754   0.004123  43.598  &lt; 2e-16 ***
-## factor(RIAGENDR)2 -1.392421   0.181676  -7.664 1.87e-14 ***
+## (Intercept)       59.046287   0.294627 200.410  &lt; 2e-16 ***
+## factor(RIDRETH1)2  1.683333   0.409738   4.108 4.00e-05 ***
+## factor(RIDRETH1)3  0.654113   0.266189   2.457    0.014 *  
+## factor(RIDRETH1)4  2.674722   0.298376   8.964  &lt; 2e-16 ***
+## factor(RIDRETH1)5  2.507048   0.395481   6.339 2.35e-10 ***
+## factor(Year)1     -1.801131   0.232905  -7.733 1.09e-14 ***
+## factor(Year)2      0.350856   0.249548   1.406    0.160    
+## RIDAGEYR           0.197459   0.004367  45.217  &lt; 2e-16 ***
+## factor(RIAGENDR)2 -1.523508   0.192836  -7.901 2.90e-15 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 13.39 on 21744 degrees of freedom
-## Multiple R-squared:  0.1211, Adjusted R-squared:  0.1207 
-## F-statistic: 374.4 on 8 and 21744 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 14.4 on 22314 degrees of freedom
+## Multiple R-squared:  0.09709,    Adjusted R-squared:  0.09677 
+## F-statistic: 299.9 on 8 and 22314 DF,  p-value: &lt; 2.2e-16</code></pre>
 <pre class="r"><code>modelData %&gt;% ggplot(aes(x = RIDAGEYR, y = MeanSys)) +
   geom_jitter() +
   stat_smooth(method = &quot;lm&quot;, se = FALSE) +

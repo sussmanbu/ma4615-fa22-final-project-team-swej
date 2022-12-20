@@ -14,11 +14,47 @@ featuredVideo: ~
 featuredImage: images/blogpost4.png
 ---
 
-```{r}
-#loading in modelling data
-suppressPackageStartupMessages(library(tidyverse))
+```{r, echo = FALSE}
+library(tidyverse)
 
-#MAKE SURE YOU GO TO load_and_clean_data.R to get the modelData1.csv dataset. it's too big to add to git.
+#haven package needed to read in .XPT data
+library(haven)
+#loading in data and libraries
+bpdata1718 <- read_csv(here::here("dataset/bpdata1718.csv"))
+demodata1718 <- read_csv(here::here("dataset/demodata1718.csv"))
+
+bpdata0910 <- read_csv(here::here("dataset/bpdata0910.csv"))
+demodata0910 <- read_csv(here::here("dataset/demodata0910.csv"))
+
+bpdata0102 <- read_csv(here::here("dataset/bpdata0102.csv"))
+demodata0102 <- read_csv(here::here("dataset/demodata0102.csv"))
+
+######################################################################
+
+#cleaning, combining, and getting data into working order for 01, 109, and 17
+
+##creating variables for mean BP readings
+bpdata1718 <- bpdata1718 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE))
+
+#ask if NaN will cause issues
+bpdata0910 <- bpdata0910 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE))
+
+bpdata0102 <- bpdata0102 %>% mutate(MeanDia = rowMeans(select(.,BPXDI1,BPXDI2,BPXDI3), na.rm = TRUE)) %>% mutate(MeanSys = rowMeans(select(.,BPXSY1,BPXSY2,BPXSY3), na.rm = TRUE))
+
+##combine bp and demo for each year
+combo1718 <- bpdata1718 %>% inner_join(demodata1718, by = "SEQN")
+combo0910 <- bpdata0910 %>% inner_join(demodata0910, by = "SEQN")
+combo0102 <- bpdata0102 %>% inner_join(demodata0102, by = "SEQN")
+
+##adding coding for year for each dataset and subsetting for stacking
+###0 = 01-02, 1 = 09-10, 2 = 17-18
+combo0102 <- combo0102 %>% mutate(Year = factor(0)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
+combo0910 <- combo0910 %>% mutate(Year = factor(1)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
+combo1718 <- combo1718 %>% mutate(Year = factor(2)) %>% select(MeanDia, MeanSys, RIAGENDR, RIDAGEYR, RIDRETH1, Year)
+
+##stacking the datasets
+modelData1 <- bind_rows(combo0102, combo0910, combo1718)
+write_csv(modelData1, file = here::here("dataset","modelData1.csv"))
 modelData <- read_csv(here::here("dataset","modelData1.csv"))
 ```
   The purpose of this dataset is to create a snapshot of the general health of adults and children in the United States through a nationally representative sample. One trend that we noticed from our exploratory analysis was that the distributions of Blood Pressure are right-skewed. This was an interesting trend and we want to further explore its relationship to other health variables, such as blood pressure (BPQ), cholesterol (CHOL), Diabetes (DIQ), Hospital utilization and access to care (HUQ), and Demographics variables, such as Race, Age, and Sex. In other words, we will be searching for variables in the survey responses that could be easily understood and representative of general health information. These variables will be the indicators of the health status of the US population. From these variables, we can further develop statistical models to understand the variables that are most correlated with the US population’s health trends. We choose the datasets from 2001-2002, 2009-2010, and 2017-2018 because we want to investigate health trends over the past years. 
