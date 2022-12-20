@@ -2,7 +2,7 @@
 title: MA 415 Final Project
 draft: false
 role: Team SWEJ
-bio: In this project, our team (Jordan Ahn, Eui Hyun Eric Kim, Shawn Xu, and Wenyan Zhang) hopes to explore and analyze the health outcomes of different demographics to find evidence for....
+bio: In this project, our team (Jordan Ahn, Eui Hyun Eric Kim, Shawn Xu, and Wenyan Zhang) hopes to explore, analyze, and evaluate the health outcomes of different demographics to find evidence for inequalities within the healthcare system.
 
 organization:
   name: Boston University
