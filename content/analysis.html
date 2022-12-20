@@ -3,7 +3,7 @@ title: Analysis
 description:
 toc: true
 featuredVideo:
-featuredImage: https://upload.wikimedia.org/wikipedia/commons/7/77/Pebbleswithquarzite.jpg
+featuredImage: https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/health/wp-content/uploads/2021/08/Untitled-design-2021-08-27T123144.738.png
 draft: false
 ---
 
@@ -14,20 +14,70 @@ draft: false
 
 <p>This comes from the file <code>content/analysis.Rmd</code>.</p>
 <p>We describe here our detailed data analysis.</p>
-<p>##Section 1: Motivation of Data Analysis
-As the United States population grows and develops, there will be a greater need for information on the general health of the nation. Our initial plan was to assess health trends over the course of time (more specifically, two decades worth of data from the National Health and Nutrition Examination Survey program). We first used diastolic and systolic blood pressures as a means of assessing general health. Later on, we ended up using Mean Arterial Pressure (MAP) instead as it provided us a way to combine both diastolic and systolic blood pressures into one value. This made the overall analysis more clean and compact. We also wanted to see how impactful ethnicity/race is on MAP; an initial exploration of the relationship between race and Thus, the variables that we are most interested in are race/ethnicity, MAP, and time (in years).</p>
-<p>After summarizing these relationships together, we can then determine how impactful race/ethnicity is on MAP compared to other predictors of health. As a result, we generated multiple tables and plots of health variables with covariables to profile each relationship. Aside from these other predictors for health, we also plan on introducing a secondary dataset for government expenditure on general health.</p>
-<p>Some questions we wanted to answer through our analysis:
-Does government expenditure have a significant impact on general health?
-How much do these other factors affect health variables?
-Which of these predictors of health has the greatest impact on health?
-How do health trends change over time?</p>
-<p>##Section 2: Variable Analysis</p>
-<p>To investigate the
-<img src="/analysis_files/figure-html/year_boxplot-1.png" width="672" /></p>
+<div id="section-1-motivation-of-data-analysis" class="section level2">
+<h2>Section 1: Motivation of Data Analysis</h2>
+<p>As the United States population grows and develops, there will be a greater need for information on the nation’s general health. Our plan for the project is to evaluate differences in health outcomes by race while considering covariates like gender, age, and time of data collection.</p>
+<p>Our response variable used to measure health outcomes is Mean Arterial Pressure (MAP), which combines both Diastolic and Systolic Blood Pressures into one value. We chose to use Blood Pressure as the dependent variable because it is often considered one of the best ways to measure overall health and possible risk factors.</p>
+<p>Our exploratory data analysis (EDA) begins with the goal of investigating the relevant independent variables and their correlation with the dependent variable. We perform our exploratory data analysis by performing in-depth analysis on the following independent variables selected from the dataset:</p>
+<ul>
+<li>Year</li>
+<li>Age</li>
+<li>Gender</li>
+<li>Ethnicity</li>
+<li>Government Health Expenditure.</li>
+</ul>
+</div>
+<div id="section-2-variable-analysis" class="section level2">
+<h2>Section 2: Variable Analysis</h2>
+<p>We start the variable analysis by looking at the correlation matrix. A correlation matrix displays the correlation between all the possible pairs of values. From the correlation matrix, we can see that Age is moderately correlated and Ethnicity, Gender, Year are weakly correlated. After looking at the correlation matrix, we took a deeper dive into each variable.</p>
+<p><img src="/analysis_files/figure-html/corr_matrix-1.png" width="672" /></p>
+<div id="variable-year" class="section level3">
+<h3>2.1 Variable: Year</h3>
+<p>From the boxplot of MAP of each year, we can see that MAP varies by year. Additionally, Median MAP increases over the years. This suggests us to consider the effect of Year on MAP and prompts us to look into other variables that might influence MAP.</p>
+<p><img src="/analysis_files/figure-html/year_boxplot-1.png" width="672" /></p>
+</div>
+<div id="variable-age" class="section level3">
+<h3>2.2 Variable: Age</h3>
+<p>Age is a continuous variable that is most correlated with MAP. From the smoothed regression line plot of <code>Age</code> vs. <code>MAP</code>, we can see that MAP increases as Age increases as it is commonly known that people’s blood pressure increases as they age. Interestingly, MAP starts to decrease for people over 65 years old. We believe that this could be due to people with high blood pressure taking medicine to lower their blood pressure.</p>
 <p><img src="/analysis_files/figure-html/age_lineplot-1.png" width="672" /></p>
-<pre class="r"><code># creating multiple linear regression model to predict MAP
-model &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
+<p>For our predicted model and model evaluation later, we choose to use Age as the X variable because it is the only continuous variable in the model, and the linear relationship between Age and MAP is moderate. Using Age as X allows us to further look into the relationship between MAP and other categorical variables.</p>
+</div>
+<div id="variable-gender" class="section level3">
+<h3>2.3 Variable: Gender</h3>
+<p>We use a scatter plot to investigate the relationship between Gender and MAP. Since the original dataset has around 60,000 data points, we choose Year 2018, the most recent year, to help us see the pattern more clearly.</p>
+<p><img src="/analysis_files/figure-html/scatter_plot_gd-1.png" width="672" /></p>
+<p>In the scatter plot, data points of female are colored in red and male are colored in green. From the graph, we can see that females generally have lower MAP. This suggests a possible interaction between <code>Gender</code> and <code>MAP</code>, which we will take into account in the models later.</p>
+</div>
+<div id="variable-ethnicity" class="section level3">
+<h3>2.4 Variable: Ethnicity</h3>
+<p>Similar to the scatter plot for Gender, we plot the scatter plot of Ethnicity vs. MAP in Year 2018. Because data points for each ethnicity are not randomly distributed and seem to show some patterns, we will consider the interaction between <code>Ethnicity</code> and <code>MAP</code> as well.</p>
+<p><img src="/analysis_files/figure-html/scatter_plot_eth-1.png" width="672" /></p>
+</div>
+<div id="variable-government-health-expenditure" class="section level3">
+<h3>2.5 Variable: Government Health Expenditure</h3>
+<p>In addition to our original dataset, we used a secondary dataset of Government Health Expenditure in percentage. The graph of Government Health Expenditure over the year shows that government spending is increasing over the year. We plot the graph of Median MAP over the year as well to see if there is a possible correlation between the two variables.</p>
+<p><img src="/analysis_files/figure-html/MAPvsEx_sidebyside-1.png" width="672" /></p>
+<p>To explore the relationship between Government Health Expenditure and Median MAP, we use a simple linear regression model to evaluate the correlation. The p-value of variable <code>GovernmentHealthExpenditure</code> is 0.198, suggesting that it is not significant. Therefore, we will not consider this variable in the model later.</p>
+<pre class="r"><code>MAPEx_model &lt;- lm(MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
+summary(MAPEx_model)$coefficients</code></pre>
+<pre><code>##                               Estimate Std. Error   t value     Pr(&gt;|t|)
+## (Intercept)                 82.5800262  3.2779110 25.192882 6.597953e-09
+## GovernmentHealthExpenditure  0.2372216  0.1693857  1.400482 1.989405e-01</code></pre>
+</div>
+</div>
+<div id="modeling-and-inferences" class="section level2">
+<h2>3. Modeling and Inferences</h2>
+<p>We start by dividing the dataset into a training set and a testing set using the <code>createDataPartition</code> function in the <code>caret</code> package. The training set contains 75% of the data (43,319 rows) and the testing set contains the rest of the data (14,439 rows). Then, we ran numerous multiple linear regressions on training data.</p>
+<pre><code>##   Training Testing
+## 1    43319   14439</code></pre>
+<div id="multiple-linear-regression" class="section level3">
+<h3>3.1 Multiple Linear Regression</h3>
+<div id="a-model" class="section level4">
+<h4>3.1. a) Model</h4>
+<p>The first model we consider is a multiple linear regression model. The independent variables are <code>Ethnicity</code>, <code>Year</code>, <code>Age</code>, and <code>Gender</code>, and the dependent variable is <code>MAP</code>.
+<br>
+<br></p>
+<pre class="r"><code>model &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
 summary(model) </code></pre>
 <pre><code>## 
 ## Call:
@@ -35,323 +85,154 @@ summary(model) </code></pre>
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -64.068  -7.233  -0.550   6.720  83.671 
+## -64.027  -7.251  -0.537   6.700  70.636 
 ## 
 ## Coefficients:
 ##                            Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)               79.208887   0.268027 295.526  &lt; 2e-16 ***
-## EthnicityMexican American -3.386728   0.188917 -17.927  &lt; 2e-16 ***
-## EthnicityOther Hispanic   -3.226913   0.247376 -13.045  &lt; 2e-16 ***
-## EthnicityOther Race       -2.304722   0.239770  -9.612  &lt; 2e-16 ***
-## EthnicityWhite            -3.445758   0.159370 -21.621  &lt; 2e-16 ***
-## factor(Year)2002          -0.624531   0.273451  -2.284 0.022383 *  
-## factor(Year)2004          -1.633870   0.278282  -5.871 4.36e-09 ***
-## factor(Year)2006          -2.171135   0.276492  -7.852 4.18e-15 ***
-## factor(Year)2008          -1.374975   0.271010  -5.074 3.92e-07 ***
-## factor(Year)2010          -2.206979   0.269039  -8.203 2.41e-16 ***
-## factor(Year)2012          -1.118101   0.276753  -4.040 5.35e-05 ***
-## factor(Year)2014          -1.858980   0.272215  -6.829 8.67e-12 ***
-## factor(Year)2016          -1.056082   0.273654  -3.859 0.000114 ***
-## factor(Year)2018           0.628943   0.279771   2.248 0.024578 *  
-## Age                        0.251894   0.003021  83.368  &lt; 2e-16 ***
-## Gendermale                 2.631427   0.119711  21.981  &lt; 2e-16 ***
+## (Intercept)               79.125437   0.259965 304.370  &lt; 2e-16 ***
+## EthnicityMexican American -3.381548   0.183062 -18.472  &lt; 2e-16 ***
+## EthnicityOther Hispanic   -3.142503   0.240121 -13.087  &lt; 2e-16 ***
+## EthnicityOther Race       -2.271176   0.231478  -9.812  &lt; 2e-16 ***
+## EthnicityWhite            -3.426828   0.154350 -22.202  &lt; 2e-16 ***
+## factor(Year)2002          -0.567880   0.264704  -2.145 0.031931 *  
+## factor(Year)2004          -1.635519   0.269296  -6.073 1.26e-09 ***
+## factor(Year)2006          -2.080764   0.268311  -7.755 9.02e-15 ***
+## factor(Year)2008          -1.352917   0.263346  -5.137 2.80e-07 ***
+## factor(Year)2010          -2.086260   0.260275  -8.016 1.12e-15 ***
+## factor(Year)2012          -1.044502   0.269302  -3.879 0.000105 ***
+## factor(Year)2014          -1.685170   0.263852  -6.387 1.71e-10 ***
+## factor(Year)2016          -1.111809   0.266041  -4.179 2.93e-05 ***
+## factor(Year)2018           0.812366   0.270861   2.999 0.002708 ** 
+## Age                        0.252832   0.002929  86.320  &lt; 2e-16 ***
+## Gendermale                 2.587526   0.115925  22.321  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 12.03 on 40417 degrees of freedom
-## Multiple R-squared:   0.17,  Adjusted R-squared:  0.1697 
-## F-statistic:   552 on 15 and 40417 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre><code>##       RMSE        R2
-## 1 12.10082 0.1697358</code></pre>
-<pre class="r"><code># load package to perform AIC
-vif(model)</code></pre>
+## Residual standard error: 12.06 on 43303 degrees of freedom
+## Multiple R-squared:  0.1701, Adjusted R-squared:  0.1698 
+## F-statistic: 591.8 on 15 and 43303 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="b-model-fit" class="section level4">
+<h4>3.1. b) Model Fit</h4>
+<p>We use root-mean-square error (RMSE) and R-squared (R2) to evaluate model performance. We compare predictions of MAP based on independent variables to the real MAP values in the testing set to see how well the model fits. The results of RMSE and R2 are shown below.</p>
+<pre><code>##     RMSE        R2
+## 1 12.029 0.1693604</code></pre>
+</div>
+<div id="c-variable-selection" class="section level4">
+<h4>3.1. c) Variable Selection</h4>
+<ul>
+<li>VIF</li>
+</ul>
+<p>One common problem of regression model is multicollinearity. Multicollinearity may hide significant variables, change the sign of them and result in an increase in the variability of the estimation. To detect multicollinearity in the regression model, we use Variance Inflation Factor (VIF) to measure the amount of multicollinearity. To calculate VIF, we use <code>vif</code> function in <code>car</code> package.</p>
+<pre class="r"><code>vif(model)</code></pre>
 <pre><code>##                  GVIF Df GVIF^(1/(2*Df))
-## Ethnicity    1.129515  4        1.015340
-## factor(Year) 1.100293  9        1.005324
-## Age          1.046434  1        1.022954
-## Gender       1.000783  1        1.000391</code></pre>
+## Ethnicity    1.127406  4        1.015103
+## factor(Year) 1.098781  9        1.005247
+## Age          1.045412  1        1.022454
+## Gender       1.000712  1        1.000356</code></pre>
+<p>Since all variables have VIF &lt; 5, multicollinearity is not a concern in our model.</p>
+<ul>
+<li>AIC</li>
+</ul>
+<p>In addition, we can also use Akaike information criterion (AIC) to perform further feature selection. AIC can be used to compare different possible models and determine which one is the best fit for the data.</p>
 <pre class="r"><code># perform AIC to eliminate insignificant variables
 stepAIC(model, direction =&quot;both&quot;)</code></pre>
-<pre><code>## Start:  AIC=201147.4
+<pre><code>## Start:  AIC=215711.9
 ## MAP ~ Ethnicity + factor(Year) + Age + Gender
 ## 
 ##                Df Sum of Sq     RSS    AIC
-## &lt;none&gt;                      5847013 201147
-## - factor(Year)  9     30254 5877268 201338
-## - Gender        1     69901 5916914 201626
-## - Ethnicity     4     77245 5924258 201670
-## - Age           1   1005475 6852488 207561</code></pre>
+## &lt;none&gt;                      6294718 215712
+## - factor(Year)  9     32646 6327364 215918
+## - Gender        1     72423 6367141 216205
+## - Ethnicity     4     81679 6376397 216262
+## - Age           1   1083128 7377846 222588</code></pre>
 <pre><code>## 
 ## Call:
 ## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender, data = train.modelData)
 ## 
 ## Coefficients:
 ##               (Intercept)  EthnicityMexican American  
-##                   79.2089                    -3.3867  
+##                   79.1254                    -3.3815  
 ##   EthnicityOther Hispanic        EthnicityOther Race  
-##                   -3.2269                    -2.3047  
+##                   -3.1425                    -2.2712  
 ##            EthnicityWhite           factor(Year)2002  
-##                   -3.4458                    -0.6245  
+##                   -3.4268                    -0.5679  
 ##          factor(Year)2004           factor(Year)2006  
-##                   -1.6339                    -2.1711  
+##                   -1.6355                    -2.0808  
 ##          factor(Year)2008           factor(Year)2010  
-##                   -1.3750                    -2.2070  
+##                   -1.3529                    -2.0863  
 ##          factor(Year)2012           factor(Year)2014  
-##                   -1.1181                    -1.8590  
+##                   -1.0445                    -1.6852  
 ##          factor(Year)2016           factor(Year)2018  
-##                   -1.0561                     0.6289  
+##                   -1.1118                     0.8124  
 ##                       Age                 Gendermale  
-##                    0.2519                     2.6314</code></pre>
+##                    0.2528                     2.5875</code></pre>
+<p>After using <code>stepAIC</code> function from the <code>MASS</code> package on our multiple linear regression model, no variables were eliminated. Thus, we come to the conclusion that all the variables are significant to the model.</p>
+</div>
+</div>
+<div id="multiple-linear-regression-with-interactions" class="section level3">
+<h3>3.2 Multiple Linear Regression with Interactions</h3>
+<p>Interaction effect means that two or more features/variables combined have a significantly larger effect on a feature as compared to the sum of the individual variables alone.</p>
+<div id="a-multiple-linear-regression-with-ethnicity-interacts-with-age" class="section level4">
+<h4>3.2 a) Multiple Linear Regression with Ethnicity Interacts with Age</h4>
+<p>Since the scatter plot in EDA shows possible interaction between <code>Ethnicity</code> and <code>Age</code>, we use <code>Ethnicity*Age</code> to model the interaction effect.</p>
 <pre class="r"><code># multiple linear regression model with interaction terms 
 model_interaction_eth &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
-                        Ethnicity*Age, data = train.modelData)
-model_interaction_gd &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
-                        Gender*Age, data = train.modelData)
-model_interaction_both &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
-                        Gender*Age + Ethnicity*Age, data = train.modelData)
-summary(model_interaction_eth)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender + 
-##     Ethnicity * Age, data = train.modelData)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -62.514  -7.188  -0.517   6.705  85.659 
-## 
-## Coefficients:
-##                                Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                   76.499216   0.362032 211.305  &lt; 2e-16 ***
-## EthnicityMexican American     -3.455946   0.440970  -7.837 4.72e-15 ***
-## EthnicityOther Hispanic       -1.955161   0.622321  -3.142  0.00168 ** 
-## EthnicityOther Race           -0.689151   0.586138  -1.176  0.23970    
-## EthnicityWhite                 2.595090   0.385900   6.725 1.78e-11 ***
-## factor(Year)2002              -0.608116   0.272004  -2.236  0.02538 *  
-## factor(Year)2004              -1.646978   0.276879  -5.948 2.73e-09 ***
-## factor(Year)2006              -2.122999   0.275035  -7.719 1.20e-14 ***
-## factor(Year)2008              -1.458038   0.269602  -5.408 6.41e-08 ***
-## factor(Year)2010              -2.308640   0.267659  -8.625  &lt; 2e-16 ***
-## factor(Year)2012              -1.262471   0.275380  -4.584 4.56e-06 ***
-## factor(Year)2014              -1.991905   0.270847  -7.354 1.95e-13 ***
-## factor(Year)2016              -1.224773   0.272335  -4.497 6.90e-06 ***
-## factor(Year)2018               0.464445   0.278446   1.668  0.09533 .  
-## Age                            0.316445   0.006469  48.916  &lt; 2e-16 ***
-## Gendermale                     2.662625   0.119092  22.358  &lt; 2e-16 ***
-## EthnicityMexican American:Age  0.005470   0.009618   0.569  0.56955    
-## EthnicityOther Hispanic:Age   -0.030557   0.012855  -2.377  0.01745 *  
-## EthnicityOther Race:Age       -0.036219   0.012593  -2.876  0.00403 ** 
-## EthnicityWhite:Age            -0.130808   0.007821 -16.726  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 11.96 on 40413 degrees of freedom
-## Multiple R-squared:  0.1789, Adjusted R-squared:  0.1785 
-## F-statistic: 463.5 on 19 and 40413 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>summary(model_interaction_gd)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender + 
-##     Gender * Age, data = train.modelData)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -62.731  -7.201  -0.519   6.703  81.982 
-## 
-## Coefficients:
-##                            Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)               77.122459   0.297892 258.894  &lt; 2e-16 ***
-## EthnicityMexican American -3.366833   0.188340 -17.876  &lt; 2e-16 ***
-## EthnicityOther Hispanic   -3.192548   0.246624 -12.945  &lt; 2e-16 ***
-## EthnicityOther Race       -2.307178   0.239032  -9.652  &lt; 2e-16 ***
-## EthnicityWhite            -3.411456   0.158894 -21.470  &lt; 2e-16 ***
-## factor(Year)2002          -0.631697   0.272610  -2.317   0.0205 *  
-## factor(Year)2004          -1.646447   0.277426  -5.935 2.97e-09 ***
-## factor(Year)2006          -2.159706   0.275642  -7.835 4.80e-15 ***
-## factor(Year)2008          -1.406976   0.270184  -5.207 1.92e-07 ***
-## factor(Year)2010          -2.225109   0.268214  -8.296  &lt; 2e-16 ***
-## factor(Year)2012          -1.151094   0.275909  -4.172 3.03e-05 ***
-## factor(Year)2014          -1.895798   0.271387  -6.986 2.88e-12 ***
-## factor(Year)2016          -1.069147   0.272813  -3.919 8.91e-05 ***
-## factor(Year)2018           0.625161   0.278910   2.241   0.0250 *  
-## Age                        0.297942   0.004186  71.179  &lt; 2e-16 ***
-## Gendermale                 6.858919   0.292309  23.465  &lt; 2e-16 ***
-## Age:Gendermale            -0.093334   0.005891 -15.843  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 11.99 on 40416 degrees of freedom
-## Multiple R-squared:  0.1752, Adjusted R-squared:  0.1748 
-## F-statistic: 536.4 on 16 and 40416 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>summary(model_interaction_both)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender + 
-##     Gender * Age + Ethnicity * Age, data = train.modelData)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -62.571  -7.096  -0.488   6.687  83.973 
-## 
-## Coefficients:
-##                                Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                   74.437588   0.383991 193.853  &lt; 2e-16 ***
-## EthnicityMexican American     -3.424518   0.439636  -7.789 6.89e-15 ***
-## EthnicityOther Hispanic       -1.761176   0.620554  -2.838  0.00454 ** 
-## EthnicityOther Race           -0.719808   0.584362  -1.232  0.21804    
-## EthnicityWhite                 2.601181   0.384729   6.761 1.39e-11 ***
-## factor(Year)2002              -0.615010   0.271178  -2.268  0.02334 *  
-## factor(Year)2004              -1.659225   0.276040  -6.011 1.86e-09 ***
-## factor(Year)2006              -2.111996   0.274201  -7.702 1.37e-14 ***
-## factor(Year)2008              -1.489435   0.268791  -5.541 3.02e-08 ***
-## factor(Year)2010              -2.326290   0.266849  -8.718  &lt; 2e-16 ***
-## factor(Year)2012              -1.293830   0.274551  -4.713 2.45e-06 ***
-## factor(Year)2014              -2.027748   0.270034  -7.509 6.07e-14 ***
-## factor(Year)2016              -1.235920   0.271509  -4.552 5.33e-06 ***
-## factor(Year)2018               0.461630   0.277601   1.663  0.09633 .  
-## Age                            0.361934   0.007068  51.207  &lt; 2e-16 ***
-## Gendermale                     6.839093   0.290837  23.515  &lt; 2e-16 ***
-## Age:Gendermale                -0.092206   0.005862 -15.731  &lt; 2e-16 ***
-## EthnicityMexican American:Age  0.005181   0.009589   0.540  0.58899    
-## EthnicityOther Hispanic:Age   -0.034122   0.012818  -2.662  0.00777 ** 
-## EthnicityOther Race:Age       -0.035559   0.012555  -2.832  0.00462 ** 
-## EthnicityWhite:Age            -0.130243   0.007797 -16.704  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 11.93 on 40412 degrees of freedom
-## Multiple R-squared:  0.1839, Adjusted R-squared:  0.1835 
-## F-statistic: 455.4 on 20 and 40412 DF,  p-value: &lt; 2.2e-16</code></pre>
+                        Ethnicity*Age, data = train.modelData)</code></pre>
+<p>We use RMSE and R2 to measure model performance.</p>
 <pre><code>##       RMSE        R2
-## 1 12.00937 0.1822237</code></pre>
-<pre class="r"><code>vif(model_interaction_both)</code></pre>
-<pre><code>##                      GVIF Df GVIF^(1/(2*Df))
-## Ethnicity     1457.076080  4        2.485623
-## factor(Year)     1.107227  9        1.005675
-## Age              5.823047  1        2.413099
-## Gender           6.006809  1        2.450879
-## Age:Gender       7.007324  1        2.647135
-## Ethnicity:Age 2467.532893  4        2.654806</code></pre>
-<pre class="r"><code># perform AIC to eliminate insignificant variables
-stepAIC(model_interaction_both, direction =&quot;both&quot;)</code></pre>
-<pre><code>## Start:  AIC=200475.2
-## MAP ~ Ethnicity + factor(Year) + Age + Gender + Gender * Age + 
-##     Ethnicity * Age
-## 
-##                 Df Sum of Sq     RSS    AIC
-## &lt;none&gt;                       5749198 200475
-## - factor(Year)   9     30023 5779221 200668
-## - Age:Gender     1     35204 5784402 200720
-## - Ethnicity:Age  4     61727 5810925 200899</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = MAP ~ Ethnicity + factor(Year) + Age + Gender + 
-##     Gender * Age + Ethnicity * Age, data = train.modelData)
-## 
-## Coefficients:
-##                   (Intercept)      EthnicityMexican American  
-##                     74.437588                      -3.424518  
-##       EthnicityOther Hispanic            EthnicityOther Race  
-##                     -1.761176                      -0.719808  
-##                EthnicityWhite               factor(Year)2002  
-##                      2.601181                      -0.615010  
-##              factor(Year)2004               factor(Year)2006  
-##                     -1.659225                      -2.111996  
-##              factor(Year)2008               factor(Year)2010  
-##                     -1.489435                      -2.326290  
-##              factor(Year)2012               factor(Year)2014  
-##                     -1.293830                      -2.027748  
-##              factor(Year)2016               factor(Year)2018  
-##                     -1.235920                       0.461630  
-##                           Age                     Gendermale  
-##                      0.361934                       6.839093  
-##                Age:Gendermale  EthnicityMexican American:Age  
-##                     -0.092206                       0.005181  
-##   EthnicityOther Hispanic:Age        EthnicityOther Race:Age  
-##                     -0.034122                      -0.035559  
-##            EthnicityWhite:Age  
-##                     -0.130243</code></pre>
-<p><img src="/analysis_files/figure-html/unnamed-chunk-11-1.png" width="672" /><img src="/analysis_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
-<p><img src="/analysis_files/figure-html/scatter_plot_gd-1.png" width="672" /></p>
-<p><img src="/analysis_files/figure-html/scatter_plot_eth-1.png" width="672" /></p>
-<pre><code>## Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
-## ℹ Please use `after_stat(density)` instead.</code></pre>
-<p><img src="/analysis_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p><img src="/analysis_files/figure-html/corr_matrix-1.png" width="672" /></p>
-<p><img src="/analysis_files/figure-html/MAPvsEx_sidebyside-1.png" width="672" /></p>
-<pre><code>## 
-## Call:
-## lm(formula = MedianMAP ~ GovernmentHealthExpenditure, data = MAPvsEx)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -1.65154 -0.74958 -0.05673  0.70992  1.66061 
-## 
-## Coefficients:
-##                             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                  82.5800     3.2779   25.19  6.6e-09 ***
-## GovernmentHealthExpenditure   0.2372     0.1694    1.40    0.199    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 1.107 on 8 degrees of freedom
-## Multiple R-squared:  0.1969, Adjusted R-squared:  0.09651 
-## F-statistic: 1.961 on 1 and 8 DF,  p-value: 0.1989</code></pre>
-<p><img src="/analysis_files/figure-html/MapvsEx_reg-1.png" width="672" /></p>
-<p><img src="/analysis_files/figure-html/Ex_year_line-1.png" width="672" /></p>
-<div id="note-on-attribution" class="section level2">
-<h2>Note on Attribution</h2>
-<p>If you are directly quoting from a source, please make that clear. You can show quotes using <code>&gt;</code> like this</p>
-<pre><code>&gt; To be or not to be.</code></pre>
-<blockquote>
-<p>To be or not to be.</p>
-</blockquote>
-<p>Also, make sure to provide a link or citation to where you are quoting from.</p>
-<hr />
+## 1 11.98485 0.1754982</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The graph of predicted MAP with and without the interaction term shows that there is an interaction between the two variables.</p>
 </div>
-<div id="rubric-on-this-page" class="section level2">
-<h2>Rubric: On this page</h2>
-<p>you will</p>
+<div id="b-multiple-linear-regression-with-gender-interacts-with-age" class="section level4">
+<h4>3.2 b) Multiple Linear Regression with Gender Interacts with Age</h4>
+<p>Similarly, the scatter plot in EDA shows possible interaction between <code>Gender</code> and <code>Age</code>, so we use <code>Gender*Age</code> to model the interaction effect.</p>
+<pre class="r"><code>model_interaction_gd &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Gender*Age, data = train.modelData)</code></pre>
+<p>We use RMSE and R2 to measure model performance.</p>
+<pre><code>##       RMSE        R2
+## 1 11.99895 0.1735145</code></pre>
+<p><img src="/analysis_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>The graph of predicted MAP with and without the interaction term shows that there is an interaction between the two variables.</p>
+</div>
+<div id="c-multiple-linear-regression-with-ethnicity-and-gender-interact-with-age" class="section level4">
+<h4>3.2 c) Multiple Linear Regression with Ethnicity and Gender Interact with Age</h4>
+<p>Since both interaction terms are significant based on the graphs, we use <code>Ethnicity*Age</code> and <code>Gender*Age</code> to model the interaction effect in our final model.</p>
+<pre class="r"><code>model_interaction_both &lt;- lm(MAP ~ Ethnicity + factor(Year) + Age + Gender +  
+                        Gender*Age + Ethnicity*Age, data = train.modelData)</code></pre>
+<p>The RMSE and R2 results of this model are shown below.</p>
+<pre><code>##       RMSE       R2
+## 1 11.95303 0.179887</code></pre>
+<p>Among the models used, the multiple linear regression model with <code>Ethnicity*Age</code> and <code>Gender*Age</code> as interaction terms has the lowest RMSE and the highest R2. Therefore, this will be our final model of choice.</p>
+</div>
+</div>
+<div id="logistic-regression" class="section level3">
+<h3>3.3 Logistic Regression</h3>
+<p>In addition to multiple linear regression model, we also try logistic regression model to predict the probability of a person having hypertension (<code>HTN</code> = 1) based on their <code>Ethnicity</code>, <code>Age</code>, and <code>Gender</code>. The graph of the logistic regression model is shown below.</p>
+<pre class="r"><code>log_model &lt;- glm(Hypertension ~ Ethnicity + Age + Gender, data = modelData, family = binomial)</code></pre>
+<pre><code>## fitting null model for pseudo-r2</code></pre>
+<pre><code>##           llh       llhNull            G2      McFadden          r2ML 
+## -2.152911e+04 -2.337150e+04  3.684792e+03  7.883087e-02  6.180464e-02 
+##          r2CU 
+##  1.113946e-01</code></pre>
+<p>To evaluate the model performance, we use the <code>pR2</code> function in the <code>pscl</code> package to calculate pseudo-r2. Our pseudo-r2 is 0.0788, suggesting that model is poor fit. Therefore, we decide to use the multiple linear regression model with interaction terms instead.</p>
+</div>
+<div id="conclusion" class="section level3">
+<h3>3.4 Conclusion</h3>
+<p>From the graph of MLR model with Ethnicity as interaction term, we come to the conclusion that health outcomes (measured by MAP) differ by race since the regression line of Ethnicity Black is above all the other regression line. Other factors such as gender and age also have an effect on an individual’s health outcomes, and using our model, we can predict a person’s MAP.</p>
+</div>
+<div id="flaws-and-limitations" class="section level3">
+<h3>4. Flaws and Limitations</h3>
 <ul>
-<li>Introduce what motivates your Data Analysis (DA)
-<ul>
-<li>Which variables and relationships are you most interested in?</li>
-<li>What questions are you interested in answering?</li>
-</ul></li>
-<li>Breadth of the DA
-<ul>
-<li>Make sure that you ask enough initial questions to explore the different variables in your data.</li>
-<li>i.e. Do you explore more than just one or two variables? Do you explore a few different relationships or many?</li>
-</ul></li>
-<li>Depth of the DA
-<ul>
-<li>When you answer one question, usually more questions arise as well.</li>
-<li>The depth of the DA is about coming up with and exploring the answers to these questions, often iterating the process a few times.</li>
-</ul></li>
-<li>Modeling and Inference
-<ul>
-<li>You should also include some kind of formal statistical model and/or inference. This could be a linear regression, logistic regression, hypothesis testing etc.</li>
-<li>Explain the techniques you used for validating your results.</li>
-<li>Describe the results of your modelling and make sure to give a sense of the uncertainty in your estimates and conclusions.</li>
-</ul></li>
-<li>Explain the flaws and limitations of your analysis
-<ul>
-<li>Are there some assumptions that you needed to make that might not hold? Is there other data that would help to answer your questions? …</li>
-</ul></li>
-<li>Clarity Figures
-<ul>
-<li>Are your figures/tables/results easy to read, informative, without problems like overplotting, hard-to-read labels, etc?</li>
-<li>Each figure should provide a key insight. Too many figures or other data summaries can detract from this.</li>
-</ul></li>
-<li>Clarity of Explanations
-<ul>
-<li>Do you introduce why you are doing each analysis?</li>
-<li>How well do you explain each figure/result?</li>
-<li>Do you provide interpretations that suggest further analysis or explanations for observed phenomenon?</li>
-</ul></li>
-<li>Organization and cleanliness.
-<ul>
-<li>Make sure to remove excessive warnings, use clean easy-to-read code, organize with sections or multiple pages, use bullets, etc.</li>
-</ul></li>
+<li>Flaws</li>
 </ul>
-<p><strong>NOTE</strong>: Your Data Analysis can be broken up into multiple pages if that helps with your organization.</p>
+<p>In the linear regression model, there are four assumptions that need to be satisfied: linearity, homoscedasticity, independence, and normality. One possible flaw of our model is the normality assumption might be violated. The normality assumption states that for any fixed value of X, Y is normally distributed.
+<img src="/analysis_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>From the graph of the distribution of the dependent variable, MAP, we can see that MAP is slightly right-skewed even after adjusting for MAP using formula. The violation of the normality assumption is attributed by the skewed nature of the dependent variable, Blood Pressure. Blood Pressure is slightly skewed to the right due to the high proportion of people with Blood Pressure values in the range above 140 mmHg. Normality assumption violation will affect the estimates of the standard error and the confidence interval, and hence the significance of the independent variables.</p>
+<ul>
+<li>Limitations</li>
+</ul>
+<p>Our model has limited predictive power due to the limited selection of predictors we can use. The dataset we used does not have geographic information and the data points are anonymous. We cannot incorporate geographic datasets as a secondary data source due to anonymity of the responders. Therefore, useful geographic predictors cannot be used to account for the differences.</p>
+</div>
 </div>
