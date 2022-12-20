@@ -11,7 +11,7 @@ authors: []
 series: []
 lastmod: '2022-12-02T09:57:34-05:00'
 featuredVideo: ~
-featuredImage: ~
+featuredImage: images/blogpost8.jpg
 ---
 
 For the polish and organizations of our visualizations and tables, we plan to first make our multiple regression tables compact per variable being analyzed. More specifically, we hope to include different faceted graphs for each variable. \n
