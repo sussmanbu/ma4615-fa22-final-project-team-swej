@@ -11,7 +11,7 @@ authors: []
 series: []
 lastmod: '2022-11-18T15:51:31-05:00'
 featuredVideo: ~
-featuredImage: ~
+featuredImage: images/blogpost6.jpg
 ---
 
 **IDEAS:**
